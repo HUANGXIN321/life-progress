@@ -3,165 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>人生进度 - 记录你的每一步</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <title>人生进度 - 记录每一步</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #6366f1;
             --primary-light: #818cf8;
             --primary-dark: #4f46e5;
-            --secondary: #f59e0b;
-            --success: #10b981;
+            --accent: #f472b6;
+            --accent-light: #f9a8d4;
+            --bg-dark: #0f0b1a;
+            --bg-card: rgba(255, 255, 255, 0.06);
+            --bg-card-hover: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.1);
+            --border-light: rgba(255, 255, 255, 0.15);
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            --success: #22c55e;
+            --success-bg: rgba(34, 197, 94, 0.15);
+            --warning: #f59e0b;
+            --warning-bg: rgba(245, 158, 11, 0.15);
             --danger: #ef4444;
-            --bg: #f0f2f5;
-            --card-bg: #ffffff;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --border: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgba(0,0,0,0.08);
-            --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.12);
-            --shadow-xl: 0 20px 40px -10px rgba(0,0,0,0.15);
-            --diary-warm: #ff6b6b;
-            --diary-warm-light: #ffa8a8;
-            --diary-warm-bg: linear-gradient(135deg, #fff5f5, #ffe3e3);
-            --confide-blue: #7c3aed;
-            --confide-blue-light: #a78bfa;
-            --confide-blue-bg: linear-gradient(135deg, #f5f3ff, #ede9fe);
-            --share-orange: #f97316;
-            --share-orange-light: #fb923c;
-            --share-orange-bg: linear-gradient(135deg, #fff7ed, #ffedd5);
-            --glass-bg: rgba(255,255,255,0.7);
-            --glass-border: rgba(255,255,255,0.3);
+            --danger-bg: rgba(239, 68, 68, 0.15);
+            --info: #3b82f6;
+            --info-bg: rgba(59, 130, 246, 0.15);
+            --pink: #ec4899;
+            --pink-bg: rgba(236, 72, 153, 0.15);
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+            --radius: 16px;
+            --radius-sm: 12px;
+            --radius-xs: 8px;
+            --nav-height: 64px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
 
         body {
             font-family: 'Noto Sans SC', sans-serif;
-            background: var(--bg);
+            background: var(--bg-dark);
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
         }
 
-        /* ===== 导航栏 ===== */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.3); border-radius: 3px; }
+
+        /* ==================== 导航栏 ==================== */
         .navbar {
-            background: rgba(255,255,255,0.85);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-height);
+            background: rgba(15, 11, 26, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border);
-            padding: 0.8rem 2rem;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+            transition: box-shadow 0.3s;
         }
 
         .navbar.scrolled {
-            padding: 0.5rem 2rem;
-            background: rgba(255,255,255,0.95);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
         }
 
-        .logo {
-            font-size: 1.4rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--confide-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 100%;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: space-between;
+            padding: 0 24px;
         }
 
-        .logo i {
-            -webkit-text-fill-color: var(--primary);
-            font-size: 1.3rem;
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+
+        .nav-logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
         }
 
         .nav-links {
             display: flex;
-            gap: 1.5rem;
+            gap: 4px;
             list-style: none;
-            align-items: center;
         }
 
         .nav-links a {
             text-decoration: none;
-            color: var(--text-light);
+            color: var(--text-muted);
+            font-size: 14px;
             font-weight: 500;
-            font-size: 0.95rem;
+            padding: 8px 16px;
+            border-radius: var(--radius-xs);
             transition: all 0.3s;
-            position: relative;
-            padding: 0.3rem 0;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--confide-blue));
-            transition: width 0.3s;
-            border-radius: 2px;
         }
 
         .nav-links a:hover {
-            color: var(--primary);
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .nav-links a.active {
-            color: var(--primary);
-        }
-
-        .nav-links a.active::after {
-            width: 100%;
-        }
-
-        .nav-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
             color: var(--text);
-            cursor: pointer;
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        /* ===== 英雄区域 ===== */
-        .hero {
-            min-height: 100vh;
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             color: white;
-            text-align: center;
-            padding: 2rem;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 6px 14px;
+            border-radius: var(--radius-xs);
+            font-size: 13px;
+            font-family: 'Noto Sans SC', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.25);
+        }
+
+        /* ==================== 英雄区域 ==================== */
+        .hero {
             position: relative;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: calc(var(--nav-height) + 40px) 24px 60px;
             overflow: hidden;
         }
 
-        #particleCanvas {
+        #heroCanvas {
             position: absolute;
             top: 0;
             left: 0;
@@ -172,2488 +194,2118 @@
 
         .hero-content {
             position: relative;
-            z-index: 1;
-            max-width: 800px;
+            z-index: 2;
+            max-width: 700px;
         }
 
-        .hero h1 {
-            font-size: 3.8rem;
-            font-weight: 900;
-            margin-bottom: 1rem;
-            animation: fadeInUp 1s ease;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            letter-spacing: -0.02em;
+        .hero-greeting {
+            font-size: 16px;
+            color: var(--primary-light);
+            font-weight: 500;
+            margin-bottom: 12px;
+            animation: fadeInUp 0.6s ease;
         }
 
-        .hero p {
-            font-size: 1.25rem;
-            margin-bottom: 2.5rem;
-            opacity: 0.92;
-            animation: fadeInUp 1s ease 0.2s both;
-            font-weight: 300;
-            line-height: 1.8;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            animation: fadeInUp 1s ease 0.4s both;
-        }
-
-        .btn {
-            padding: 0.8rem 2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            font-family: 'Noto Sans SC', sans-serif;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .btn-primary {
-            background: white;
-            color: var(--primary);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: white;
-            border: 2px solid rgba(255,255,255,0.7);
-        }
-
-        .btn-outline:hover {
-            background: white;
-            color: var(--primary);
-            border-color: white;
-            transform: translateY(-3px);
-        }
-
-        /* 浮动装饰元素 */
-        .floating-shapes {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .shape {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0.1;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .shape:nth-child(1) {
-            width: 300px;
-            height: 300px;
-            background: white;
-            top: -50px;
-            right: -80px;
-            animation-delay: 0s;
-        }
-
-        .shape:nth-child(2) {
-            width: 200px;
-            height: 200px;
-            background: white;
-            bottom: 10%;
-            left: -60px;
-            animation-delay: 2s;
-            border-radius: 30%;
-        }
-
-        .shape:nth-child(3) {
-            width: 150px;
-            height: 150px;
-            background: white;
-            top: 30%;
-            right: 15%;
-            animation-delay: 4s;
-            border-radius: 20%;
-        }
-
-        .shape:nth-child(4) {
-            width: 100px;
-            height: 100px;
-            background: white;
-            bottom: 20%;
-            right: 30%;
-            animation-delay: 1s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-        }
-
-        /* ===== 通用区块样式 ===== */
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .section-title h2 {
-            font-size: 2.5rem;
+        .hero-title {
+            font-size: 42px;
             font-weight: 700;
-            color: var(--text);
-            margin-bottom: 0.5rem;
-            position: relative;
-            display: inline-block;
+            line-height: 1.3;
+            margin-bottom: 16px;
+            animation: fadeInUp 0.6s ease 0.1s both;
         }
 
-        .section-title h2::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--confide-blue));
-            border-radius: 2px;
-        }
-
-        .section-title p {
-            color: var(--text-light);
-            font-size: 1.1rem;
-            margin-top: 1rem;
-        }
-
-        /* ===== 卡片入场动画 ===== */
-        .fade-in-up {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-
-        .fade-in-up.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* ===== 人生进度总览 ===== */
-        .life-overview {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .progress-container {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 2.5rem;
-            box-shadow: var(--shadow-lg);
-            margin-bottom: 2rem;
-            border: 1px solid var(--glass-border);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .progress-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--confide-blue), var(--secondary));
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .progress-header h3 {
-            font-size: 1.5rem;
-            color: var(--text);
-        }
-
-        .life-percentage {
-            font-size: 2.5rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--primary), var(--confide-blue));
+        .hero-title span {
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 24px;
-            background: #e8ecf1;
-            border-radius: 12px;
+        .hero-subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            animation: fadeInUp 0.6s ease 0.2s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.6s ease 0.3s both;
+        }
+
+        .btn-primary {
+            padding: 12px 28px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-outline {
+            padding: 12px 28px;
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--primary-light);
+        }
+
+        /* ==================== 通用Section ==================== */
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 24px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .section-header h2 i {
+            margin-right: 10px;
+            color: var(--primary-light);
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        /* ==================== 进度总览 ==================== */
+        .progress-overview {
+            margin-bottom: 24px;
+        }
+
+        .life-progress-bar {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            height: 32px;
             overflow: hidden;
-            margin-bottom: 1rem;
             position: relative;
+            margin-bottom: 12px;
         }
 
-        .progress-fill {
+        .life-progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--confide-blue), var(--secondary));
-            border-radius: 12px;
-            transition: width 2s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 20px;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            width: 0%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 12px;
         }
 
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            animation: shimmer 2s infinite;
+        .life-progress-fill span {
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
         }
 
-        .life-stats {
+        .life-progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
+            gap: 16px;
+            margin-top: 32px;
         }
 
         .stat-card {
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-            padding: 1.5rem;
-            border-radius: 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
             text-align: center;
             transition: all 0.3s;
-            border: 1px solid var(--border);
+            animation: fadeInUp 0.6s ease both;
         }
 
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
         .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
         }
 
         .stat-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            display: inline-block;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 12px;
         }
 
-        .stat-icon.purple { color: var(--primary); }
-        .stat-icon.amber { color: var(--secondary); }
-        .stat-icon.green { color: var(--success); }
-        .stat-icon.rose { color: var(--diary-warm); }
+        .stat-card:nth-child(1) .stat-icon { background: var(--info-bg); color: var(--info); }
+        .stat-card:nth-child(2) .stat-icon { background: var(--success-bg); color: var(--success); }
+        .stat-card:nth-child(3) .stat-icon { background: var(--warning-bg); color: var(--warning); }
+        .stat-card:nth-child(4) .stat-icon { background: var(--pink-bg); color: var(--pink); }
 
-        .stat-value {
-            font-size: 1.8rem;
+        .stat-number {
+            font-size: 32px;
             font-weight: 700;
-            color: var(--text);
+            margin-bottom: 4px;
         }
 
         .stat-label {
-            color: var(--text-light);
-            font-size: 0.9rem;
+            font-size: 13px;
+            color: var(--text-muted);
         }
 
-        /* ===== 时间轴 ===== */
-        .timeline-section {
-            background: linear-gradient(180deg, #ffffff, #f8fafc);
-            padding: 5rem 2rem;
-        }
-
+        /* ==================== 时间轴 ==================== */
         .timeline-container {
-            max-width: 1000px;
-            margin: 0 auto;
             position: relative;
+            padding: 20px 0;
         }
 
-        .timeline-container::before {
-            content: '';
+        .timeline-line {
             position: absolute;
             left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
             transform: translateX(-50%);
-            width: 3px;
-            height: 100%;
-            background: linear-gradient(180deg, var(--primary), var(--confide-blue), var(--secondary));
-            border-radius: 2px;
         }
 
         .timeline-item {
             display: flex;
-            justify-content: flex-end;
-            padding-right: 3rem;
+            align-items: flex-start;
+            margin-bottom: 40px;
             position: relative;
-            margin-bottom: 3rem;
-            width: 50%;
+            animation: fadeInUp 0.6s ease both;
         }
 
-        .timeline-item:nth-child(even) {
-            justify-content: flex-start;
-            padding-left: 3rem;
-            padding-right: 0;
-            margin-left: 50%;
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+            text-align: right;
         }
 
-        .timeline-content {
-            background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            max-width: 400px;
-            position: relative;
+        .timeline-item:nth-child(odd) .timeline-card {
+            margin-right: 60px;
+            margin-left: 0;
+        }
+
+        .timeline-item:nth-child(even) .timeline-card {
+            margin-left: 60px;
+            margin-right: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 3px solid var(--bg-dark);
+            z-index: 2;
+        }
+
+        .timeline-dot.tag-achievement { background: var(--success); }
+        .timeline-dot.tag-milestone { background: var(--info); }
+        .timeline-dot.tag-memory { background: var(--pink); }
+
+        .timeline-card {
+            background: var(--bg-card);
             border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            max-width: calc(50% - 80px);
+            flex: 1;
             transition: all 0.3s;
         }
 
-        .timeline-content:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .timeline-content::before {
-            content: '';
-            position: absolute;
-            top: 20px;
-            width: 16px;
-            height: 16px;
-            background: var(--primary);
-            border-radius: 50%;
-            border: 3px solid white;
-            box-shadow: 0 0 0 3px var(--primary), 0 2px 8px rgba(99,102,241,0.3);
-        }
-
-        .timeline-item:nth-child(odd) .timeline-content::before {
-            right: -42px;
-        }
-
-        .timeline-item:nth-child(even) .timeline-content::before {
-            left: -42px;
+        .timeline-card:hover {
+            background: var(--bg-card-hover);
+            box-shadow: var(--shadow);
         }
 
         .timeline-date {
-            color: var(--primary);
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-bottom: 8px;
         }
 
         .timeline-title {
-            font-size: 1.2rem;
+            font-size: 16px;
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 8px;
         }
 
         .timeline-desc {
-            color: var(--text-light);
-            font-size: 0.9rem;
+            font-size: 14px;
+            color: var(--text-muted);
         }
 
-        .timeline-tags {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .tag {
-            padding: 0.25rem 0.75rem;
+        .timeline-tag {
+            display: inline-block;
+            padding: 3px 10px;
             border-radius: 20px;
-            font-size: 0.75rem;
+            font-size: 12px;
             font-weight: 500;
+            margin-top: 10px;
         }
 
-        .tag-achievement { background: #d1fae5; color: #065f46; }
-        .tag-milestone { background: #dbeafe; color: #1e40af; }
-        .tag-memory { background: #fce7f3; color: #9d174d; }
+        .timeline-tag.tag-achievement { background: var(--success-bg); color: var(--success); }
+        .timeline-tag.tag-milestone { background: var(--info-bg); color: var(--info); }
+        .timeline-tag.tag-memory { background: var(--pink-bg); color: var(--pink); }
 
-        /* ===== 未来规划 ===== */
-        .future-section {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
+        /* ==================== 目标卡片 ==================== */
         .goals-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
         }
 
         .goal-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: var(--shadow);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
             transition: all 0.3s;
-            border-left: 4px solid var(--primary);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .goal-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, transparent, rgba(99,102,241,0.05));
-            border-radius: 0 20px 0 80px;
+            animation: fadeInUp 0.6s ease both;
         }
 
         .goal-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-xl);
+            background: var(--bg-card-hover);
+            box-shadow: var(--shadow);
         }
 
         .goal-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
+            align-items: flex-start;
+            margin-bottom: 12px;
         }
 
         .goal-title {
-            font-size: 1.2rem;
+            font-size: 16px;
             font-weight: 600;
         }
 
         .goal-status {
-            padding: 0.3rem 0.8rem;
+            padding: 3px 10px;
             border-radius: 20px;
-            font-size: 0.75rem;
+            font-size: 12px;
             font-weight: 500;
+            white-space: nowrap;
         }
 
-        .status-active { background: #d1fae5; color: #065f46; }
-        .status-planned { background: #fef3c7; color: #92400e; }
-        .status-completed { background: #dbeafe; color: #1e40af; }
+        .goal-status.in-progress { background: var(--info-bg); color: var(--info); }
+        .goal-status.completed { background: var(--success-bg); color: var(--success); }
+        .goal-status.paused { background: var(--warning-bg); color: var(--warning); }
 
         .goal-desc {
-            color: var(--text-light);
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
-        }
-
-        .goal-progress {
-            margin-bottom: 0.5rem;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
         }
 
         .goal-progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #e8ecf1;
-            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            height: 10px;
             overflow: hidden;
+            margin-bottom: 8px;
         }
 
         .goal-progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--primary-light));
-            border-radius: 4px;
-            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 0%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
         }
 
-        .goal-progress-text {
-            text-align: right;
-            font-size: 0.8rem;
-            color: var(--text-light);
-            margin-top: 0.25rem;
-        }
+        .goal-progress-fill.in-progress { background: var(--info); }
+        .goal-progress-fill.completed { background: var(--success); }
+        .goal-progress-fill.paused { background: var(--warning); }
 
-        .goal-deadline {
+        .goal-footer {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 0.5rem;
-            color: var(--text-light);
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
+            font-size: 13px;
+            color: var(--text-muted);
         }
 
-        /* ===== 人生日记 ===== */
-        .diary-section {
-            padding: 5rem 2rem;
-            background: var(--diary-warm-bg);
-            position: relative;
-            overflow: hidden;
+        .goal-update-btn {
+            padding: 4px 12px;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: var(--primary-light);
+            border-radius: var(--radius-xs);
+            font-size: 12px;
+            font-family: 'Noto Sans SC', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .diary-section::before {
-            content: '';
-            position: absolute;
-            top: -100px;
-            right: -100px;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(255,107,107,0.1), transparent);
-            border-radius: 50%;
+        .goal-update-btn:hover {
+            background: rgba(99, 102, 241, 0.25);
         }
 
-        .diary-section .section-title h2::after {
-            background: linear-gradient(90deg, var(--diary-warm), var(--secondary));
-        }
-
-        .diary-container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .diary-grid {
+        /* ==================== 日记卡片 ==================== */
+        .diaries-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
         }
 
         .diary-card {
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 15px rgba(255,107,107,0.1);
-            border: 1px solid rgba(255,107,107,0.15);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
             transition: all 0.3s;
+            animation: fadeInUp 0.6s ease both;
             position: relative;
         }
 
         .diary-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(255,107,107,0.15);
+            background: var(--bg-card-hover);
+            box-shadow: var(--shadow);
         }
 
-        .diary-card-header {
+        .diary-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 1rem;
-        }
-
-        .diary-date {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
+            margin-bottom: 12px;
         }
 
         .diary-mood {
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
+            font-size: 28px;
         }
 
-        .mood-happy { background: #fef3c7; color: #92400e; }
-        .mood-calm { background: #d1fae5; color: #065f46; }
-        .mood-moved { background: #fce7f3; color: #9d174d; }
-        .mood-sad { background: #dbeafe; color: #1e40af; }
-        .mood-angry { background: #fee2e2; color: #991b1b; }
-        .mood-excited { background: #ede9fe; color: #5b21b6; }
+        .diary-date {
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+
+        .diary-title {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
 
         .diary-content {
-            color: var(--text);
-            font-size: 0.95rem;
+            font-size: 14px;
+            color: var(--text-muted);
             line-height: 1.7;
-            margin-bottom: 1rem;
-            white-space: pre-wrap;
-        }
-
-        .diary-delete {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            color: #cbd5e1;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: color 0.3s;
-            padding: 0.3rem;
-        }
-
-        .diary-delete:hover {
-            color: var(--danger);
-        }
-
-        /* ===== 人生倾诉 ===== */
-        .confide-section {
-            padding: 5rem 2rem;
-            background: var(--confide-blue-bg);
-            position: relative;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
             overflow: hidden;
         }
 
-        .confide-section::before {
-            content: '';
+        .diary-delete-btn {
             position: absolute;
-            bottom: -100px;
-            left: -100px;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(124,58,237,0.08), transparent);
+            top: 12px;
+            right: 12px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
-        }
-
-        .confide-section .section-title h2::after {
-            background: linear-gradient(90deg, var(--confide-blue), var(--primary));
-        }
-
-        .confide-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .confide-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .confide-card {
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 15px rgba(124,58,237,0.08);
-            border: 1px solid rgba(124,58,237,0.12);
-            transition: all 0.3s;
-        }
-
-        .confide-card:hover {
-            box-shadow: 0 8px 25px rgba(124,58,237,0.12);
-        }
-
-        .confide-header {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            font-size: 12px;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 0.8rem;
-            margin-bottom: 1rem;
+            justify-content: center;
+            transition: all 0.3s;
+            opacity: 0;
         }
 
-        .confide-avatar {
-            width: 42px;
-            height: 42px;
+        .diary-card:hover .diary-delete-btn {
+            opacity: 1;
+        }
+
+        .diary-delete-btn:hover {
+            background: rgba(239, 68, 68, 0.25);
+        }
+
+        /* ==================== 倾诉卡片 ==================== */
+        .confessions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 20px;
+        }
+
+        .confession-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            transition: all 0.3s;
+            animation: fadeInUp 0.6s ease both;
+        }
+
+        .confession-card:hover {
+            background: var(--bg-card-hover);
+            box-shadow: var(--shadow);
+        }
+
+        .confession-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .confession-avatar {
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--confide-blue), var(--primary));
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1rem;
-            flex-shrink: 0;
+            font-size: 12px;
+            font-weight: 700;
         }
 
-        .confide-avatar.anonymous {
-            background: linear-gradient(135deg, #94a3b8, #64748b);
+        .confession-author {
+            font-size: 14px;
+            font-weight: 500;
         }
 
-        .confide-meta {
-            flex: 1;
-        }
-
-        .confide-name {
-            font-weight: 600;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .confide-anonymous-badge {
-            background: #f1f5f9;
-            color: #64748b;
-            font-size: 0.7rem;
-            padding: 0.15rem 0.5rem;
-            border-radius: 10px;
-        }
-
-        .confide-time {
-            font-size: 0.8rem;
-            color: var(--text-light);
-        }
-
-        .confide-content {
-            color: var(--text);
-            font-size: 0.95rem;
-            line-height: 1.7;
-            margin-bottom: 1rem;
-            white-space: pre-wrap;
-        }
-
-        .confide-actions {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .confide-action-btn {
-            background: none;
-            border: 1px solid var(--border);
-            padding: 0.4rem 0.8rem;
+        .confession-anon-tag {
+            padding: 2px 8px;
+            background: rgba(148, 163, 184, 0.15);
             border-radius: 20px;
-            font-size: 0.8rem;
-            color: var(--text-light);
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 11px;
+            color: var(--text-muted);
         }
 
-        .confide-action-btn:hover {
-            border-color: var(--confide-blue);
-            color: var(--confide-blue);
-            background: rgba(124,58,237,0.05);
+        .confession-content {
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.7;
+            margin-bottom: 16px;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--primary);
         }
 
-        .confide-responses {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px dashed var(--border);
+        .confession-responses {
+            margin-top: 12px;
         }
 
-        .confide-responses-title {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
+        .confession-responses h4 {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
         }
 
         .response-item {
-            display: flex;
-            gap: 0.6rem;
-            margin-bottom: 0.6rem;
-            align-items: flex-start;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-xs);
+            margin-bottom: 8px;
+            font-size: 13px;
         }
 
-        .response-avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--success), #34d399);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 0.65rem;
-            flex-shrink: 0;
+        .response-item .response-author {
+            font-weight: 600;
+            color: var(--primary-light);
+            margin-right: 6px;
         }
 
-        .response-content {
-            background: #f8fafc;
-            padding: 0.5rem 0.8rem;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            color: var(--text);
+        .response-input-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .response-input-row input {
             flex: 1;
-        }
-
-        .response-time {
-            font-size: 0.7rem;
-            color: #94a3b8;
-            margin-top: 0.2rem;
-        }
-
-        .response-input-wrap {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.8rem;
-        }
-
-        .response-input-wrap input {
-            flex: 1;
-            padding: 0.5rem 1rem;
+            padding: 8px 14px;
+            background: rgba(255, 255, 255, 0.06);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            font-size: 0.85rem;
+            border-radius: var(--radius-xs);
+            color: var(--text);
             font-family: 'Noto Sans SC', sans-serif;
+            font-size: 13px;
             outline: none;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
         }
 
-        .response-input-wrap input:focus {
-            border-color: var(--confide-blue);
+        .response-input-row input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
         }
 
-        .response-input-wrap button {
-            padding: 0.5rem 1rem;
-            background: var(--confide-blue);
-            color: white;
+        .response-send-btn {
+            padding: 8px 16px;
+            background: var(--primary);
             border: none;
-            border-radius: 20px;
-            font-size: 0.85rem;
+            border-radius: var(--radius-xs);
+            color: white;
+            font-size: 13px;
             cursor: pointer;
-            font-family: 'Noto Sans SC', sans-serif;
-            transition: background 0.3s;
+            transition: all 0.3s;
+            white-space: nowrap;
         }
 
-        .response-input-wrap button:hover {
-            background: var(--confide-blue-light);
+        .response-send-btn:hover {
+            background: var(--primary-dark);
         }
 
-        /* ===== 人生分享 ===== */
-        .share-section {
-            padding: 5rem 2rem;
-            background: var(--share-orange-bg);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .share-section::before {
-            content: '';
-            position: absolute;
-            top: -80px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(249,115,22,0.06), transparent);
-            border-radius: 50%;
-        }
-
-        .share-section .section-title h2::after {
-            background: linear-gradient(90deg, var(--share-orange), var(--secondary));
-        }
-
-        .share-container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .share-grid {
+        /* ==================== 社区分享 ==================== */
+        .shares-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
         }
 
         .share-card {
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 15px rgba(249,115,22,0.08);
-            border: 1px solid rgba(249,115,22,0.12);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
             transition: all 0.3s;
+            animation: fadeInUp 0.6s ease both;
         }
 
         .share-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(249,115,22,0.15);
+            background: var(--bg-card-hover);
+            box-shadow: var(--shadow);
         }
 
-        .share-card-header {
+        .share-header {
             display: flex;
             align-items: center;
-            gap: 0.8rem;
-            margin-bottom: 1rem;
+            gap: 12px;
+            margin-bottom: 14px;
         }
 
         .share-avatar {
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.1rem;
+            font-size: 16px;
             font-weight: 700;
-            flex-shrink: 0;
         }
 
-        .share-avatar.av1 { background: linear-gradient(135deg, #f97316, #fb923c); }
-        .share-avatar.av2 { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
-        .share-avatar.av3 { background: linear-gradient(135deg, #06b6d4, #22d3ee); }
-
-        .share-user-info {
+        .share-author-info {
             flex: 1;
         }
 
-        .share-username {
+        .share-author-name {
+            font-size: 14px;
             font-weight: 600;
-            font-size: 0.95rem;
         }
 
-        .share-time {
-            font-size: 0.8rem;
-            color: var(--text-light);
+        .share-date {
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+
+        .share-title {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 8px;
         }
 
         .share-content {
-            color: var(--text);
-            font-size: 0.95rem;
+            font-size: 14px;
+            color: var(--text-muted);
             line-height: 1.7;
-            margin-bottom: 1rem;
+            margin-bottom: 16px;
         }
 
-        .share-stats {
+        .share-actions {
             display: flex;
-            gap: 1.5rem;
+            gap: 16px;
         }
 
-        .share-stat {
-            display: flex;
+        .like-btn {
+            display: inline-flex;
             align-items: center;
-            gap: 0.3rem;
-            color: var(--text-light);
-            font-size: 0.85rem;
+            gap: 6px;
+            padding: 6px 14px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 20px;
+            color: #fca5a5;
+            font-size: 13px;
             cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .share-stat:hover {
-            color: var(--share-orange);
-        }
-
-        .share-stat.liked {
-            color: var(--share-orange);
-        }
-
-        /* ===== 模态框 ===== */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
-            z-index: 2000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal {
-            background: white;
-            border-radius: 24px;
-            padding: 2rem;
-            max-width: 500px;
-            width: 100%;
-            box-shadow: var(--shadow-xl);
-            animation: slideUp 0.3s ease;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .modal-close {
-            margin-left: auto;
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            color: var(--text-light);
-            cursor: pointer;
-            padding: 0.3rem;
-            transition: color 0.3s;
-        }
-
-        .modal-close:hover {
-            color: var(--text);
-        }
-
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: 0.4rem;
-            font-size: 0.9rem;
-            color: var(--text);
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 0.7rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            font-size: 0.95rem;
-            font-family: 'Noto Sans SC', sans-serif;
-            outline: none;
-            transition: border-color 0.3s, box-shadow 0.3s;
-            background: #f8fafc;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
-            background: white;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .form-group select {
-            cursor: pointer;
-        }
-
-        .form-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .form-checkbox input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--confide-blue);
-            cursor: pointer;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 0.8rem;
-            justify-content: flex-end;
-            margin-top: 1.5rem;
-        }
-
-        .modal-btn {
-            padding: 0.6rem 1.5rem;
-            border-radius: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            font-family: 'Noto Sans SC', sans-serif;
-            font-size: 0.95rem;
             transition: all 0.3s;
-            border: none;
+            font-family: 'Noto Sans SC', sans-serif;
         }
 
-        .modal-btn-cancel {
-            background: #f1f5f9;
-            color: var(--text-light);
+        .like-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
         }
 
-        .modal-btn-cancel:hover {
-            background: #e2e8f0;
+        .like-btn.liked {
+            background: rgba(239, 68, 68, 0.25);
+            color: #f87171;
         }
 
-        .modal-btn-confirm {
-            background: linear-gradient(135deg, var(--primary), var(--confide-blue));
-            color: white;
-        }
-
-        .modal-btn-confirm:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-        }
-
-        .modal-btn-confirm.diary-confirm {
-            background: linear-gradient(135deg, var(--diary-warm), var(--secondary));
-        }
-
-        .modal-btn-confirm.confide-confirm {
-            background: linear-gradient(135deg, var(--confide-blue), var(--primary));
-        }
-
-        .modal-btn-confirm.timeline-confirm {
-            background: linear-gradient(135deg, var(--primary), var(--confide-blue));
-        }
-
-        .modal-btn-confirm.goal-confirm {
-            background: linear-gradient(135deg, var(--success), #34d399);
-        }
-
-        /* ===== 浮动按钮菜单 ===== */
+        /* ==================== FAB浮动按钮 ==================== */
         .fab-container {
             position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 1000;
+            bottom: 30px;
+            right: 30px;
+            z-index: 90;
         }
-
-        .fab-menu {
-            position: absolute;
-            bottom: 70px;
-            right: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-            align-items: flex-end;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px);
-            transition: all 0.3s ease;
-        }
-
-        .fab-menu.open {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .fab-item {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            cursor: pointer;
-            animation: fadeInUp 0.3s ease both;
-        }
-
-        .fab-item:nth-child(1) { animation-delay: 0.05s; }
-        .fab-item:nth-child(2) { animation-delay: 0.1s; }
-        .fab-item:nth-child(3) { animation-delay: 0.15s; }
-        .fab-item:nth-child(4) { animation-delay: 0.2s; }
-
-        .fab-item-label {
-            background: white;
-            padding: 0.4rem 0.8rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            box-shadow: var(--shadow);
-            white-space: nowrap;
-            color: var(--text);
-        }
-
-        .fab-item-btn {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            border: none;
-            color: white;
-            font-size: 1.1rem;
-            cursor: pointer;
-            box-shadow: var(--shadow-lg);
-            transition: transform 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .fab-item-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .fab-item-btn.diary-btn { background: linear-gradient(135deg, var(--diary-warm), var(--secondary)); }
-        .fab-item-btn.confide-btn { background: linear-gradient(135deg, var(--confide-blue), var(--primary)); }
-        .fab-item-btn.timeline-btn { background: linear-gradient(135deg, var(--primary), var(--confide-blue)); }
-        .fab-item-btn.goal-btn { background: linear-gradient(135deg, var(--success), #34d399); }
 
         .fab-main {
-            width: 60px;
-            height: 60px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--confide-blue));
-            color: white;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             border: none;
-            font-size: 1.5rem;
+            color: white;
+            font-size: 22px;
             cursor: pointer;
-            box-shadow: 0 6px 20px rgba(99,102,241,0.4);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.5);
             transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
+            z-index: 2;
         }
 
         .fab-main:hover {
             transform: scale(1.1);
-            box-shadow: 0 8px 30px rgba(99,102,241,0.5);
         }
 
-        .fab-main.open {
+        .fab-main.active {
             transform: rotate(45deg);
         }
 
-        .fab-main.open:hover {
-            transform: rotate(45deg) scale(1.1);
-        }
-
-        /* ===== 确认对话框 ===== */
-        .confirm-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
-            z-index: 3000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .confirm-overlay.active {
-            display: flex;
-        }
-
-        .confirm-box {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-            box-shadow: var(--shadow-xl);
-            animation: slideUp 0.3s ease;
-        }
-
-        .confirm-icon {
-            font-size: 3rem;
-            color: var(--danger);
-            margin-bottom: 1rem;
-        }
-
-        .confirm-text {
-            font-size: 1.1rem;
-            margin-bottom: 1.5rem;
-            color: var(--text);
-        }
-
-        .confirm-actions {
-            display: flex;
-            gap: 0.8rem;
-            justify-content: center;
-        }
-
-        .confirm-btn {
-            padding: 0.6rem 1.5rem;
-            border-radius: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            font-family: 'Noto Sans SC', sans-serif;
-            font-size: 0.95rem;
-            transition: all 0.3s;
-            border: none;
-        }
-
-        .confirm-btn-cancel {
-            background: #f1f5f9;
-            color: var(--text-light);
-        }
-
-        .confirm-btn-delete {
-            background: var(--danger);
-            color: white;
-        }
-
-        .confirm-btn-delete:hover {
-            opacity: 0.9;
-        }
-
-        /* ===== Toast 提示 ===== */
-        .toast-container {
-            position: fixed;
-            top: 80px;
-            right: 1rem;
-            z-index: 4000;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .toast {
-            background: white;
-            padding: 0.8rem 1.2rem;
-            border-radius: 12px;
-            box-shadow: var(--shadow-lg);
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            animation: slideInRight 0.3s ease;
-            border-left: 4px solid var(--success);
-            max-width: 300px;
-        }
-
-        .toast.error {
-            border-left-color: var(--danger);
-        }
-
-        /* ===== 页脚 ===== */
-        .footer {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            color: white;
-            text-align: center;
-            padding: 3rem 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .footer::before {
-            content: '';
+        .fab-sub-list {
             position: absolute;
+            bottom: 70px;
+            right: 0;
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 12px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+        }
+
+        .fab-sub-list.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .fab-sub {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .fab-sub-label {
+            background: rgba(15, 11, 26, 0.9);
+            padding: 6px 12px;
+            border-radius: var(--radius-xs);
+            font-size: 13px;
+            white-space: nowrap;
+            border: 1px solid var(--border);
+        }
+
+        .fab-sub-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .fab-sub-btn:hover {
+            transform: scale(1.15);
+        }
+
+        .fab-sub-btn:nth-child(2) { background: var(--info); }
+        .fab-sub-btn:nth-child(4) { background: var(--pink); }
+        .fab-sub-btn:nth-child(6) { background: var(--success); }
+        .fab-sub-btn:nth-child(8) { background: var(--warning); }
+        .fab-sub-btn:nth-child(10) { background: var(--primary); }
+
+        /* ==================== 模态框 ==================== */
+        .modal-overlay {
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--confide-blue), var(--secondary), var(--diary-warm));
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
         }
 
-        .footer p {
-            opacity: 0.8;
-        }
-
-        .footer .footer-brand {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+        .modal-overlay.show {
             opacity: 1;
+            pointer-events: auto;
         }
 
-        /* ===== 动画 ===== */
+        .modal-card {
+            background: #1a1530;
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 32px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.show .modal-card {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-header h3 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+        }
+
+        .modal-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .modal-form label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .modal-form input,
+        .modal-form textarea,
+        .modal-form select {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .modal-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .modal-form input:focus,
+        .modal-form textarea:focus,
+        .modal-form select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        .modal-form select option {
+            background: #1a1530;
+        }
+
+        .modal-form .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-form .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        .modal-submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: var(--radius-sm);
+            color: white;
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 8px;
+        }
+
+        .modal-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        /* ==================== Toast ==================== */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 24px;
+            z-index: 300;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toast-item {
+            padding: 14px 24px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            animation: toastIn 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast-item.success {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            color: #86efac;
+        }
+
+        .toast-item.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+        }
+
+        .toast-item.info {
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            color: #a5b4fc;
+        }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* ==================== 页脚 ==================== */
+        .footer {
+            text-align: center;
+            padding: 40px 24px;
+            border-top: 1px solid var(--border);
+            color: var(--text-dim);
+            font-size: 13px;
+        }
+
+        .footer span {
+            margin: 0 8px;
+        }
+
+        /* ==================== 动画 ==================== */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        /* ==================== 空状态 ==================== */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-dim);
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.3;
         }
 
-        @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(100px); }
-            to { opacity: 1; transform: translateX(0); }
+        .empty-state p {
+            font-size: 15px;
         }
 
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        /* ===== 响应式 ===== */
+        /* ==================== 响应式 ==================== */
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2.2rem; }
-            .hero p { font-size: 1rem; }
-
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: rgba(255,255,255,0.98);
-                backdrop-filter: blur(20px);
+            .nav-links { display: none; }
+            .hero-title { font-size: 28px; }
+            .timeline-line { left: 20px; }
+            .timeline-item,
+            .timeline-item:nth-child(odd) {
                 flex-direction: column;
-                padding: 1rem 2rem;
-                gap: 0.8rem;
-                border-bottom: 1px solid var(--border);
-                box-shadow: var(--shadow-lg);
+                text-align: left;
+                padding-left: 50px;
             }
-
-            .nav-links.mobile-open {
-                display: flex;
-            }
-
-            .nav-toggle {
-                display: block;
-            }
-
-            .section-title h2 {
-                font-size: 1.8rem;
-            }
-
-            .timeline-container::before {
+            .timeline-dot {
                 left: 20px;
             }
-
-            .timeline-item,
-            .timeline-item:nth-child(even) {
-                width: 100%;
+            .timeline-item:nth-child(odd) .timeline-card,
+            .timeline-item:nth-child(even) .timeline-card {
                 margin-left: 0;
-                padding-left: 3rem;
-                padding-right: 0;
-                justify-content: flex-start;
+                margin-right: 0;
+                max-width: 100%;
             }
-
-            .timeline-item:nth-child(odd) .timeline-content::before,
-            .timeline-item:nth-child(even) .timeline-content::before {
-                left: -38px;
-                right: auto;
-            }
-
-            .goals-grid {
+            .goals-grid,
+            .diaries-grid,
+            .shares-grid,
+            .confessions-grid {
                 grid-template-columns: 1fr;
             }
-
-            .diary-grid,
-            .share-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .fab-container {
-                bottom: 1.5rem;
-                right: 1.5rem;
-            }
-
-            .fab-item-label {
-                display: none;
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 480px) {
-            .hero h1 { font-size: 1.8rem; }
-            .hero-buttons { flex-direction: column; align-items: center; }
-            .life-percentage { font-size: 2rem; }
-            .progress-header h3 { font-size: 1.2rem; }
-        }
-
-        /* ===== 滚动条美化 ===== */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+            .section { padding: 50px 16px; }
+            .hero { min-height: 60vh; padding-top: calc(var(--nav-height) + 20px); }
+            .hero-title { font-size: 24px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .stat-card { padding: 16px; }
+            .stat-number { font-size: 24px; }
+            .fab-container { bottom: 20px; right: 20px; }
         }
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
+
+    <!-- ==================== 导航栏 ==================== -->
     <nav class="navbar" id="navbar">
-        <div class="logo">
-            <i class="fas fa-heartbeat"></i>
-            人生进度
+        <div class="nav-inner">
+            <a href="#" class="nav-logo">
+                <div class="nav-logo-icon"><i class="fas fa-heartbeat"></i></div>
+                <span class="nav-logo-text">人生进度</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#overview"><i class="fas fa-chart-pie"></i> 总览</a></li>
+                <li><a href="#timeline"><i class="fas fa-clock-rotate-left"></i> 回顾</a></li>
+                <li><a href="#goals"><i class="fas fa-bullseye"></i> 规划</a></li>
+                <li><a href="#diaries"><i class="fas fa-book"></i> 日记</a></li>
+                <li><a href="#confessions"><i class="fas fa-comments"></i> 倾诉</a></li>
+                <li><a href="#shares"><i class="fas fa-share-nodes"></i> 分享</a></li>
+            </ul>
+            <div class="nav-right">
+                <div class="user-avatar" id="navAvatar">U</div>
+                <span class="user-name" id="navNickname">用户</span>
+                <button class="logout-btn" onclick="handleLogout()"><i class="fas fa-right-from-bracket"></i> 退出</button>
+            </div>
         </div>
-        <button class="nav-toggle" id="navToggle" aria-label="菜单">
-            <i class="fas fa-bars"></i>
-        </button>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="#overview" class="active">总览</a></li>
-            <li><a href="#timeline">回顾</a></li>
-            <li><a href="#future">规划</a></li>
-            <li><a href="#diary">日记</a></li>
-            <li><a href="#confide">倾诉</a></li>
-            <li><a href="#share">分享</a></li>
-        </ul>
     </nav>
 
-    <!-- 英雄区域 -->
+    <!-- ==================== 英雄区域 ==================== -->
     <section class="hero" id="hero">
-        <canvas id="particleCanvas"></canvas>
-        <div class="floating-shapes">
-            <div class="shape"></div>
-            <div class="shape"></div>
-            <div class="shape"></div>
-            <div class="shape"></div>
-        </div>
+        <canvas id="heroCanvas"></canvas>
         <div class="hero-content">
-            <h1>记录人生，规划未来</h1>
-            <p>每一个计划都是蓝图，每一个脚印都是记号。<br>在这里，书写属于你的生命故事。</p>
+            <div class="hero-greeting"><i class="fas fa-sparkles"></i> 欢迎回来</div>
+            <h1 class="hero-title">你好，<span id="heroNickname">用户</span>！</h1>
+            <p class="hero-subtitle">每一个计划都是蓝图，每一个脚印都是记号</p>
             <div class="hero-buttons">
-                <a href="#overview" class="btn btn-primary"><i class="fas fa-play"></i> 开始记录</a>
-                <a href="#timeline" class="btn btn-outline"><i class="fas fa-history"></i> 回顾过往</a>
+                <a href="#diaries" class="btn-primary"><i class="fas fa-pen-fancy"></i> 开始记录</a>
+                <a href="#timeline" class="btn-outline"><i class="fas fa-clock-rotate-left"></i> 回顾过往</a>
             </div>
         </div>
     </section>
 
-    <!-- 人生进度总览 -->
-    <section class="life-overview" id="overview">
-        <div class="section-title fade-in-up">
-            <h2>人生进度</h2>
-            <p>你已经走过了人生的一段旅程，继续向前，未来可期</p>
+    <!-- ==================== 人生进度总览 ==================== -->
+    <section class="section" id="overview">
+        <div class="section-header">
+            <h2><i class="fas fa-chart-pie"></i> 人生进度总览</h2>
+            <p>你的生命旅程，每一步都算数</p>
         </div>
-
-        <div class="progress-container fade-in-up">
-            <div class="progress-header">
-                <h3><i class="fas fa-heartbeat" style="color:var(--primary);margin-right:0.5rem;"></i>生命进度条</h3>
-                <div class="life-percentage" id="lifePercentage">28.5%</div>
+        <div class="progress-overview">
+            <div class="life-progress-bar">
+                <div class="life-progress-fill" id="lifeProgressFill" style="width: 0%">
+                    <span id="lifeProgressText">0%</span>
+                </div>
             </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="mainProgressFill" data-width="28.5"></div>
+            <div class="life-progress-label">
+                <span>出生</span>
+                <span id="lifeProgressAge">28岁 / 80岁</span>
+                <span>100岁</span>
             </div>
-            <p style="color: var(--text-light); text-align: center;">假设寿命80岁，你已经度过了28年的人生旅程</p>
-
-            <div class="life-stats">
-                <div class="stat-card fade-in-up">
-                    <div class="stat-icon purple"><i class="fas fa-calendar-alt"></i></div>
-                    <div class="stat-value">10,220</div>
-                    <div class="stat-label">已度过天数</div>
-                </div>
-                <div class="stat-card fade-in-up">
-                    <div class="stat-icon amber"><i class="fas fa-trophy"></i></div>
-                    <div class="stat-value">47</div>
-                    <div class="stat-label">达成成就</div>
-                </div>
-                <div class="stat-card fade-in-up">
-                    <div class="stat-icon green"><i class="fas fa-flag-checkered"></i></div>
-                    <div class="stat-value">12</div>
-                    <div class="stat-label">里程碑</div>
-                </div>
-                <div class="stat-card fade-in-up">
-                    <div class="stat-icon rose"><i class="fas fa-bullseye"></i></div>
-                    <div class="stat-value">8</div>
-                    <div class="stat-label">进行中目标</div>
-                </div>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-book"></i></div>
+                <div class="stat-number" id="statDiaries">0</div>
+                <div class="stat-label">日记篇数</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                <div class="stat-number" id="statTimeline">0</div>
+                <div class="stat-label">人生足迹</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
+                <div class="stat-number" id="statGoals">0</div>
+                <div class="stat-label">目标数量</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-comments"></i></div>
+                <div class="stat-number" id="statConfessions">0</div>
+                <div class="stat-label">倾诉次数</div>
             </div>
         </div>
     </section>
 
-    <!-- 时间轴回顾 -->
-    <section class="timeline-section" id="timeline">
-        <div class="section-title fade-in-up">
-            <h2>人生足迹</h2>
-            <p>回顾那些重要的时刻，它们塑造了今天的你</p>
+    <!-- ==================== 人生足迹（时间轴） ==================== -->
+    <section class="section" id="timeline">
+        <div class="section-header">
+            <h2><i class="fas fa-clock-rotate-left"></i> 人生足迹</h2>
+            <p>那些闪闪发光的时刻</p>
         </div>
-
         <div class="timeline-container" id="timelineContainer">
-            <!-- 时间轴事件由JS渲染 -->
+            <div class="timeline-line"></div>
+            <!-- 动态渲染 -->
         </div>
     </section>
 
-    <!-- 未来规划 -->
-    <section class="future-section" id="future">
-        <div class="section-title fade-in-up">
-            <h2>未来蓝图</h2>
-            <p>规划你的未来，让每一步都朝着梦想前进</p>
+    <!-- ==================== 未来蓝图（目标） ==================== -->
+    <section class="section" id="goals">
+        <div class="section-header">
+            <h2><i class="fas fa-bullseye"></i> 未来蓝图</h2>
+            <p>每一个目标都值得被认真对待</p>
         </div>
-
         <div class="goals-grid" id="goalsGrid">
-            <!-- 目标卡片由JS渲染 -->
+            <!-- 动态渲染 -->
         </div>
     </section>
 
-    <!-- 人生日记 -->
-    <section class="diary-section" id="diary">
-        <div class="section-title fade-in-up">
-            <h2>人生日记</h2>
-            <p>记录每一天的心情与感悟，留住那些珍贵的瞬间</p>
+    <!-- ==================== 人生日记 ==================== -->
+    <section class="section" id="diaries">
+        <div class="section-header">
+            <h2><i class="fas fa-book"></i> 人生日记</h2>
+            <p>用文字记录生活的温度</p>
         </div>
-
-        <div class="diary-container">
-            <div class="diary-grid" id="diaryGrid">
-                <!-- 日记卡片由JS渲染 -->
-            </div>
+        <div class="diaries-grid" id="diariesGrid">
+            <!-- 动态渲染 -->
         </div>
     </section>
 
-    <!-- 人生倾诉 -->
-    <section class="confide-section" id="confide">
-        <div class="section-title fade-in-up">
-            <h2>人生倾诉</h2>
-            <p>说出你的心事，收获来自陌生人的温暖</p>
+    <!-- ==================== 人生倾诉 ==================== -->
+    <section class="section" id="confessions">
+        <div class="section-header">
+            <h2><i class="fas fa-comments"></i> 人生倾诉</h2>
+            <p>说出心里话，温暖你我他</p>
         </div>
-
-        <div class="confide-container">
-            <div class="confide-list" id="confideList">
-                <!-- 倾诉卡片由JS渲染 -->
-            </div>
+        <div class="confessions-grid" id="confessionsGrid">
+            <!-- 动态渲染 -->
         </div>
     </section>
 
-    <!-- 人生分享 -->
-    <section class="share-section" id="share">
-        <div class="section-title fade-in-up">
-            <h2>社区精选</h2>
-            <p>来自其他用户的人生故事，感受不同的生命旅程</p>
+    <!-- ==================== 社区精选 ==================== -->
+    <section class="section" id="shares">
+        <div class="section-header">
+            <h2><i class="fas fa-share-nodes"></i> 社区精选</h2>
+            <p>分享你的故事，照亮别人的路</p>
         </div>
-
-        <div class="share-container">
-            <div class="share-grid" id="shareGrid">
-                <!-- 分享卡片由JS渲染 -->
-            </div>
+        <div class="shares-grid" id="sharesGrid">
+            <!-- 动态渲染 -->
         </div>
     </section>
 
-    <!-- 页脚 -->
-    <footer class="footer">
-        <div class="footer-brand"><i class="fas fa-heartbeat"></i> 人生进度</div>
-        <p>记录每一步，规划每一天</p>
-        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.6;">TRAE AI创造力大赛参赛作品</p>
-    </footer>
-
-    <!-- 浮动按钮菜单 -->
+    <!-- ==================== FAB浮动按钮 ==================== -->
     <div class="fab-container">
-        <div class="fab-menu" id="fabMenu">
-            <div class="fab-item" onclick="openModal('diary')">
-                <span class="fab-item-label">写日记</span>
-                <button class="fab-item-btn diary-btn"><i class="fas fa-book"></i></button>
+        <div class="fab-sub-list" id="fabSubList">
+            <div class="fab-sub">
+                <span class="fab-sub-label">写日记</span>
+                <button class="fab-sub-btn" onclick="openModal('diary')" title="写日记"><i class="fas fa-pen-fancy"></i></button>
             </div>
-            <div class="fab-item" onclick="openModal('confide')">
-                <span class="fab-item-label">发倾诉</span>
-                <button class="fab-item-btn confide-btn"><i class="fas fa-comment-dots"></i></button>
+            <div class="fab-sub">
+                <span class="fab-sub-label">发倾诉</span>
+                <button class="fab-sub-btn" onclick="openModal('confession')" title="发倾诉"><i class="fas fa-comment-dots"></i></button>
             </div>
-            <div class="fab-item" onclick="openModal('timeline')">
-                <span class="fab-item-label">加事件</span>
-                <button class="fab-item-btn timeline-btn"><i class="fas fa-plus-circle"></i></button>
+            <div class="fab-sub">
+                <span class="fab-sub-label">加事件</span>
+                <button class="fab-sub-btn" onclick="openModal('timeline')" title="加事件"><i class="fas fa-plus"></i></button>
             </div>
-            <div class="fab-item" onclick="openModal('goal')">
-                <span class="fab-item-label">加目标</span>
-                <button class="fab-item-btn goal-btn"><i class="fas fa-bullseye"></i></button>
+            <div class="fab-sub">
+                <span class="fab-sub-label">加目标</span>
+                <button class="fab-sub-btn" onclick="openModal('goal')" title="加目标"><i class="fas fa-bullseye"></i></button>
+            </div>
+            <div class="fab-sub">
+                <span class="fab-sub-label">发分享</span>
+                <button class="fab-sub-btn" onclick="openModal('share')" title="发分享"><i class="fas fa-share"></i></button>
             </div>
         </div>
-        <button class="fab-main" id="fabMain" aria-label="操作菜单">
+        <button class="fab-main" id="fabMain" onclick="toggleFab()">
             <i class="fas fa-plus"></i>
         </button>
     </div>
 
-    <!-- 日记模态框 -->
-    <div class="modal-overlay" id="diaryModal">
-        <div class="modal">
-            <div class="modal-title">
-                <i class="fas fa-book" style="color:var(--diary-warm)"></i> 写日记
-                <button class="modal-close" onclick="closeModal('diary')"><i class="fas fa-times"></i></button>
+    <!-- ==================== 模态框 ==================== -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+        <div class="modal-card" id="modalCard">
+            <div class="modal-header">
+                <h3 id="modalTitle">标题</h3>
+                <button class="modal-close" onclick="closeModal()"><i class="fas fa-xmark"></i></button>
             </div>
-            <div class="form-group">
-                <label>日期</label>
-                <input type="date" id="diaryDate">
-            </div>
-            <div class="form-group">
-                <label>心情</label>
-                <select id="diaryMood">
-                    <option value="happy">开心</option>
-                    <option value="calm">平静</option>
-                    <option value="moved">感动</option>
-                    <option value="sad">难过</option>
-                    <option value="angry">愤怒</option>
-                    <option value="excited">兴奋</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>内容</label>
-                <textarea id="diaryContent" placeholder="写下今天的心情和感悟..."></textarea>
-            </div>
-            <div class="modal-actions">
-                <button class="modal-btn modal-btn-cancel" onclick="closeModal('diary')">取消</button>
-                <button class="modal-btn modal-btn-confirm diary-confirm" onclick="saveDiary()">保存日记</button>
+            <div id="modalBody">
+                <!-- 动态渲染 -->
             </div>
         </div>
     </div>
 
-    <!-- 倾诉模态框 -->
-    <div class="modal-overlay" id="confideModal">
-        <div class="modal">
-            <div class="modal-title">
-                <i class="fas fa-comment-dots" style="color:var(--confide-blue)"></i> 发倾诉
-                <button class="modal-close" onclick="closeModal('confide')"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="form-group">
-                <label>你的名字（选填）</label>
-                <input type="text" id="confideName" placeholder="留空则为匿名倾诉">
-            </div>
-            <div class="form-group">
-                <label class="form-checkbox">
-                    <input type="checkbox" id="confideAnonymous" checked>
-                    匿名倾诉
-                </label>
-            </div>
-            <div class="form-group">
-                <label>心事内容</label>
-                <textarea id="confideContent" placeholder="说出你的心事，这里是一个安全的角落..."></textarea>
-            </div>
-            <div class="modal-actions">
-                <button class="modal-btn modal-btn-cancel" onclick="closeModal('confide')">取消</button>
-                <button class="modal-btn modal-btn-confirm confide-confirm" onclick="saveConfide()">发布倾诉</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 时间轴事件模态框 -->
-    <div class="modal-overlay" id="timelineModal">
-        <div class="modal">
-            <div class="modal-title">
-                <i class="fas fa-plus-circle" style="color:var(--primary)"></i> 添加人生事件
-                <button class="modal-close" onclick="closeModal('timeline')"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="form-group">
-                <label>日期</label>
-                <input type="text" id="timelineDate" placeholder="例如：2024年6月">
-            </div>
-            <div class="form-group">
-                <label>标题</label>
-                <input type="text" id="timelineTitle" placeholder="事件标题">
-            </div>
-            <div class="form-group">
-                <label>描述</label>
-                <textarea id="timelineDesc" placeholder="描述这个重要时刻..."></textarea>
-            </div>
-            <div class="form-group">
-                <label>标签</label>
-                <select id="timelineTag">
-                    <option value="achievement">成就</option>
-                    <option value="milestone">里程碑</option>
-                    <option value="memory">回忆</option>
-                </select>
-            </div>
-            <div class="modal-actions">
-                <button class="modal-btn modal-btn-cancel" onclick="closeModal('timeline')">取消</button>
-                <button class="modal-btn modal-btn-confirm timeline-confirm" onclick="saveTimelineEvent()">添加事件</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 目标模态框 -->
-    <div class="modal-overlay" id="goalModal">
-        <div class="modal">
-            <div class="modal-title">
-                <i class="fas fa-bullseye" style="color:var(--success)"></i> 添加新目标
-                <button class="modal-close" onclick="closeModal('goal')"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="form-group">
-                <label>目标名称</label>
-                <input type="text" id="goalTitle" placeholder="你的目标是什么？">
-            </div>
-            <div class="form-group">
-                <label>描述</label>
-                <textarea id="goalDesc" placeholder="详细描述你的目标..."></textarea>
-            </div>
-            <div class="form-group">
-                <label>状态</label>
-                <select id="goalStatus">
-                    <option value="active">进行中</option>
-                    <option value="planned">计划中</option>
-                    <option value="completed">已完成</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>当前进度 (%)</label>
-                <input type="number" id="goalProgress" min="0" max="100" value="0" placeholder="0-100">
-            </div>
-            <div class="form-group">
-                <label>目标日期</label>
-                <input type="text" id="goalDeadline" placeholder="例如：2026年12月">
-            </div>
-            <div class="modal-actions">
-                <button class="modal-btn modal-btn-cancel" onclick="closeModal('goal')">取消</button>
-                <button class="modal-btn modal-btn-confirm goal-confirm" onclick="saveGoal()">添加目标</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 确认对话框 -->
-    <div class="confirm-overlay" id="confirmOverlay">
-        <div class="confirm-box">
-            <div class="confirm-icon"><i class="fas fa-exclamation-triangle"></i></div>
-            <div class="confirm-text" id="confirmText">确定要删除这条日记吗？</div>
-            <div class="confirm-actions">
-                <button class="confirm-btn confirm-btn-cancel" onclick="closeConfirm()">取消</button>
-                <button class="confirm-btn confirm-btn-delete" id="confirmBtn" onclick="confirmAction()">删除</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast容器 -->
+    <!-- ==================== Toast容器 ==================== -->
     <div class="toast-container" id="toastContainer"></div>
 
+    <!-- ==================== 页脚 ==================== -->
+    <footer class="footer">
+        人生进度 &mdash; 记录每一步，规划每一天 <span>|</span> TRAE AI创造力大赛参赛作品
+    </footer>
+
     <script>
-    /* ===== 数据管理 ===== */
-    const STORAGE_KEYS = {
-        diary: 'lifeProgress_diary',
-        confide: 'lifeProgress_confide',
-        timeline: 'lifeProgress_timeline',
-        goals: 'lifeProgress_goals'
-    };
+    // ==================== 全局变量 ====================
+    let currentUser = null;
+    let db = null;
 
-    /* 心情配置 */
-    const MOOD_MAP = {
-        happy:   { label: '开心', icon: 'fa-face-smile',    cls: 'mood-happy' },
-        calm:    { label: '平静', icon: 'fa-face-meh',      cls: 'mood-calm' },
-        moved:   { label: '感动', icon: 'fa-face-grin-tears', cls: 'mood-moved' },
-        sad:     { label: '难过', icon: 'fa-face-sad-tear',  cls: 'mood-sad' },
-        angry:   { label: '愤怒', icon: 'fa-face-angry',     cls: 'mood-angry' },
-        excited: { label: '兴奋', icon: 'fa-face-grin-stars', cls: 'mood-excited' }
-    };
-
-    const TAG_MAP = {
-        achievement: { label: '成就', cls: 'tag-achievement' },
-        milestone:   { label: '里程碑', cls: 'tag-milestone' },
-        memory:      { label: '回忆', cls: 'tag-memory' }
-    };
-
-    const STATUS_MAP = {
-        active:    { label: '进行中', cls: 'status-active' },
-        planned:   { label: '计划中', cls: 'status-planned' },
-        completed: { label: '已完成', cls: 'status-completed' }
-    };
-
-    /* 默认预置数据 */
-    function getDefaultDiaries() {
-        return [
-            { id: 1, date: '2026-06-15', mood: 'happy', content: '今天收到了期待已久的offer！三年的努力终于有了回报。晚上和朋友们庆祝了一下，感觉人生充满了希望。未来的路还很长，但我已经准备好了。' },
-            { id: 2, date: '2026-06-10', mood: 'moved', content: '下班路上看到一个小女孩在给流浪猫喂食，她妈妈站在旁边微笑着看着她。这个画面让我觉得世界真的很美好，善良是会传承的。' },
-            { id: 3, date: '2026-06-05', mood: 'calm', content: '周末去公园跑了5公里，虽然速度不快，但跑完后整个人都放松了。有时候不需要追求极致，享受过程本身就是一种幸福。' }
-        ];
-    }
-
-    function getDefaultConfides() {
-        return [
-            {
-                id: 1,
-                name: '',
-                anonymous: true,
-                content: '最近工作压力很大，感觉自己一直在追赶别人的脚步。有时候会想，是不是应该停下来，好好想想自己真正想要的是什么...',
-                time: '2026-06-14 22:30',
-                responses: [
-                    { id: 1, content: '停下来思考不是退缩，而是为了更好地出发。相信自己的节奏，你比你想象的更优秀。', time: '2026-06-14 23:15' },
-                    { id: 2, content: '我也有同样的感受，后来发现按自己的节奏走反而走得更远。加油！', time: '2026-06-15 08:20' }
-                ]
-            },
-            {
-                id: 2,
-                name: '小星星',
-                anonymous: false,
-                content: '今天终于鼓起勇气跟暗恋了两年的人表白了，虽然被拒绝了，但至少不再遗憾了。感谢这段暗恋教会我的勇气。',
-                time: '2026-06-12 20:00',
-                responses: [
-                    { id: 1, content: '勇敢的人值得被爱！你的真诚终将遇到对的人。', time: '2026-06-12 21:30' }
-                ]
-            }
-        ];
-    }
-
-    function getDefaultTimeline() {
-        return [
-            { id: 1, date: '2024年6月', title: '获得晋升', desc: '经过两年的努力，终于从初级工程师晋升为高级工程师，这是职业生涯的重要里程碑。', tags: ['achievement', 'milestone'] },
-            { id: 2, date: '2023年12月', title: '第一次马拉松', desc: '完成了人生第一个全程马拉松，用时4小时15分钟。证明了坚持训练的力量。', tags: ['achievement', 'memory'] },
-            { id: 3, date: '2022年8月', title: '买房安家', desc: '在这个城市拥有了属于自己的小窝，从此不再漂泊，有了真正的归属感。', tags: ['milestone'] },
-            { id: 4, date: '2020年7月', title: '毕业工作', desc: '从大学毕业，进入第一家公司，开启了职业生涯的新篇章。', tags: ['milestone'] },
-            { id: 5, date: '2016年9月', title: '大学入学', desc: '踏入大学校园，开始了四年的求学之旅，结识了一生的挚友。', tags: ['memory'] }
-        ];
-    }
-
-    function getDefaultGoals() {
-        return [
-            { id: 1, title: '学习一门新语言', desc: '计划学习日语，目标是在两年内达到N2水平，为未来的日本旅行做准备。', status: 'active', progress: 35, deadline: '2026年12月' },
-            { id: 2, title: '完成半程铁人三项', desc: '挑战自我，完成1.9km游泳 + 90km自行车 + 21km跑步的半程铁人三项。', status: 'active', progress: 60, deadline: '2025年9月' },
-            { id: 3, title: '出版个人技术博客集', desc: '将多年积累的技术文章整理成册，出版一本属于自己的技术博客集。', status: 'planned', progress: 10, deadline: '2027年6月' },
-            { id: 4, title: '环游世界30个国家', desc: '在35岁之前游历30个国家，体验不同的文化和风景。', status: 'active', progress: 40, deadline: '2031年12月', progressText: '12/30' },
-            { id: 5, title: '建立被动收入来源', desc: '通过投资理财和副业，建立稳定的被动收入来源，实现财务自由。', status: 'planned', progress: 15, deadline: '2030年12月' },
-            { id: 6, title: '完成100本书阅读挑战', desc: '每年阅读20本书，五年内完成100本书的阅读挑战，涵盖技术、人文、历史等领域。', status: 'active', progress: 45, deadline: '2028年12月', progressText: '45/100' }
-        ];
-    }
-
-    function getDefaultShares() {
-        return [
-            {
-                id: 1,
-                username: '追梦人阿杰',
-                avatarClass: 'av1',
-                avatarText: '杰',
-                time: '2小时前',
-                content: '用了三年时间，终于从零基础学会了弹吉他。从最初的手指疼痛到如今能弹奏一首完整的曲子，这个过程教会了我：只要不放弃，时间会给你答案。',
-                likes: 128,
-                comments: 23,
-                liked: false
-            },
-            {
-                id: 2,
-                username: '旅行的蜗牛',
-                avatarClass: 'av2',
-                avatarText: '蜗',
-                time: '5小时前',
-                content: '30岁那年，我辞掉了稳定的工作，开始了间隔年旅行。走过了东南亚、欧洲和南美。回来后发现，世界很大，但最重要的是找到了内心的平静。人生不只有一种活法。',
-                likes: 256,
-                comments: 45,
-                liked: false
-            },
-            {
-                id: 3,
-                username: '码农小王',
-                avatarClass: 'av3',
-                avatarText: '王',
-                time: '1天前',
-                content: '今天是我坚持写技术博客的第365天。从最初的几篇没人看的文章，到现在有了自己的读者群。分享知识的过程让我学到了更多，也认识了很多志同道合的朋友。坚持做一件事，真的会有复利效应。',
-                likes: 89,
-                comments: 16,
-                liked: false
-            }
-        ];
-    }
-
-    /* LocalStorage 读写 */
-    function loadData(key, defaultFn) {
+    // ==================== 认证检查 ====================
+    (function checkAuth() {
+        const stored = localStorage.getItem('currentUser');
+        if (!stored) {
+            window.location.href = 'login.html';
+            return;
+        }
         try {
-            const data = localStorage.getItem(key);
-            if (data) return JSON.parse(data);
-        } catch(e) {}
-        const def = defaultFn();
-        localStorage.setItem(key, JSON.stringify(def));
-        return def;
-    }
-
-    function saveData(key, data) {
-        localStorage.setItem(key, JSON.stringify(data));
-    }
-
-    /* ===== 全局状态 ===== */
-    let diaries = loadData(STORAGE_KEYS.diary, getDefaultDiaries);
-    let confides = loadData(STORAGE_KEYS.confide, getDefaultConfides);
-    let timelineEvents = loadData(STORAGE_KEYS.timeline, getDefaultTimeline);
-    let goals = loadData(STORAGE_KEYS.goals, getDefaultGoals);
-    let shares = getDefaultShares(); // 社区分享不持久化
-
-    let pendingConfirmAction = null;
-
-    /* ===== 渲染函数 ===== */
-
-    /* 时间轴 */
-    function renderTimeline() {
-        const container = document.getElementById('timelineContainer');
-        if (timelineEvents.length === 0) {
-            container.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:2rem;">暂无时间轴事件，点击右下角按钮添加你的第一个人生足迹吧！</p>';
-            return;
-        }
-        container.innerHTML = timelineEvents.map((item, i) => `
-            <div class="timeline-item fade-in-up" style="transition-delay:${i * 0.1}s">
-                <div class="timeline-content">
-                    <div class="timeline-date"><i class="far fa-calendar-alt" style="margin-right:0.3rem;"></i>${item.date}</div>
-                    <div class="timeline-title">${item.title}</div>
-                    <div class="timeline-desc">${item.desc}</div>
-                    <div class="timeline-tags">
-                        ${item.tags.map(t => `<span class="tag ${TAG_MAP[t].cls}">${TAG_MAP[t].label}</span>`).join('')}
-                    </div>
-                </div>
-            </div>
-        `).join('');
-        observeFadeIn();
-    }
-
-    /* 目标 */
-    function renderGoals() {
-        const grid = document.getElementById('goalsGrid');
-        if (goals.length === 0) {
-            grid.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:2rem;grid-column:1/-1;">暂无目标，点击右下角按钮添加你的第一个人生目标吧！</p>';
-            return;
-        }
-        grid.innerHTML = goals.map((g, i) => `
-            <div class="goal-card fade-in-up" style="transition-delay:${i * 0.1}s">
-                <div class="goal-header">
-                    <div class="goal-title">${g.title}</div>
-                    <span class="goal-status ${STATUS_MAP[g.status].cls}">${STATUS_MAP[g.status].label}</span>
-                </div>
-                <div class="goal-desc">${g.desc}</div>
-                <div class="goal-progress">
-                    <div class="goal-progress-bar">
-                        <div class="goal-progress-fill" data-width="${g.progress}"></div>
-                    </div>
-                    <div class="goal-progress-text">${g.progressText || g.progress + '%'}</div>
-                </div>
-                <div class="goal-deadline">
-                    <i class="far fa-clock"></i>
-                    目标日期：${g.deadline}
-                </div>
-            </div>
-        `).join('');
-        observeFadeIn();
-        observeProgressBars();
-    }
-
-    /* 日记 */
-    function renderDiaries() {
-        const grid = document.getElementById('diaryGrid');
-        if (diaries.length === 0) {
-            grid.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:2rem;grid-column:1/-1;">还没有日记，点击右下角按钮写下你的第一篇日记吧！</p>';
-            return;
-        }
-        // 按日期倒序
-        const sorted = [...diaries].sort((a, b) => b.date.localeCompare(a.date));
-        grid.innerHTML = sorted.map((d, i) => {
-            const mood = MOOD_MAP[d.mood] || MOOD_MAP.calm;
-            return `
-            <div class="diary-card fade-in-up" style="transition-delay:${i * 0.08}s">
-                <button class="diary-delete" onclick="deleteDiary(${d.id})" title="删除日记"><i class="fas fa-trash-alt"></i></button>
-                <div class="diary-card-header">
-                    <div class="diary-date"><i class="far fa-calendar"></i> ${d.date}</div>
-                    <span class="diary-mood ${mood.cls}"><i class="fas ${mood.icon}"></i> ${mood.label}</span>
-                </div>
-                <div class="diary-content">${d.content}</div>
-            </div>`;
-        }).join('');
-        observeFadeIn();
-    }
-
-    /* 倾诉 */
-    function renderConfides() {
-        const list = document.getElementById('confideList');
-        if (confides.length === 0) {
-            list.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:2rem;">还没有倾诉，点击右下角按钮说出你的心事吧！</p>';
-            return;
-        }
-        const sorted = [...confides].sort((a, b) => b.time.localeCompare(a.time));
-        list.innerHTML = sorted.map((c, i) => {
-            const displayName = c.anonymous ? '匿名用户' : (c.name || '热心网友');
-            const avatarCls = c.anonymous ? 'anonymous' : '';
-            const avatarIcon = c.anonymous ? '<i class="fas fa-user-secret"></i>' : '<i class="fas fa-user"></i>';
-            const badge = c.anonymous ? '<span class="confide-anonymous-badge"><i class="fas fa-mask"></i> 匿名</span>' : '';
-            const responsesHtml = (c.responses || []).map(r => `
-                <div class="response-item">
-                    <div class="response-avatar"><i class="fas fa-heart"></i></div>
-                    <div>
-                        <div class="response-content">${r.content}</div>
-                        <div class="response-time">${r.time}</div>
-                    </div>
-                </div>
-            `).join('');
-            return `
-            <div class="confide-card fade-in-up" style="transition-delay:${i * 0.08}s">
-                <div class="confide-header">
-                    <div class="confide-avatar ${avatarCls}">${avatarIcon}</div>
-                    <div class="confide-meta">
-                        <div class="confide-name">${displayName} ${badge}</div>
-                        <div class="confide-time"><i class="far fa-clock"></i> ${c.time}</div>
-                    </div>
-                </div>
-                <div class="confide-content">${c.content}</div>
-                <div class="confide-responses">
-                    <div class="confide-responses-title"><i class="fas fa-heart" style="color:var(--diary-warm)"></i> 暖心回应 (${(c.responses || []).length})</div>
-                    ${responsesHtml}
-                    <div class="response-input-wrap">
-                        <input type="text" placeholder="给予温暖的回应..." id="responseInput_${c.id}">
-                        <button onclick="addResponse(${c.id})">回应</button>
-                    </div>
-                </div>
-            </div>`;
-        }).join('');
-        observeFadeIn();
-    }
-
-    /* 分享 */
-    function renderShares() {
-        const grid = document.getElementById('shareGrid');
-        grid.innerHTML = shares.map((s, i) => `
-            <div class="share-card fade-in-up" style="transition-delay:${i * 0.1}s">
-                <div class="share-card-header">
-                    <div class="share-avatar ${s.avatarClass}">${s.avatarText}</div>
-                    <div class="share-user-info">
-                        <div class="share-username">${s.username}</div>
-                        <div class="share-time">${s.time}</div>
-                    </div>
-                </div>
-                <div class="share-content">${s.content}</div>
-                <div class="share-stats">
-                    <span class="share-stat ${s.liked ? 'liked' : ''}" onclick="toggleLike(${s.id})">
-                        <i class="${s.liked ? 'fas' : 'far'} fa-heart"></i> ${s.likes}
-                    </span>
-                    <span class="share-stat">
-                        <i class="far fa-comment"></i> ${s.comments}
-                    </span>
-                </div>
-            </div>
-        `).join('');
-        observeFadeIn();
-    }
-
-    /* ===== 交互函数 ===== */
-
-    /* 模态框 */
-    function openModal(type) {
-        closeFabMenu();
-        const modal = document.getElementById(type + 'Modal');
-        if (modal) {
-            modal.classList.add('active');
-            // 设置默认日期
-            if (type === 'diary') {
-                document.getElementById('diaryDate').value = new Date().toISOString().split('T')[0];
+            currentUser = JSON.parse(stored);
+            if (!currentUser.id || !currentUser.username) {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'login.html';
+                return;
             }
+        } catch (e) {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
         }
-    }
+    })();
 
-    function closeModal(type) {
-        const modal = document.getElementById(type + 'Modal');
-        if (modal) modal.classList.remove('active');
-    }
-
-    /* 点击overlay关闭模态框 */
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-        overlay.addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.classList.remove('active');
-            }
+    // ==================== IndexedDB 初始化 ====================
+    function openDB() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open('LifeProgressDB', 1);
+            request.onupgradeneeded = (e) => {
+                const db = e.target.result;
+                // users
+                if (!db.objectStoreNames.contains('users')) {
+                    const us = db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
+                    us.createIndex('username', 'username', { unique: true });
+                }
+                // diaries
+                if (!db.objectStoreNames.contains('diaries')) {
+                    const ds = db.createObjectStore('diaries', { keyPath: 'id', autoIncrement: true });
+                    ds.createIndex('userId', 'userId', { unique: false });
+                    ds.createIndex('date', 'date', { unique: false });
+                }
+                // confessions
+                if (!db.objectStoreNames.contains('confessions')) {
+                    const cs = db.createObjectStore('confessions', { keyPath: 'id', autoIncrement: true });
+                    cs.createIndex('userId', 'userId', { unique: false });
+                }
+                // timeline
+                if (!db.objectStoreNames.contains('timeline')) {
+                    const ts = db.createObjectStore('timeline', { keyPath: 'id', autoIncrement: true });
+                    ts.createIndex('userId', 'userId', { unique: false });
+                }
+                // goals
+                if (!db.objectStoreNames.contains('goals')) {
+                    const gs = db.createObjectStore('goals', { keyPath: 'id', autoIncrement: true });
+                    gs.createIndex('userId', 'userId', { unique: false });
+                }
+                // shares
+                if (!db.objectStoreNames.contains('shares')) {
+                    db.createObjectStore('shares', { keyPath: 'id', autoIncrement: true });
+                }
+            };
+            request.onsuccess = (e) => resolve(e.target.result);
+            request.onerror = (e) => reject(e.target.error);
         });
-    });
+    }
 
-    /* 保存日记 */
-    function saveDiary() {
-        const date = document.getElementById('diaryDate').value;
-        const mood = document.getElementById('diaryMood').value;
-        const content = document.getElementById('diaryContent').value.trim();
-        if (!date || !content) {
-            showToast('请填写日期和内容', true);
+    // ==================== IndexedDB 辅助函数 ====================
+    function dbAdd(storeName, data) {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, 'readwrite');
+            const store = tx.objectStore(storeName);
+            const req = store.add(data);
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+        });
+    }
+
+    function dbPut(storeName, data) {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, 'readwrite');
+            const store = tx.objectStore(storeName);
+            const req = store.put(data);
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+        });
+    }
+
+    function dbDelete(storeName, id) {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, 'readwrite');
+            const store = tx.objectStore(storeName);
+            const req = store.delete(id);
+            req.onsuccess = () => resolve();
+            req.onerror = () => reject(req.error);
+        });
+    }
+
+    function dbGetAll(storeName) {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, 'readonly');
+            const store = tx.objectStore(storeName);
+            const req = store.getAll();
+            req.onsuccess = () => resolve(req.result || []);
+            req.onerror = () => reject(req.error);
+        });
+    }
+
+    function dbGetByIndex(storeName, indexName, value) {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, 'readonly');
+            const store = tx.objectStore(storeName);
+            const index = store.index(indexName);
+            const req = index.getAll(value);
+            req.onsuccess = () => resolve(req.result || []);
+            req.onerror = () => reject(req.error);
+        });
+    }
+
+    function dbGet(storeName, id) {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, 'readonly');
+            const store = tx.objectStore(storeName);
+            const req = store.get(id);
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+        });
+    }
+
+    // ==================== 预置数据 ====================
+    async function seedData() {
+        const diaries = await dbGetAll('diaries');
+        if (diaries.length > 0) return; // 已有数据，不重复插入
+
+        const uid = currentUser.id;
+        const now = new Date().toISOString();
+
+        // 3条日记
+        await dbAdd('diaries', {
+            userId: uid, title: '新的一天，新的开始',
+            content: '今天阳光明媚，心情格外好。早上去了公园散步，看到樱花开了，粉粉的一片，美极了。生活就是这样，总有一些小确幸值得记录。',
+            mood: 'happy', date: '2024-03-15', createdAt: now
+        });
+        await dbAdd('diaries', {
+            userId: uid, title: '深夜的思考',
+            content: '深夜总是容易让人陷入沉思。回顾过去的一年，虽然有很多挑战，但也收获了很多成长。感谢身边一直支持我的朋友们，你们是我前进的动力。',
+            mood: 'thoughtful', date: '2024-03-10', createdAt: now
+        });
+        await dbAdd('diaries', {
+            userId: uid, title: '读完了一本好书',
+            content: '今天终于读完了《百年孤独》，马尔克斯的魔幻现实主义让我深深着迷。书中关于孤独、时间、命运的描写，让我对人生有了新的理解。推荐给每一个热爱阅读的人。',
+            mood: 'inspired', date: '2024-03-05', createdAt: now
+        });
+
+        // 2条倾诉
+        await dbAdd('confessions', {
+            userId: uid, content: '最近工作压力好大，感觉每天都在赶deadline。有时候真的很想停下来，好好休息一下，但又怕落后于人。不知道大家都是怎么调节的？',
+            anonymous: false, responses: [
+                { author: '小明', content: '我理解你的感受，适当休息反而效率更高哦！', createdAt: now },
+                { author: '阿花', content: '试试冥想吧，每天10分钟，真的很有帮助。', createdAt: now }
+            ], createdAt: now
+        });
+        await dbAdd('confessions', {
+            userId: uid, content: '有时候觉得自己不够好，总是拿自己和别人比较。明明知道这样不好，但就是控制不住。希望能学会更多地欣赏自己。',
+            anonymous: true, responses: [
+                { author: '匿名', content: '你已经很棒了，每个人都是独特的，不需要比较。', createdAt: now }
+            ], createdAt: now
+        });
+
+        // 5条时间轴事件
+        await dbAdd('timeline', {
+            userId: uid, title: '大学毕业', description: '四年大学生活画上句号，带着满满的回忆和期待走向社会。',
+            date: '2020-06-30', tag: 'milestone', createdAt: now
+        });
+        await dbAdd('timeline', {
+            userId: uid, title: '第一份工作', description: '入职了一家互联网公司，开始了职业生涯的新篇章。',
+            date: '2020-09-01', tag: 'achievement', createdAt: now
+        });
+        await dbAdd('timeline', {
+            userId: uid, title: '独自旅行', description: '一个人去了云南，看了洱海的日出，感受到了前所未有的自由。',
+            date: '2021-05-15', tag: 'memory', createdAt: now
+        });
+        await dbAdd('timeline', {
+            userId: uid, title: '升职加薪', description: '经过一年的努力，终于获得了晋升的机会，感谢团队的信任。',
+            date: '2022-03-01', tag: 'achievement', createdAt: now
+        });
+        await dbAdd('timeline', {
+            userId: uid, title: '学会做饭', description: '从只会煮泡面到能做出一桌菜，虽然只是小事，但很有成就感。',
+            date: '2023-01-20', tag: 'memory', createdAt: now
+        });
+
+        // 6个目标
+        await dbAdd('goals', {
+            userId: uid, title: '学习一门新语言', description: '目标：日语N2水平，每天学习30分钟',
+            progress: 35, status: 'in-progress', deadline: '2024-12-31', createdAt: now
+        });
+        await dbAdd('goals', {
+            userId: uid, title: '完成半程马拉松', description: '每周跑步3次，逐步提升到21公里',
+            progress: 60, status: 'in-progress', deadline: '2024-10-15', createdAt: now
+        });
+        await dbAdd('goals', {
+            userId: uid, title: '阅读24本书', description: '每月阅读2本书，涵盖文学、科技、哲学',
+            progress: 100, status: 'completed', deadline: '2024-12-31', createdAt: now
+        });
+        await dbAdd('goals', {
+            userId: uid, title: '存款达到10万', description: '每月存入工资的30%，控制消费',
+            progress: 45, status: 'in-progress', deadline: '2025-06-30', createdAt: now
+        });
+        await dbAdd('goals', {
+            userId: uid, title: '学习吉他', description: '报名吉他课，每周练习，能弹5首完整歌曲',
+            progress: 20, status: 'paused', deadline: '2024-12-31', createdAt: now
+        });
+        await dbAdd('goals', {
+            userId: uid, title: '获得专业认证', description: '准备并通过PMP项目管理认证考试',
+            progress: 80, status: 'in-progress', deadline: '2024-09-30', createdAt: now
+        });
+
+        // 3条社区分享
+        await dbAdd('shares', {
+            userId: uid, nickname: currentUser.nickname, title: '我的时间管理心得',
+            content: '经过两年的摸索，我找到了适合自己的时间管理方法：番茄工作法+周复盘。每天专注工作25分钟，休息5分钟，一周做一次总结和调整。效率提升了至少50%！',
+            likes: 12, createdAt: now
+        });
+        await dbAdd('shares', {
+            userId: uid, nickname: currentUser.nickname, title: '坚持跑步100天的心路历程',
+            content: '从跑500米就喘到能跑10公里，这100天教会我：坚持本身就是最大的收获。不需要和别人比速度，只要比昨天的自己快一步就好。',
+            likes: 28, createdAt: now
+        });
+        await dbAdd('shares', {
+            userId: uid, nickname: currentUser.nickname, title: '给25岁自己的建议',
+            content: '1. 学会说不，你的时间很宝贵。2. 保持好奇心，永远不要停止学习。3. 珍惜身边的人，多表达爱意。4. 不要害怕失败，每次跌倒都是成长的机会。5. 记得照顾好自己的身体。',
+            likes: 45, createdAt: now
+        });
+
+        showToast('示例数据已加载', 'success');
+    }
+
+    // ==================== 渲染函数 ====================
+
+    // 更新用户信息显示
+    function updateUserUI() {
+        const nickname = currentUser.nickname || currentUser.username;
+        const initial = nickname.charAt(0).toUpperCase();
+        document.getElementById('navAvatar').textContent = initial;
+        document.getElementById('navNickname').textContent = nickname;
+        document.getElementById('heroNickname').textContent = nickname;
+    }
+
+    // 渲染统计
+    async function renderStats() {
+        const diaries = await dbGetByIndex('diaries', 'userId', currentUser.id);
+        const timeline = await dbGetByIndex('timeline', 'userId', currentUser.id);
+        const goals = await dbGetByIndex('goals', 'userId', currentUser.id);
+        const confessions = await dbGetByIndex('confessions', 'userId', currentUser.id);
+
+        document.getElementById('statDiaries').textContent = diaries.length;
+        document.getElementById('statTimeline').textContent = timeline.length;
+        document.getElementById('statGoals').textContent = goals.length;
+        document.getElementById('statConfessions').textContent = confessions.length;
+    }
+
+    // 渲染生命进度条
+    function renderLifeProgress() {
+        const age = 28;
+        const lifespan = 80;
+        const percent = Math.round((age / lifespan) * 100);
+        setTimeout(() => {
+            document.getElementById('lifeProgressFill').style.width = percent + '%';
+            document.getElementById('lifeProgressText').textContent = percent + '%';
+        }, 300);
+        document.getElementById('lifeProgressAge').textContent = age + '岁 / ' + lifespan + '岁';
+    }
+
+    // 渲染时间轴
+    async function renderTimeline() {
+        const items = await dbGetByIndex('timeline', 'userId', currentUser.id);
+        const container = document.getElementById('timelineContainer');
+        const line = '<div class="timeline-line"></div>';
+
+        if (items.length === 0) {
+            container.innerHTML = line + '<div class="empty-state"><i class="fas fa-clock-rotate-left"></i><p>还没有人生足迹，快去添加吧</p></div>';
             return;
         }
-        const newDiary = {
-            id: Date.now(),
-            date: date,
-            mood: mood,
-            content: content
-        };
-        diaries.push(newDiary);
-        saveData(STORAGE_KEYS.diary, diaries);
-        renderDiaries();
-        closeModal('diary');
-        // 清空表单
-        document.getElementById('diaryContent').value = '';
-        showToast('日记保存成功！');
+
+        // 按日期排序（最新在前）
+        items.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        let html = line;
+        items.forEach((item, i) => {
+            const tagClass = item.tag || 'achievement';
+            const tagLabel = tagClass === 'achievement' ? '成就' : tagClass === 'milestone' ? '里程碑' : '回忆';
+            html += `
+                <div class="timeline-item" style="animation-delay: ${i * 0.1}s">
+                    <div class="timeline-dot tag-${tagClass}"></div>
+                    <div class="timeline-card">
+                        <div class="timeline-date"><i class="far fa-calendar"></i> ${item.date}</div>
+                        <div class="timeline-title">${escapeHtml(item.title)}</div>
+                        <div class="timeline-desc">${escapeHtml(item.description)}</div>
+                        <span class="timeline-tag tag-${tagClass}"><i class="fas fa-tag"></i> ${tagLabel}</span>
+                    </div>
+                </div>`;
+        });
+        container.innerHTML = html;
     }
 
-    /* 删除日记 */
-    function deleteDiary(id) {
-        pendingConfirmAction = function() {
-            diaries = diaries.filter(d => d.id !== id);
-            saveData(STORAGE_KEYS.diary, diaries);
-            renderDiaries();
-            showToast('日记已删除');
-        };
-        document.getElementById('confirmText').textContent = '确定要删除这条日记吗？此操作不可撤销。';
-        document.getElementById('confirmOverlay').classList.add('active');
-    }
+    // 渲染目标
+    async function renderGoals() {
+        const items = await dbGetByIndex('goals', 'userId', currentUser.id);
+        const grid = document.getElementById('goalsGrid');
 
-    /* 保存倾诉 */
-    function saveConfide() {
-        const anonymous = document.getElementById('confideAnonymous').checked;
-        const name = document.getElementById('confideName').value.trim();
-        const content = document.getElementById('confideContent').value.trim();
-        if (!content) {
-            showToast('请填写倾诉内容', true);
+        if (items.length === 0) {
+            grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-bullseye"></i><p>还没有目标，快去规划你的未来蓝图吧</p></div>';
             return;
         }
-        const now = new Date();
-        const timeStr = now.getFullYear() + '-' +
-            String(now.getMonth()+1).padStart(2,'0') + '-' +
-            String(now.getDate()).padStart(2,'0') + ' ' +
-            String(now.getHours()).padStart(2,'0') + ':' +
-            String(now.getMinutes()).padStart(2,'0');
-        const newConfide = {
-            id: Date.now(),
-            name: anonymous ? '' : name,
-            anonymous: anonymous,
-            content: content,
-            time: timeStr,
-            responses: []
-        };
-        confides.push(newConfide);
-        saveData(STORAGE_KEYS.confide, confides);
-        renderConfides();
-        closeModal('confide');
-        document.getElementById('confideContent').value = '';
-        document.getElementById('confideName').value = '';
-        showToast('倾诉发布成功！');
+
+        let html = '';
+        items.forEach((item, i) => {
+            const statusLabel = item.status === 'completed' ? '已完成' : item.status === 'paused' ? '已暂停' : '进行中';
+            html += `
+                <div class="goal-card" style="animation-delay: ${i * 0.1}s">
+                    <div class="goal-header">
+                        <div class="goal-title">${escapeHtml(item.title)}</div>
+                        <span class="goal-status ${item.status}">${statusLabel}</span>
+                    </div>
+                    <div class="goal-desc">${escapeHtml(item.description)}</div>
+                    <div class="goal-progress-bar">
+                        <div class="goal-progress-fill ${item.status}" style="width: ${Math.min(item.progress, 100)}%"></div>
+                    </div>
+                    <div class="goal-footer">
+                        <span>进度 ${item.progress}%</span>
+                        ${item.status !== 'completed' ? `<button class="goal-update-btn" onclick="updateGoalProgress(${item.id}, ${item.progress})"><i class="fas fa-plus"></i> +5%</button>` : '<i class="fas fa-check-circle" style="color:var(--success)"></i>'}
+                    </div>
+                </div>`;
+        });
+        grid.innerHTML = html;
     }
 
-    /* 添加回应 */
-    function addResponse(confideId) {
-        const input = document.getElementById('responseInput_' + confideId);
+    // 渲染日记
+    async function renderDiaries() {
+        const items = await dbGetByIndex('diaries', 'userId', currentUser.id);
+        const grid = document.getElementById('diariesGrid');
+
+        if (items.length === 0) {
+            grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-book"></i><p>还没有日记，快去记录你的生活吧</p></div>';
+            return;
+        }
+
+        // 按日期排序（最新在前）
+        items.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        const moodMap = {
+            happy: '&#128522;', sad: '&#128546;', angry: '&#128545;',
+            excited: '&#129321;', calm: '&#128524;', thoughtful: '&#129300;',
+            inspired: '&#129504;', grateful: '&#128151;', anxious: '&#128550;'
+        };
+
+        let html = '';
+        items.forEach((item, i) => {
+            const moodEmoji = moodMap[item.mood] || '&#128516;';
+            html += `
+                <div class="diary-card" style="animation-delay: ${i * 0.1}s">
+                    <button class="diary-delete-btn" onclick="deleteDiary(${item.id})" title="删除"><i class="fas fa-trash"></i></button>
+                    <div class="diary-header">
+                        <div class="diary-mood">${moodEmoji}</div>
+                        <div class="diary-date"><i class="far fa-calendar"></i> ${item.date}</div>
+                    </div>
+                    <div class="diary-title">${escapeHtml(item.title)}</div>
+                    <div class="diary-content">${escapeHtml(item.content)}</div>
+                </div>`;
+        });
+        grid.innerHTML = html;
+    }
+
+    // 渲染倾诉
+    async function renderConfessions() {
+        const items = await dbGetAll('confessions');
+        const grid = document.getElementById('confessionsGrid');
+
+        if (items.length === 0) {
+            grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-comments"></i><p>还没有倾诉，说出你的心里话吧</p></div>';
+            return;
+        }
+
+        let html = '';
+        items.forEach((item, i) => {
+            const displayName = item.anonymous ? '匿名用户' : (item.nickname || '用户');
+            const initial = displayName.charAt(0);
+            const anonTag = item.anonymous ? '<span class="confession-anon-tag"><i class="fas fa-user-secret"></i> 匿名</span>' : '';
+
+            let responsesHtml = '';
+            if (item.responses && item.responses.length > 0) {
+                responsesHtml = '<div class="confession-responses"><h4><i class="fas fa-reply"></i> 回应 (' + item.responses.length + ')</h4>';
+                item.responses.forEach(r => {
+                    responsesHtml += `<div class="response-item"><span class="response-author">${escapeHtml(r.author)}</span>${escapeHtml(r.content)}</div>`;
+                });
+                responsesHtml += '</div>';
+            }
+
+            html += `
+                <div class="confession-card" style="animation-delay: ${i * 0.1}s">
+                    <div class="confession-meta">
+                        <div class="confession-avatar">${initial}</div>
+                        <span class="confession-author">${escapeHtml(displayName)}</span>
+                        ${anonTag}
+                    </div>
+                    <div class="confession-content">${escapeHtml(item.content)}</div>
+                    ${responsesHtml}
+                    <div class="response-input-row">
+                        <input type="text" placeholder="写下你的回应..." id="responseInput_${item.id}">
+                        <button class="response-send-btn" onclick="addResponse(${item.id})"><i class="fas fa-paper-plane"></i> 发送</button>
+                    </div>
+                </div>`;
+        });
+        grid.innerHTML = html;
+    }
+
+    // 渲染分享
+    async function renderShares() {
+        const items = await dbGetAll('shares');
+        const grid = document.getElementById('sharesGrid');
+
+        if (items.length === 0) {
+            grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-share-nodes"></i><p>还没有分享，快去分享你的故事吧</p></div>';
+            return;
+        }
+
+        let html = '';
+        items.forEach((item, i) => {
+            const nickname = item.nickname || '用户';
+            const initial = nickname.charAt(0);
+            const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString('zh-CN') : '';
+
+            html += `
+                <div class="share-card" style="animation-delay: ${i * 0.1}s">
+                    <div class="share-header">
+                        <div class="share-avatar">${initial}</div>
+                        <div class="share-author-info">
+                            <div class="share-author-name">${escapeHtml(nickname)}</div>
+                            <div class="share-date">${dateStr}</div>
+                        </div>
+                    </div>
+                    <div class="share-title">${escapeHtml(item.title)}</div>
+                    <div class="share-content">${escapeHtml(item.content)}</div>
+                    <div class="share-actions">
+                        <button class="like-btn" onclick="likeShare(${item.id})" id="likeBtn_${item.id}">
+                            <i class="fas fa-heart"></i> <span id="likeCount_${item.id}">${item.likes || 0}</span>
+                        </button>
+                    </div>
+                </div>`;
+        });
+        grid.innerHTML = html;
+    }
+
+    // ==================== 操作函数 ====================
+
+    // 更新目标进度
+    async function updateGoalProgress(id, currentProgress) {
+        const newProgress = Math.min(currentProgress + 5, 100);
+        const newStatus = newProgress >= 100 ? 'completed' : 'in-progress';
+        try {
+            const item = await dbGet('goals', id);
+            if (item) {
+                item.progress = newProgress;
+                item.status = newStatus;
+                await dbPut('goals', item);
+                showToast('进度已更新！' + (newStatus === 'completed' ? ' 恭喜完成目标！' : ''), 'success');
+                await renderGoals();
+                await renderStats();
+            }
+        } catch (e) {
+            showToast('更新失败：' + e.message, 'error');
+        }
+    }
+
+    // 删除日记
+    async function deleteDiary(id) {
+        if (!confirm('确定要删除这篇日记吗？此操作不可恢复。')) return;
+        try {
+            await dbDelete('diaries', id);
+            showToast('日记已删除', 'success');
+            await renderDiaries();
+            await renderStats();
+        } catch (e) {
+            showToast('删除失败：' + e.message, 'error');
+        }
+    }
+
+    // 添加回应
+    async function addResponse(confessionId) {
+        const input = document.getElementById('responseInput_' + confessionId);
         const content = input.value.trim();
         if (!content) {
-            showToast('请输入回应内容', true);
+            showToast('请输入回应内容', 'error');
             return;
         }
-        const now = new Date();
-        const timeStr = now.getFullYear() + '-' +
-            String(now.getMonth()+1).padStart(2,'0') + '-' +
-            String(now.getDate()).padStart(2,'0') + ' ' +
-            String(now.getHours()).padStart(2,'0') + ':' +
-            String(now.getMinutes()).padStart(2,'0');
-        const confide = confides.find(c => c.id === confideId);
-        if (confide) {
-            if (!confide.responses) confide.responses = [];
-            confide.responses.push({
-                id: Date.now(),
-                content: content,
-                time: timeStr
+        try {
+            const item = await dbGet('confessions', confessionId);
+            if (item) {
+                if (!item.responses) item.responses = [];
+                item.responses.push({
+                    author: currentUser.nickname || currentUser.username,
+                    content: content,
+                    createdAt: new Date().toISOString()
+                });
+                await dbPut('confessions', item);
+                showToast('回应已发送', 'success');
+                await renderConfessions();
+            }
+        } catch (e) {
+            showToast('发送失败：' + e.message, 'error');
+        }
+    }
+
+    // 点赞分享
+    async function likeShare(shareId) {
+        try {
+            const item = await dbGet('shares', shareId);
+            if (item) {
+                item.likes = (item.likes || 0) + 1;
+                await dbPut('shares', item);
+                document.getElementById('likeCount_' + shareId).textContent = item.likes;
+                document.getElementById('likeBtn_' + shareId).classList.add('liked');
+                showToast('已点赞', 'success');
+            }
+        } catch (e) {
+            showToast('操作失败：' + e.message, 'error');
+        }
+    }
+
+    // ==================== 模态框系统 ====================
+    function openModal(type) {
+        toggleFab(true); // 关闭FAB
+        const overlay = document.getElementById('modalOverlay');
+        const title = document.getElementById('modalTitle');
+        const body = document.getElementById('modalBody');
+
+        const forms = {
+            diary: {
+                title: '<i class="fas fa-pen-fancy"></i> 写日记',
+                html: `
+                    <form class="modal-form" onsubmit="submitDiary(event)">
+                        <div class="form-group">
+                            <label>标题</label>
+                            <input type="text" id="diaryTitle" placeholder="给今天起个标题..." required>
+                        </div>
+                        <div class="form-group">
+                            <label>内容</label>
+                            <textarea id="diaryContent" placeholder="今天发生了什么..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>心情</label>
+                            <select id="diaryMood" required>
+                                <option value="happy">开心 &#128522;</option>
+                                <option value="calm">平静 &#128524;</option>
+                                <option value="thoughtful">沉思 &#129300;</option>
+                                <option value="inspired">受启发 &#129504;</option>
+                                <option value="grateful">感恩 &#128151;</option>
+                                <option value="excited">兴奋 &#129321;</option>
+                                <option value="sad">难过 &#128546;</option>
+                                <option value="anxious">焦虑 &#128550;</option>
+                                <option value="angry">生气 &#128545;</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="modal-submit-btn"><i class="fas fa-check"></i> 保存日记</button>
+                    </form>`
+            },
+            confession: {
+                title: '<i class="fas fa-comment-dots"></i> 发倾诉',
+                html: `
+                    <form class="modal-form" onsubmit="submitConfession(event)">
+                        <div class="form-group">
+                            <label>倾诉内容</label>
+                            <textarea id="confessionContent" placeholder="说出你的心里话..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="confessionAnon" checked>
+                                <label for="confessionAnon" style="margin:0">匿名发布</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="modal-submit-btn"><i class="fas fa-paper-plane"></i> 发布倾诉</button>
+                    </form>`
+            },
+            timeline: {
+                title: '<i class="fas fa-plus"></i> 添加人生事件',
+                html: `
+                    <form class="modal-form" onsubmit="submitTimeline(event)">
+                        <div class="form-group">
+                            <label>事件标题</label>
+                            <input type="text" id="timelineTitle" placeholder="这个时刻叫什么..." required>
+                        </div>
+                        <div class="form-group">
+                            <label>事件描述</label>
+                            <textarea id="timelineDesc" placeholder="描述一下这个时刻..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>日期</label>
+                            <input type="date" id="timelineDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>标签</label>
+                            <select id="timelineTag" required>
+                                <option value="achievement">成就</option>
+                                <option value="milestone">里程碑</option>
+                                <option value="memory">回忆</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="modal-submit-btn"><i class="fas fa-check"></i> 添加事件</button>
+                    </form>`
+            },
+            goal: {
+                title: '<i class="fas fa-bullseye"></i> 添加新目标',
+                html: `
+                    <form class="modal-form" onsubmit="submitGoal(event)">
+                        <div class="form-group">
+                            <label>目标标题</label>
+                            <input type="text" id="goalTitle" placeholder="你的目标是什么..." required>
+                        </div>
+                        <div class="form-group">
+                            <label>目标描述</label>
+                            <textarea id="goalDesc" placeholder="详细描述一下..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>截止日期</label>
+                            <input type="date" id="goalDeadline" required>
+                        </div>
+                        <button type="submit" class="modal-submit-btn"><i class="fas fa-check"></i> 添加目标</button>
+                    </form>`
+            },
+            share: {
+                title: '<i class="fas fa-share"></i> 发布分享',
+                html: `
+                    <form class="modal-form" onsubmit="submitShare(event)">
+                        <div class="form-group">
+                            <label>标题</label>
+                            <input type="text" id="shareTitle" placeholder="分享的标题..." required>
+                        </div>
+                        <div class="form-group">
+                            <label>内容</label>
+                            <textarea id="shareContent" placeholder="分享你的故事或心得..." required></textarea>
+                        </div>
+                        <button type="submit" class="modal-submit-btn"><i class="fas fa-paper-plane"></i> 发布分享</button>
+                    </form>`
+            }
+        };
+
+        const config = forms[type];
+        if (!config) return;
+
+        title.innerHTML = config.title;
+        body.innerHTML = config.html;
+        overlay.classList.add('show');
+    }
+
+    function closeModal() {
+        document.getElementById('modalOverlay').classList.remove('show');
+    }
+
+    function closeModalOnOverlay(e) {
+        if (e.target === document.getElementById('modalOverlay')) {
+            closeModal();
+        }
+    }
+
+    // ==================== 表单提交 ====================
+    async function submitDiary(e) {
+        e.preventDefault();
+        const title = document.getElementById('diaryTitle').value.trim();
+        const content = document.getElementById('diaryContent').value.trim();
+        const mood = document.getElementById('diaryMood').value;
+
+        if (!title || !content) { showToast('请填写完整信息', 'error'); return; }
+
+        try {
+            await dbAdd('diaries', {
+                userId: currentUser.id, title, content, mood,
+                date: new Date().toISOString().split('T')[0],
+                createdAt: new Date().toISOString()
             });
-            saveData(STORAGE_KEYS.confide, confides);
-            renderConfides();
-            showToast('回应发送成功！');
+            showToast('日记保存成功', 'success');
+            closeModal();
+            await renderDiaries();
+            await renderStats();
+        } catch (e) {
+            showToast('保存失败：' + e.message, 'error');
         }
     }
 
-    /* 保存时间轴事件 */
-    function saveTimelineEvent() {
-        const date = document.getElementById('timelineDate').value.trim();
+    async function submitConfession(e) {
+        e.preventDefault();
+        const content = document.getElementById('confessionContent').value.trim();
+        const anonymous = document.getElementById('confessionAnon').checked;
+
+        if (!content) { showToast('请填写倾诉内容', 'error'); return; }
+
+        try {
+            await dbAdd('confessions', {
+                userId: currentUser.id, content, anonymous,
+                nickname: currentUser.nickname,
+                responses: [],
+                createdAt: new Date().toISOString()
+            });
+            showToast('倾诉发布成功', 'success');
+            closeModal();
+            await renderConfessions();
+            await renderStats();
+        } catch (e) {
+            showToast('发布失败：' + e.message, 'error');
+        }
+    }
+
+    async function submitTimeline(e) {
+        e.preventDefault();
         const title = document.getElementById('timelineTitle').value.trim();
-        const desc = document.getElementById('timelineDesc').value.trim();
+        const description = document.getElementById('timelineDesc').value.trim();
+        const date = document.getElementById('timelineDate').value;
         const tag = document.getElementById('timelineTag').value;
-        if (!date || !title) {
-            showToast('请填写日期和标题', true);
-            return;
+
+        if (!title || !description || !date) { showToast('请填写完整信息', 'error'); return; }
+
+        try {
+            await dbAdd('timeline', {
+                userId: currentUser.id, title, description, date, tag,
+                createdAt: new Date().toISOString()
+            });
+            showToast('事件添加成功', 'success');
+            closeModal();
+            await renderTimeline();
+            await renderStats();
+        } catch (e) {
+            showToast('添加失败：' + e.message, 'error');
         }
-        const newEvent = {
-            id: Date.now(),
-            date: date,
-            title: title,
-            desc: desc || '这是一个重要的人生时刻。',
-            tags: [tag]
-        };
-        timelineEvents.unshift(newEvent);
-        saveData(STORAGE_KEYS.timeline, timelineEvents);
-        renderTimeline();
-        closeModal('timeline');
-        document.getElementById('timelineDate').value = '';
-        document.getElementById('timelineTitle').value = '';
-        document.getElementById('timelineDesc').value = '';
-        showToast('事件添加成功！');
     }
 
-    /* 保存目标 */
-    function saveGoal() {
+    async function submitGoal(e) {
+        e.preventDefault();
         const title = document.getElementById('goalTitle').value.trim();
-        const desc = document.getElementById('goalDesc').value.trim();
-        const status = document.getElementById('goalStatus').value;
-        const progress = parseInt(document.getElementById('goalProgress').value) || 0;
-        const deadline = document.getElementById('goalDeadline').value.trim();
-        if (!title) {
-            showToast('请填写目标名称', true);
+        const description = document.getElementById('goalDesc').value.trim();
+        const deadline = document.getElementById('goalDeadline').value;
+
+        if (!title || !description || !deadline) { showToast('请填写完整信息', 'error'); return; }
+
+        try {
+            await dbAdd('goals', {
+                userId: currentUser.id, title, description,
+                progress: 0, status: 'in-progress', deadline,
+                createdAt: new Date().toISOString()
+            });
+            showToast('目标添加成功', 'success');
+            closeModal();
+            await renderGoals();
+            await renderStats();
+        } catch (e) {
+            showToast('添加失败：' + e.message, 'error');
+        }
+    }
+
+    async function submitShare(e) {
+        e.preventDefault();
+        const title = document.getElementById('shareTitle').value.trim();
+        const content = document.getElementById('shareContent').value.trim();
+
+        if (!title || !content) { showToast('请填写完整信息', 'error'); return; }
+
+        try {
+            await dbAdd('shares', {
+                userId: currentUser.id, nickname: currentUser.nickname,
+                title, content, likes: 0,
+                createdAt: new Date().toISOString()
+            });
+            showToast('分享发布成功', 'success');
+            closeModal();
+            await renderShares();
+        } catch (e) {
+            showToast('发布失败：' + e.message, 'error');
+        }
+    }
+
+    // ==================== FAB ====================
+    function toggleFab(forceClose) {
+        const main = document.getElementById('fabMain');
+        const list = document.getElementById('fabSubList');
+        if (forceClose === true) {
+            main.classList.remove('active');
+            list.classList.remove('show');
             return;
         }
-        const clampedProgress = Math.max(0, Math.min(100, progress));
-        const newGoal = {
-            id: Date.now(),
-            title: title,
-            desc: desc || '向目标前进中...',
-            status: status,
-            progress: clampedProgress,
-            deadline: deadline || '待定'
-        };
-        goals.push(newGoal);
-        saveData(STORAGE_KEYS.goals, goals);
-        renderGoals();
-        closeModal('goal');
-        document.getElementById('goalTitle').value = '';
-        document.getElementById('goalDesc').value = '';
-        document.getElementById('goalProgress').value = '0';
-        document.getElementById('goalDeadline').value = '';
-        showToast('目标添加成功！');
+        main.classList.toggle('active');
+        list.classList.toggle('show');
     }
 
-    /* 点赞 */
-    function toggleLike(shareId) {
-        const share = shares.find(s => s.id === shareId);
-        if (share) {
-            share.liked = !share.liked;
-            share.likes += share.liked ? 1 : -1;
-            renderShares();
-        }
-    }
-
-    /* 确认对话框 */
-    function closeConfirm() {
-        document.getElementById('confirmOverlay').classList.remove('active');
-        pendingConfirmAction = null;
-    }
-
-    function confirmAction() {
-        if (pendingConfirmAction) {
-            pendingConfirmAction();
-        }
-        closeConfirm();
-    }
-
-    /* Toast提示 */
-    function showToast(message, isError) {
+    // ==================== Toast ====================
+    function showToast(message, type = 'info') {
         const container = document.getElementById('toastContainer');
         const toast = document.createElement('div');
-        toast.className = 'toast' + (isError ? ' error' : '');
-        toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}" style="color:${isError ? 'var(--danger)' : 'var(--success)'}"></i> ${message}`;
+        toast.className = 'toast-item ' + type;
+        const icon = type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+        toast.innerHTML = '<i class="fas ' + icon + '"></i> ' + message;
         container.appendChild(toast);
         setTimeout(() => {
             toast.style.opacity = '0';
             toast.style.transform = 'translateX(100px)';
             toast.style.transition = 'all 0.3s';
             setTimeout(() => toast.remove(), 300);
-        }, 2500);
+        }, 3000);
     }
 
-    /* ===== FAB菜单 ===== */
-    const fabMain = document.getElementById('fabMain');
-    const fabMenu = document.getElementById('fabMenu');
-
-    fabMain.addEventListener('click', () => {
-        fabMain.classList.toggle('open');
-        fabMenu.classList.toggle('open');
-    });
-
-    function closeFabMenu() {
-        fabMain.classList.remove('open');
-        fabMenu.classList.remove('open');
+    // ==================== 退出登录 ====================
+    function handleLogout() {
+        if (!confirm('确定要退出登录吗？')) return;
+        localStorage.removeItem('currentUser');
+        window.location.href = 'login.html';
     }
 
-    /* 点击外部关闭FAB */
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.fab-container')) {
-            closeFabMenu();
-        }
-    });
+    // ==================== 工具函数 ====================
+    function escapeHtml(str) {
+        if (!str) return '';
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
 
-    /* ===== 导航栏 ===== */
-    const navToggle = document.getElementById('navToggle');
-    const navLinks = document.getElementById('navLinks');
-
-    navToggle.addEventListener('click', () => {
-        navLinks.classList.toggle('mobile-open');
-    });
-
-    /* 导航栏滚动效果 */
+    // ==================== 导航栏滚动阴影 ====================
     window.addEventListener('scroll', () => {
         const navbar = document.getElementById('navbar');
-        if (window.scrollY > 50) {
+        if (window.scrollY > 10) {
             navbar.classList.add('scrolled');
         } else {
             navbar.classList.remove('scrolled');
         }
-
-        // 高亮当前导航
-        const sections = ['overview', 'timeline', 'future', 'diary', 'confide', 'share'];
-        let current = '';
-        sections.forEach(id => {
-            const section = document.getElementById(id);
-            if (section) {
-                const rect = section.getBoundingClientRect();
-                if (rect.top <= 150) {
-                    current = id;
-                }
-            }
-        });
-        document.querySelectorAll('.nav-links a').forEach(a => {
-            a.classList.remove('active');
-            if (a.getAttribute('href') === '#' + current) {
-                a.classList.add('active');
-            }
-        });
     });
 
-    /* 平滑滚动 */
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth' });
-                navLinks.classList.remove('mobile-open');
-            }
-        });
-    });
-
-    /* ===== 入场动画观察器 ===== */
-    function observeFadeIn() {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-        document.querySelectorAll('.fade-in-up:not(.visible)').forEach(el => {
-            observer.observe(el);
-        });
-    }
-
-    /* 进度条动画观察器 */
-    function observeProgressBars() {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const fills = entry.target.querySelectorAll('.goal-progress-fill[data-width]');
-                    fills.forEach(fill => {
-                        setTimeout(() => {
-                            fill.style.width = fill.dataset.width + '%';
-                        }, 200);
-                    });
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.3 });
-
-        document.querySelectorAll('.goal-card').forEach(el => observer.observe(el));
-    }
-
-    /* 主进度条动画 */
-    function animateMainProgress() {
-        const fill = document.getElementById('mainProgressFill');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        fill.style.width = fill.dataset.width + '%';
-                    }, 300);
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.5 });
-        observer.observe(fill.parentElement);
-    }
-
-    /* ===== 粒子动画 ===== */
-    function initParticles() {
-        const canvas = document.getElementById('particleCanvas');
+    // ==================== 英雄区域粒子动画 ====================
+    (function initHeroCanvas() {
+        const canvas = document.getElementById('heroCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        let animationId;
+        let animId;
 
         function resize() {
-            canvas.width = canvas.offsetWidth;
-            canvas.height = canvas.offsetHeight;
+            const hero = document.getElementById('hero');
+            canvas.width = hero.offsetWidth;
+            canvas.height = hero.offsetHeight;
         }
 
-        resize();
-        window.addEventListener('resize', resize);
-
-        class Particle {
+        class HeroParticle {
             constructor() {
-                this.reset();
-            }
-            reset() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 3 + 1;
-                this.speedX = (Math.random() - 0.5) * 0.8;
-                this.speedY = (Math.random() - 0.5) * 0.8;
-                this.opacity = Math.random() * 0.5 + 0.2;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.4 + 0.1;
             }
             update() {
                 this.x += this.speedX;
@@ -2664,26 +2316,30 @@
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.fillStyle = `rgba(99, 102, 241, ${this.opacity})`;
                 ctx.fill();
             }
         }
 
-        // 创建粒子
-        const count = Math.min(80, Math.floor(canvas.width * canvas.height / 15000));
-        for (let i = 0; i < count; i++) {
-            particles.push(new Particle());
+        function init() {
+            resize();
+            particles = [];
+            const count = Math.min(60, Math.floor((canvas.width * canvas.height) / 20000));
+            for (let i = 0; i < count; i++) {
+                particles.push(new HeroParticle());
+            }
         }
 
-        function connectParticles() {
+        function connect() {
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 120) {
+                    if (dist < 100) {
+                        const opacity = (1 - dist / 100) * 0.12;
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.15 * (1 - dist / 120)})`;
+                        ctx.strokeStyle = `rgba(99, 102, 241, ${opacity})`;
                         ctx.lineWidth = 0.5;
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
@@ -2695,52 +2351,33 @@
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            connectParticles();
-            animationId = requestAnimationFrame(animate);
+            particles.forEach(p => { p.update(); p.draw(); });
+            connect();
+            animId = requestAnimationFrame(animate);
         }
 
+        init();
         animate();
+        window.addEventListener('resize', () => { cancelAnimationFrame(animId); init(); animate(); });
+    })();
 
-        // 页面不可见时暂停动画
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                cancelAnimationFrame(animationId);
-            } else {
-                animate();
-            }
-        });
-    }
-
-    /* ===== 匿名复选框联动 ===== */
-    document.getElementById('confideAnonymous').addEventListener('change', function() {
-        const nameInput = document.getElementById('confideName');
-        if (this.checked) {
-            nameInput.value = '';
-            nameInput.disabled = true;
-            nameInput.placeholder = '匿名模式下无需填写';
-        } else {
-            nameInput.disabled = false;
-            nameInput.placeholder = '输入你的名字';
+    // ==================== 页面初始化 ====================
+    async function init() {
+        try {
+            db = await openDB();
+            updateUserUI();
+            renderLifeProgress();
+            await seedData();
+            await renderStats();
+            await renderTimeline();
+            await renderGoals();
+            await renderDiaries();
+            await renderConfessions();
+            await renderShares();
+        } catch (e) {
+            showToast('初始化失败：' + e.message, 'error');
+            console.error(e);
         }
-    });
-
-    /* ===== 初始化 ===== */
-    function init() {
-        renderTimeline();
-        renderGoals();
-        renderDiaries();
-        renderConfides();
-        renderShares();
-        animateMainProgress();
-        initParticles();
-        observeFadeIn();
-        // 初始化匿名输入框状态
-        document.getElementById('confideName').disabled = true;
-        document.getElementById('confideName').placeholder = '匿名模式下无需填写';
     }
 
     init();
