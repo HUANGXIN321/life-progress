@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人生进度 - 记录你的每一步</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --secondary: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* 英雄区域 */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+            background-size: cover;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* 人生进度总览 */
+        .life-overview {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .progress-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-header h3 {
+            font-size: 1.5rem;
+            color: var(--text);
+        }
+
+        .life-percentage {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 10px;
+            transition: width 2s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        .life-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* 时间轴 */
+        .timeline-section {
+            background: white;
+            padding: 5rem 2rem;
+        }
+
+        .timeline-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 2rem;
+            position: relative;
+            margin-bottom: 3rem;
+            width: 50%;
+        }
+
+        .timeline-item:nth-child(even) {
+            justify-content: flex-start;
+            padding-left: 2rem;
+            padding-right: 0;
+            margin-left: 50%;
+        }
+
+        .timeline-content {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            max-width: 400px;
+            position: relative;
+        }
+
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            width: 15px;
+            height: 15px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--primary);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content::before {
+            right: -39px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content::before {
+            left: -39px;
+        }
+
+        .timeline-date {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-desc {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .timeline-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .tag-achievement {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .tag-milestone {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .tag-memory {
+            background: #fce7f3;
+            color: #9d174d;
+        }
+
+        /* 未来规划 */
+        .future-section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .goal-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 4px solid var(--primary);
+        }
+
+        .goal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .goal-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .goal-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-planned {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-completed {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .goal-desc {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .goal-progress {
+            margin-bottom: 0.5rem;
+        }
+
+        .goal-progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .goal-progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .goal-progress-text {
+            text-align: right;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        .goal-deadline {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        /* 添加按钮 */
+        .add-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: transform 0.3s;
+            z-index: 100;
+        }
+
+        .add-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* 页脚 */
+        .footer {
+            background: var(--text);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .footer p {
+            opacity: 0.8;
+        }
+
+        /* 动画 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .timeline-container::before {
+                left: 20px;
+            }
+
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                width: 100%;
+                margin-left: 0;
+                padding-left: 3rem;
+                padding-right: 0;
+                justify-content: flex-start;
+            }
+
+            .timeline-item:nth-child(odd) .timeline-content::before,
+            .timeline-item:nth-child(even) .timeline-content::before {
+                left: -34px;
+                right: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-heartbeat"></i>
+            人生进度
+        </div>
+        <ul class="nav-links">
+            <li><a href="#overview">总览</a></li>
+            <li><a href="#timeline">回顾</a></li>
+            <li><a href="#future">规划</a></li>
+        </ul>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>记录人生，规划未来</h1>
+            <p>每一个计划都是蓝图，每一个脚印都是记号。在这里，书写属于你的生命故事。</p>
+            <div class="hero-buttons">
+                <a href="#overview" class="btn btn-primary">开始记录</a>
+                <a href="#timeline" class="btn btn-outline">回顾过往</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 人生进度总览 -->
+    <section class="life-overview" id="overview">
+        <div class="section-title">
+            <h2>人生进度</h2>
+            <p>你已经走过了人生的一段旅程，继续向前，未来可期</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-header">
+                <h3>生命进度条</h3>
+                <div class="life-percentage">28.5%</div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 28.5%"></div>
+            </div>
+            <p style="color: var(--text-light); text-align: center;">假设寿命80岁，你已经度过了28年的人生旅程</p>
+
+            <div class="life-stats">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <div class="stat-value">10,220</div>
+                    <div class="stat-label">已度过天数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                    <div class="stat-value">47</div>
+                    <div class="stat-label">达成成就</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-flag-checkered"></i></div>
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">里程碑</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">进行中目标</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 时间轴回顾 -->
+    <section class="timeline-section" id="timeline">
+        <div class="section-title">
+            <h2>人生足迹</h2>
+            <p>回顾那些重要的时刻，它们塑造了今天的你</p>
+        </div>
+
+        <div class="timeline-container">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">2024年6月</div>
+                    <div class="timeline-title">获得晋升</div>
+                    <div class="timeline-desc">经过两年的努力，终于从初级工程师晋升为高级工程师，这是职业生涯的重要里程碑。</div>
+                    <div class="timeline-tags">
+                        <span class="tag tag-achievement">成就</span>
+                        <span class="tag tag-milestone">里程碑</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">2023年12月</div>
+                    <div class="timeline-title">第一次马拉松</div>
+                    <div class="timeline-desc">完成了人生第一个全程马拉松，用时4小时15分钟。证明了坚持训练的力量。</div>
+                    <div class="timeline-tags">
+                        <span class="tag tag-achievement">成就</span>
+                        <span class="tag tag-memory">回忆</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">2022年8月</div>
+                    <div class="timeline-title">买房安家</div>
+                    <div class="timeline-desc">在这个城市拥有了属于自己的小窝，从此不再漂泊，有了真正的归属感。</div>
+                    <div class="timeline-tags">
+                        <span class="tag tag-milestone">里程碑</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">2020年7月</div>
+                    <div class="timeline-title">毕业工作</div>
+                    <div class="timeline-desc">从大学毕业，进入第一家公司，开启了职业生涯的新篇章。</div>
+                    <div class="timeline-tags">
+                        <span class="tag tag-milestone">里程碑</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">2016年9月</div>
+                    <div class="timeline-title">大学入学</div>
+                    <div class="timeline-desc">踏入大学校园，开始了四年的求学之旅，结识了一生的挚友。</div>
+                    <div class="timeline-tags">
+                        <span class="tag tag-memory">回忆</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 未来规划 -->
+    <section class="future-section" id="future">
+        <div class="section-title">
+            <h2>未来蓝图</h2>
+            <p>规划你的未来，让每一步都朝着梦想前进</p>
+        </div>
+
+        <div class="goals-grid">
+            <div class="goal-card">
+                <div class="goal-header">
+                    <div class="goal-title">学习一门新语言</div>
+                    <span class="goal-status status-active">进行中</span>
+                </div>
+                <div class="goal-desc">计划学习日语，目标是在两年内达到N2水平，为未来的日本旅行做准备。</div>
+                <div class="goal-progress">
+                    <div class="goal-progress-bar">
+                        <div class="goal-progress-fill" style="width: 35%"></div>
+                    </div>
+                    <div class="goal-progress-text">35%</div>
+                </div>
+                <div class="goal-deadline">
+                    <i class="far fa-clock"></i>
+                    目标日期：2026年12月
+                </div>
+            </div>
+
+            <div class="goal-card">
+                <div class="goal-header">
+                    <div class="goal-title">完成半程铁人三项</div>
+                    <span class="goal-status status-active">进行中</span>
+                </div>
+                <div class="goal-desc">挑战自我，完成1.9km游泳 + 90km自行车 + 21km跑步的半程铁人三项。</div>
+                <div class="goal-progress">
+                    <div class="goal-progress-bar">
+                        <div class="goal-progress-fill" style="width: 60%"></div>
+                    </div>
+                    <div class="goal-progress-text">60%</div>
+                </div>
+                <div class="goal-deadline">
+                    <i class="far fa-clock"></i>
+                    目标日期：2025年9月
+                </div>
+            </div>
+
+            <div class="goal-card">
+                <div class="goal-header">
+                    <div class="goal-title">出版个人技术博客集</div>
+                    <span class="goal-status status-planned">计划中</span>
+                </div>
+                <div class="goal-desc">将多年积累的技术文章整理成册，出版一本属于自己的技术博客集。</div>
+                <div class="goal-progress">
+                    <div class="goal-progress-bar">
+                        <div class="goal-progress-fill" style="width: 10%"></div>
+                    </div>
+                    <div class="goal-progress-text">10%</div>
+                </div>
+                <div class="goal-deadline">
+                    <i class="far fa-clock"></i>
+                    目标日期：2027年6月
+                </div>
+            </div>
+
+            <div class="goal-card">
+                <div class="goal-header">
+                    <div class="goal-title">环游世界30个国家</div>
+                    <span class="goal-status status-active">进行中</span>
+                </div>
+                <div class="goal-desc">在35岁之前游历30个国家，体验不同的文化和风景。</div>
+                <div class="goal-progress">
+                    <div class="goal-progress-bar">
+                        <div class="goal-progress-fill" style="width: 40%"></div>
+                    </div>
+                    <div class="goal-progress-text">12/30</div>
+                </div>
+                <div class="goal-deadline">
+                    <i class="far fa-clock"></i>
+                    目标日期：2031年12月
+                </div>
+            </div>
+
+            <div class="goal-card">
+                <div class="goal-header">
+                    <div class="goal-title">建立被动收入来源</div>
+                    <span class="goal-status status-planned">计划中</span>
+                </div>
+                <div class="goal-desc">通过投资理财和副业，建立稳定的被动收入来源，实现财务自由。</div>
+                <div class="goal-progress">
+                    <div class="goal-progress-bar">
+                        <div class="goal-progress-fill" style="width: 15%"></div>
+                    </div>
+                    <div class="goal-progress-text">15%</div>
+                </div>
+                <div class="goal-deadline">
+                    <i class="far fa-clock"></i>
+                    目标日期：2030年12月
+                </div>
+            </div>
+
+            <div class="goal-card">
+                <div class="goal-header">
+                    <div class="goal-title">完成100本书阅读挑战</div>
+                    <span class="goal-status status-active">进行中</span>
+                </div>
+                <div class="goal-desc">每年阅读20本书，五年内完成100本书的阅读挑战，涵盖技术、人文、历史等领域。</div>
+                <div class="goal-progress">
+                    <div class="goal-progress-bar">
+                        <div class="goal-progress-fill" style="width: 45%"></div>
+                    </div>
+                    <div class="goal-progress-text">45/100</div>
+                </div>
+                <div class="goal-deadline">
+                    <i class="far fa-clock"></i>
+                    目标日期：2028年12月
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>人生进度 - 记录每一步，规划每一天</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">TRAE AI创造力大赛参赛作品</p>
+    </footer>
+
+    <!-- 添加按钮 -->
+    <button class="add-btn" onclick="showAddModal()">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <script>
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // 进度条动画
+        const observerOptions = {
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const progressFills = entry.target.querySelectorAll('.progress-fill, .goal-progress-fill');
+                    progressFills.forEach(fill => {
+                        const width = fill.style.width;
+                        fill.style.width = '0%';
+                        setTimeout(() => {
+                            fill.style.width = width;
+                        }, 100);
+                    });
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.progress-container, .goal-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // 添加按钮点击
+        function showAddModal() {
+            alert('添加功能：可以添加新的人生里程碑、成就或未来目标！\n\n在实际应用中，这里会弹出一个表单，让你记录新的事件或目标。');
+        }
+
+        // 导航栏滚动效果
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+            } else {
+                navbar.style.boxShadow = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
