@@ -1605,17 +1605,104 @@
         /* ==================== 空状态 ==================== */
         .empty-state {
             text-align: center;
-            padding: 50px 20px;
+            padding: 60px 20px;
             color: var(--text-muted);
             transition: color 0.5s ease;
+            grid-column: 1 / -1;
         }
-        .empty-state i {
-            font-size: 40px;
-            margin-bottom: 14px;
-            opacity: 0.3;
+        .empty-state .empty-icon-wrap {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            position: relative;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--bg-warm), var(--card-bg));
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: emptyFloat 3s ease-in-out infinite;
         }
-        .empty-state p {
+        .empty-state .empty-icon-wrap i {
+            font-size: 36px;
+            color: var(--primary);
+            opacity: 0.6;
+        }
+        .empty-state .empty-icon-wrap::after {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 2px dashed var(--border);
+            animation: emptySpin 20s linear infinite;
+        }
+        .empty-state .empty-title {
+            font-family: var(--font-serif);
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+        .empty-state .empty-desc {
             font-size: 14px;
+            opacity: 0.7;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .empty-state .empty-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border-radius: 50px;
+            border: 2px dashed var(--primary);
+            background: transparent;
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: var(--font-sans);
+        }
+        .empty-state .empty-action-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-style: solid;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        @keyframes emptyFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        @keyframes emptySpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        /* 空状态装饰粒子 */
+        .empty-particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .empty-particles span {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0.15;
+            animation: emptyParticleFloat 4s ease-in-out infinite;
+        }
+        .empty-particles span:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+        .empty-particles span:nth-child(2) { left: 80%; top: 15%; animation-delay: 0.8s; width: 8px; height: 8px; }
+        .empty-particles span:nth-child(3) { left: 25%; top: 70%; animation-delay: 1.6s; }
+        .empty-particles span:nth-child(4) { left: 70%; top: 65%; animation-delay: 2.4s; width: 4px; height: 4px; }
+        .empty-particles span:nth-child(5) { left: 50%; top: 40%; animation-delay: 3.2s; width: 5px; height: 5px; }
+        @keyframes emptyParticleFloat {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.15; }
+            50% { transform: translateY(-15px) scale(1.3); opacity: 0.3; }
         }
 
         /* ==================== 响应式 ==================== */
@@ -2342,109 +2429,9 @@
         }
     }
 
-    // ==================== 预置数据 ====================
+    // ==================== 预置数据（已清空，等待用户自己创建） ====================
     async function seedData() {
-        const diaries = await dbGetAll('diaries');
-        if (diaries.length > 0) return;
-        const uid = currentUser.id;
-        const now = new Date().toISOString();
-
-        await dbAdd('diaries', {
-            userId: uid, title: '新的一天，新的开始',
-            content: '今天阳光明媚，心情格外好。早上去了公园散步，看到樱花开了，粉粉的一片，美极了。生活就是这样，总有一些小确幸值得记录。',
-            mood: 'happy', date: '2024-03-15', createdAt: now,
-            images: [], videos: [], audios: []
-        });
-        await dbAdd('diaries', {
-            userId: uid, title: '深夜的思考',
-            content: '深夜总是容易让人陷入沉思。回顾过去的一年，虽然有很多挑战，但也收获了很多成长。感谢身边一直支持我的朋友们，你们是我前进的动力。',
-            mood: 'thoughtful', date: '2024-03-10', createdAt: now,
-            images: [], videos: [], audios: []
-        });
-        await dbAdd('diaries', {
-            userId: uid, title: '读完了一本好书',
-            content: '今天终于读完了《百年孤独》，马尔克斯的魔幻现实主义让我深深着迷。书中关于孤独、时间、命运的描写，让我对人生有了新的理解。推荐给每一个热爱阅读的人。',
-            mood: 'inspired', date: '2024-03-05', createdAt: now,
-            images: [], videos: [], audios: []
-        });
-
-        await dbAdd('confessions', {
-            userId: uid, content: '最近工作压力好大，感觉每天都在赶deadline。有时候真的很想停下来，好好休息一下，但又怕落后于人。不知道大家都是怎么调节的？',
-            anonymous: false, responses: [
-                { author: '小明', content: '我理解你的感受，适当休息反而效率更高哦！', createdAt: now },
-                { author: '阿花', content: '试试冥想吧，每天10分钟，真的很有帮助。', createdAt: now }
-            ], createdAt: now
-        });
-        await dbAdd('confessions', {
-            userId: uid, content: '有时候觉得自己不够好，总是拿自己和别人比较。明明知道这样不好，但就是控制不住。希望能学会更多地欣赏自己。',
-            anonymous: true, responses: [
-                { author: '匿名', content: '你已经很棒了，每个人都是独特的，不需要比较。', createdAt: now }
-            ], createdAt: now
-        });
-
-        await dbAdd('timeline', {
-            userId: uid, title: '大学毕业', description: '四年大学生活画上句号，带着满满的回忆和期待走向社会。',
-            date: '2020-06-30', tag: 'milestone', createdAt: now
-        });
-        await dbAdd('timeline', {
-            userId: uid, title: '第一份工作', description: '入职了一家互联网公司，开始了职业生涯的新篇章。',
-            date: '2020-09-01', tag: 'achievement', createdAt: now
-        });
-        await dbAdd('timeline', {
-            userId: uid, title: '独自旅行', description: '一个人去了云南，看了洱海的日出，感受到了前所未有的自由。',
-            date: '2021-05-15', tag: 'memory', createdAt: now
-        });
-        await dbAdd('timeline', {
-            userId: uid, title: '升职加薪', description: '经过一年的努力，终于获得了晋升的机会，感谢团队的信任。',
-            date: '2022-03-01', tag: 'achievement', createdAt: now
-        });
-        await dbAdd('timeline', {
-            userId: uid, title: '学会做饭', description: '从只会煮泡面到能做出一桌菜，虽然只是小事，但很有成就感。',
-            date: '2023-01-20', tag: 'memory', createdAt: now
-        });
-
-        await dbAdd('goals', {
-            userId: uid, title: '学习一门新语言', description: '目标：日语N2水平，每天学习30分钟',
-            progress: 35, status: 'in-progress', deadline: '2024-12-31', createdAt: now
-        });
-        await dbAdd('goals', {
-            userId: uid, title: '完成半程马拉松', description: '每周跑步3次，逐步提升到21公里',
-            progress: 60, status: 'in-progress', deadline: '2024-10-15', createdAt: now
-        });
-        await dbAdd('goals', {
-            userId: uid, title: '阅读24本书', description: '每月阅读2本书，涵盖文学、科技、哲学',
-            progress: 100, status: 'completed', deadline: '2024-12-31', createdAt: now
-        });
-        await dbAdd('goals', {
-            userId: uid, title: '存款达到10万', description: '每月存入工资的30%，控制消费',
-            progress: 45, status: 'in-progress', deadline: '2025-06-30', createdAt: now
-        });
-        await dbAdd('goals', {
-            userId: uid, title: '学习吉他', description: '报名吉他课，每周练习，能弹5首完整歌曲',
-            progress: 20, status: 'paused', deadline: '2024-12-31', createdAt: now
-        });
-        await dbAdd('goals', {
-            userId: uid, title: '获得专业认证', description: '准备并通过PMP项目管理认证考试',
-            progress: 80, status: 'in-progress', deadline: '2024-09-30', createdAt: now
-        });
-
-        await dbAdd('shares', {
-            userId: uid, nickname: currentUser.nickname, title: '我的时间管理心得',
-            content: '经过两年的摸索，我找到了适合自己的时间管理方法：番茄工作法+周复盘。每天专注工作25分钟，休息5分钟，一周做一次总结和调整。效率提升了至少50%！',
-            likes: 12, createdAt: now
-        });
-        await dbAdd('shares', {
-            userId: uid, nickname: currentUser.nickname, title: '坚持跑步100天的心路历程',
-            content: '从跑500米就喘到能跑10公里，这100天教会我：坚持本身就是最大的收获。不需要和别人比速度，只要比昨天的自己快一步就好。',
-            likes: 28, createdAt: now
-        });
-        await dbAdd('shares', {
-            userId: uid, nickname: currentUser.nickname, title: '给25岁自己的建议',
-            content: '1. 学会说不，你的时间很宝贵。2. 保持好奇心，永远不要停止学习。3. 珍惜身边的人，多表达爱意。4. 不要害怕失败，每次跌倒都是成长的机会。5. 记得照顾好自己的身体。',
-            likes: 45, createdAt: now
-        });
-
-        showToast('示例数据已加载', 'success');
+        // 不再预置虚构数据，所有内容由用户自己填写
     }
 
     // ==================== 渲染函数 ====================
@@ -2497,7 +2484,7 @@
         const container = document.getElementById('timelineContainer');
         const line = '<div class="timeline-line"></div>';
         if (items.length === 0) {
-            container.innerHTML = line + '<div class="empty-state"><i class="fas fa-clock-rotate-left"></i><p>还没有人生足迹，快去添加吧</p></div>';
+            container.innerHTML = line + `<div class="empty-state"><div class="empty-particles"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-shoe-prints"></i></div><div class="empty-title">你的人生足迹还是空白的</div><div class="empty-desc">在这里记录你人生中的重要时刻<br>每一个脚印都值得被铭记</div><button class="empty-action-btn" onclick="openModal('event')"><i class="fas fa-plus"></i> 添加第一个足迹</button></div>`;
             return;
         }
         items.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -2523,7 +2510,7 @@
         const items = await dbGetByIndex('goals', 'userId', currentUser.id);
         const grid = document.getElementById('goalsGrid');
         if (items.length === 0) {
-            grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-bullseye"></i><p>还没有目标，快去规划你的未来蓝图吧</p></div>';
+            grid.innerHTML = `<div class="empty-state"><div class="empty-particles"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-compass"></i></div><div class="empty-title">你的未来蓝图还是空白的</div><div class="empty-desc">设定目标，规划未来<br>让每一步都朝着梦想前进</div><button class="empty-action-btn" onclick="openModal('goal')"><i class="fas fa-plus"></i> 设定第一个目标</button></div>`;
             return;
         }
         let html = '';
@@ -2568,7 +2555,7 @@
         const items = await dbGetByIndex('diaries', 'userId', currentUser.id);
         const grid = document.getElementById('diariesGrid');
         if (items.length === 0) {
-            grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-book"></i><p>还没有日记，快去记录你的生活吧</p></div>';
+            grid.innerHTML = `<div class="empty-state"><div class="empty-particles"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-feather-pointed"></i></div><div class="empty-title">还没有写下任何日记</div><div class="empty-desc">用文字、图片、视频或录音<br>记录生活中每一个珍贵的瞬间</div><button class="empty-action-btn" onclick="openModal('diary')"><i class="fas fa-plus"></i> 写下第一篇日记</button></div>`;
             return;
         }
         items.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -2609,7 +2596,7 @@
         const items = await dbGetAll('confessions');
         const grid = document.getElementById('confessionsGrid');
         if (items.length === 0) {
-            grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-comments"></i><p>还没有倾诉，说出你的心里话吧</p></div>';
+            grid.innerHTML = `<div class="empty-state"><div class="empty-particles"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-comment-dots"></i></div><div class="empty-title">还没有人倾诉</div><div class="empty-desc">说出你的心里话<br>收获来自陌生人的温暖与回应</div><button class="empty-action-btn" onclick="openModal('confession')"><i class="fas fa-plus"></i> 发出第一条倾诉</button></div>`;
             return;
         }
         let html = '';
@@ -2649,7 +2636,7 @@
         const items = await dbGetAll('shares');
         const grid = document.getElementById('sharesGrid');
         if (items.length === 0) {
-            grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-share-nodes"></i><p>还没有分享，快去分享你的故事吧</p></div>';
+            grid.innerHTML = `<div class="empty-state"><div class="empty-particles"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-share-nodes"></i></div><div class="empty-title">社区还没有任何分享</div><div class="empty-desc">分享你的故事和经验<br>照亮别人的路，也温暖自己的心</div><button class="empty-action-btn" onclick="openModal('share')"><i class="fas fa-plus"></i> 分享第一个故事</button></div>`;
             return;
         }
         let html = '';
