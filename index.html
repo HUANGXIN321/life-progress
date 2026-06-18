@@ -5,38 +5,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>人生进度 - 记录每一步</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ==================== 主题变量系统 ==================== */
         :root {
-            --primary: #6366f1;
-            --primary-light: #818cf8;
-            --primary-dark: #4f46e5;
-            --accent: #f472b6;
-            --accent-light: #f9a8d4;
-            --bg-dark: #0f0b1a;
-            --bg-card: rgba(255, 255, 255, 0.06);
-            --bg-card-hover: rgba(255, 255, 255, 0.1);
-            --border: rgba(255, 255, 255, 0.1);
-            --border-light: rgba(255, 255, 255, 0.15);
-            --text: #e2e8f0;
-            --text-muted: #94a3b8;
-            --text-dim: #64748b;
-            --success: #22c55e;
-            --success-bg: rgba(34, 197, 94, 0.15);
-            --warning: #f59e0b;
-            --warning-bg: rgba(245, 158, 11, 0.15);
-            --danger: #ef4444;
-            --danger-bg: rgba(239, 68, 68, 0.15);
-            --info: #3b82f6;
-            --info-bg: rgba(59, 130, 246, 0.15);
-            --pink: #ec4899;
-            --pink-bg: rgba(236, 72, 153, 0.15);
-            --shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
-            --radius: 16px;
-            --radius-sm: 12px;
-            --radius-xs: 8px;
+            --primary: #e07a5f;
+            --primary-light: #f4a261;
+            --primary-dark: #c45d42;
+            --accent: #81b29a;
+            --accent-light: #a8d5ba;
+            --bg: #fefae0;
+            --bg-warm: #fdf6e3;
+            --card-bg: #ffffff;
+            --card-bg-rgb: 255, 255, 255;
+            --text: #3d405b;
+            --text-light: #5a5d7a;
+            --text-muted: #8b8fa3;
+            --border: rgba(61, 64, 91, 0.1);
+            --border-light: rgba(61, 64, 91, 0.06);
+            --shadow: 0 8px 32px rgba(61, 64, 91, 0.08);
+            --shadow-hover: 0 16px 48px rgba(61, 64, 91, 0.12);
+            --danger: #e07a5f;
+            --success: #81b29a;
+            --info: #7a9ab8;
+            --warning: #d4a05a;
+            --radius: 20px;
+            --radius-sm: 14px;
+            --radius-xs: 10px;
             --nav-height: 64px;
+            --font-serif: 'Noto Serif SC', serif;
+            --font-sans: 'Noto Sans SC', sans-serif;
+        }
+
+        [data-theme="twilight"] {
+            --primary: #6b8cae;
+            --primary-light: #8fb0cc;
+            --primary-dark: #4a6d8c;
+            --accent: #a0a8b8;
+            --accent-light: #c0c6d2;
+            --bg: #e8ecf1;
+            --bg-warm: #dfe4ea;
+            --card-bg: #f5f7fa;
+            --card-bg-rgb: 245, 247, 250;
+            --text: #2c3e50;
+            --text-light: #4a5568;
+            --text-muted: #718096;
+            --border: rgba(44, 62, 80, 0.1);
+            --border-light: rgba(44, 62, 80, 0.06);
+            --shadow: 0 8px 32px rgba(44, 62, 80, 0.08);
+            --shadow-hover: 0 16px 48px rgba(44, 62, 80, 0.12);
+            --danger: #c07070;
+            --success: #7a9a8a;
+            --info: #6b8cae;
+            --warning: #b8a070;
+        }
+
+        [data-theme="forest"] {
+            --primary: #5d7a5d;
+            --primary-light: #7a9a7a;
+            --primary-dark: #4a634a;
+            --accent: #a67c52;
+            --accent-light: #c49a70;
+            --bg: #f5f0e8;
+            --bg-warm: #ebe5da;
+            --card-bg: #faf8f3;
+            --card-bg-rgb: 250, 248, 243;
+            --text: #3a3a30;
+            --text-light: #55554a;
+            --text-muted: #7a7a6a;
+            --border: rgba(58, 58, 48, 0.1);
+            --border-light: rgba(58, 58, 48, 0.06);
+            --shadow: 0 8px 32px rgba(58, 58, 48, 0.08);
+            --shadow-hover: 0 16px 48px rgba(58, 58, 48, 0.12);
+            --danger: #a07060;
+            --success: #6a8a6a;
+            --info: #7a8a7a;
+            --warning: #a08050;
+        }
+
+        [data-theme="pink"] {
+            --primary: #d4849c;
+            --primary-light: #e8a4b8;
+            --primary-dark: #b86880;
+            --accent: #b8a8c8;
+            --accent-light: #d0c4dc;
+            --bg: #fdf6f8;
+            --bg-warm: #f8eef2;
+            --card-bg: #fffafc;
+            --card-bg-rgb: 255, 250, 252;
+            --text: #4a3a42;
+            --text-light: #66565e;
+            --text-muted: #8a7a82;
+            --border: rgba(74, 58, 66, 0.1);
+            --border-light: rgba(74, 58, 66, 0.06);
+            --shadow: 0 8px 32px rgba(74, 58, 66, 0.08);
+            --shadow-hover: 0 16px 48px rgba(74, 58, 66, 0.12);
+            --danger: #c07080;
+            --success: #8aaa8a;
+            --info: #a090b0;
+            --warning: #c0a070;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -44,36 +112,111 @@
         html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Noto Sans SC', sans-serif;
-            background: var(--bg-dark);
+            font-family: var(--font-sans);
+            background: var(--bg);
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
+            transition: background 0.5s ease, color 0.5s ease;
         }
 
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.3); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; opacity: 0.3; }
+
+        /* ==================== 加载动画 ==================== */
+        .loader-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--bg);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        .loader-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .loader-logo {
+            width: 60px; height: 60px;
+        }
+        .loader-logo svg { width: 100%; height: 100%; }
+        .loader-logo path {
+            stroke: var(--primary);
+            stroke-width: 3;
+            fill: none;
+            stroke-dasharray: 300;
+            stroke-dashoffset: 300;
+            animation: drawLogo 1.5s ease forwards;
+        }
+        @keyframes drawLogo { to { stroke-dashoffset: 0; } }
+        .loader-text {
+            font-family: var(--font-serif);
+            font-size: 18px;
+            color: var(--text);
+            margin-top: 16px;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 0.8s both;
+        }
+
+        /* ==================== 自定义光标 ==================== */
+        .custom-cursor {
+            position: fixed;
+            width: 12px; height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99999;
+            transition: transform 0.15s ease-out, opacity 0.15s ease;
+            mix-blend-mode: difference;
+        }
+        .custom-cursor-follower {
+            position: fixed;
+            width: 32px; height: 32px;
+            border: 1.5px solid var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99998;
+            transition: transform 0.35s ease-out, opacity 0.35s ease;
+            opacity: 0.4;
+        }
+        @media (pointer: coarse) {
+            .custom-cursor, .custom-cursor-follower { display: none !important; }
+        }
+
+        /* ==================== 纸质纹理 ==================== */
+        .paper-texture {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.025;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
 
         /* ==================== 导航栏 ==================== */
         .navbar {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: var(--nav-height);
-            background: rgba(15, 11, 26, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(var(--card-bg-rgb), 0.75);
+            backdrop-filter: blur(20px) saturate(1.2);
+            -webkit-backdrop-filter: blur(20px) saturate(1.2);
             border-bottom: 1px solid var(--border);
             z-index: 100;
-            transition: box-shadow 0.3s;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
         }
-
         .navbar.scrolled {
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+            height: 52px;
+            box-shadow: var(--shadow);
+            background: rgba(var(--card-bg-rgb), 0.9);
         }
-
         .nav-inner {
             max-width: 1200px;
             margin: 0 auto;
@@ -83,92 +226,109 @@
             justify-content: space-between;
             padding: 0 24px;
         }
-
         .nav-logo {
             display: flex;
             align-items: center;
             gap: 10px;
             text-decoration: none;
         }
-
         .nav-logo-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+            width: 34px; height: 34px;
+            background: var(--primary);
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 16px;
+            font-size: 14px;
+            transform: rotate(-3deg);
+            transition: all 0.5s ease;
         }
-
         .nav-logo-text {
-            font-size: 18px;
+            font-family: var(--font-serif);
+            font-size: 17px;
             font-weight: 700;
             color: var(--text);
+            transition: color 0.5s ease;
         }
-
         .nav-links {
             display: flex;
             gap: 4px;
             list-style: none;
         }
-
         .nav-links a {
             text-decoration: none;
             color: var(--text-muted);
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
-            padding: 8px 16px;
+            padding: 7px 14px;
             border-radius: var(--radius-xs);
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
-
         .nav-links a:hover {
             color: var(--text);
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--border-light);
         }
-
         .nav-right {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-
-        .user-avatar {
-            width: 36px;
-            height: 36px;
+        .theme-switcher-nav {
+            display: flex;
+            gap: 5px;
+            background: var(--bg-warm);
+            padding: 4px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+        .theme-btn-nav {
+            width: 22px; height: 22px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .theme-btn-nav:hover { transform: scale(1.15); }
+        .theme-btn-nav.active { border-color: var(--text); transform: scale(1.1); }
+        .theme-btn-nav[data-theme="warm"] { background: linear-gradient(135deg, #e07a5f, #f4a261); }
+        .theme-btn-nav[data-theme="twilight"] { background: linear-gradient(135deg, #6b8cae, #a0a8b8); }
+        .theme-btn-nav[data-theme="forest"] { background: linear-gradient(135deg, #5d7a5d, #a67c52); }
+        .theme-btn-nav[data-theme="pink"] { background: linear-gradient(135deg, #d4849c, #b8a8c8); }
+        .user-avatar {
+            width: 34px; height: 34px;
+            border-radius: 50%;
+            background: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 14px;
-            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-
+        .user-avatar:hover { transform: scale(1.1); }
         .user-name {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             color: var(--text);
+            transition: color 0.5s ease;
         }
-
         .logout-btn {
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #fca5a5;
-            padding: 6px 14px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 5px 12px;
             border-radius: var(--radius-xs);
-            font-size: 13px;
-            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 12px;
+            font-family: var(--font-sans);
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
-
         .logout-btn:hover {
-            background: rgba(239, 68, 68, 0.25);
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
         }
 
         /* ==================== 英雄区域 ==================== */
@@ -182,52 +342,62 @@
             padding: calc(var(--nav-height) + 40px) 24px 60px;
             overflow: hidden;
         }
-
-        #heroCanvas {
+        .hero-svg-bg {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: 0;
+            opacity: 0.4;
         }
-
+        .hero-svg-bg svg {
+            width: 100%; height: 100%;
+        }
         .hero-content {
             position: relative;
             z-index: 2;
             max-width: 700px;
         }
-
         .hero-greeting {
-            font-size: 16px;
-            color: var(--primary-light);
+            font-size: 15px;
+            color: var(--primary);
             font-weight: 500;
             margin-bottom: 12px;
-            animation: fadeInUp 0.6s ease;
+            animation: fadeInUp 0.6s ease both;
         }
-
         .hero-title {
-            font-size: 42px;
+            font-family: var(--font-serif);
+            font-size: 40px;
             font-weight: 700;
             line-height: 1.3;
             margin-bottom: 16px;
             animation: fadeInUp 0.6s ease 0.1s both;
+            color: var(--text);
+            transition: color 0.5s ease;
         }
-
         .hero-title span {
-            background: linear-gradient(135deg, var(--primary-light), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--primary);
+            transition: color 0.5s ease;
         }
-
         .hero-subtitle {
-            font-size: 16px;
+            font-size: 15px;
             color: var(--text-muted);
             margin-bottom: 32px;
             animation: fadeInUp 0.6s ease 0.2s both;
+            transition: color 0.5s ease;
         }
-
+        .hero-bio {
+            font-size: 14px;
+            color: var(--text-light);
+            font-style: italic;
+            margin-bottom: 28px;
+            padding: 12px 24px;
+            background: var(--card-bg);
+            border-radius: var(--radius-sm);
+            display: inline-block;
+            border: 1px solid var(--border);
+            animation: fadeInUp 0.6s ease 0.25s both;
+            transition: all 0.5s ease;
+        }
         .hero-buttons {
             display: flex;
             gap: 16px;
@@ -235,96 +405,95 @@
             flex-wrap: wrap;
             animation: fadeInUp 0.6s ease 0.3s both;
         }
-
         .btn-primary {
             padding: 12px 28px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            background: var(--primary);
             color: white;
             border: none;
             border-radius: var(--radius-sm);
-            font-family: 'Noto Sans SC', sans-serif;
-            font-size: 15px;
+            font-family: var(--font-sans);
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            letter-spacing: 0.5px;
         }
-
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 8px 24px rgba(224, 122, 95, 0.35);
+            background: var(--primary-dark);
         }
-
         .btn-outline {
             padding: 12px 28px;
             background: transparent;
             color: var(--text);
-            border: 1px solid var(--border-light);
+            border: 2px solid var(--border);
             border-radius: var(--radius-sm);
-            font-family: 'Noto Sans SC', sans-serif;
-            font-size: 15px;
+            font-family: var(--font-sans);
+            font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.35s ease;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 8px;
         }
-
         .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--primary-light);
+            background: var(--card-bg);
+            border-color: var(--primary);
+            color: var(--primary);
         }
 
         /* ==================== 通用Section ==================== */
         .section {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 80px 24px;
+            padding: 70px 24px;
+            position: relative;
+            z-index: 2;
         }
-
         .section-header {
             text-align: center;
-            margin-bottom: 48px;
+            margin-bottom: 40px;
         }
-
         .section-header h2 {
-            font-size: 28px;
+            font-family: var(--font-serif);
+            font-size: 26px;
             font-weight: 700;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
+            color: var(--text);
+            transition: color 0.5s ease;
         }
-
         .section-header h2 i {
             margin-right: 10px;
-            color: var(--primary-light);
+            color: var(--primary);
+            transition: color 0.5s ease;
         }
-
         .section-header p {
             color: var(--text-muted);
-            font-size: 15px;
+            font-size: 14px;
+            transition: color 0.5s ease;
         }
 
         /* ==================== 进度总览 ==================== */
-        .progress-overview {
-            margin-bottom: 24px;
-        }
-
+        .progress-overview { margin-bottom: 20px; }
         .life-progress-bar {
-            background: rgba(255, 255, 255, 0.08);
+            background: var(--bg-warm);
             border-radius: 20px;
-            height: 32px;
+            height: 28px;
             overflow: hidden;
             position: relative;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border);
         }
-
         .life-progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
             border-radius: 20px;
             transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
@@ -333,675 +502,767 @@
             justify-content: flex-end;
             padding-right: 12px;
         }
-
         .life-progress-fill span {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             color: white;
         }
-
         .life-progress-label {
             display: flex;
             justify-content: space-between;
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-muted);
+            transition: color 0.5s ease;
         }
-
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-top: 32px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+            margin-top: 28px;
         }
-
         .stat-card {
-            background: var(--bg-card);
+            background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 24px;
+            padding: 22px 16px;
             text-align: center;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
             animation: fadeInUp 0.6s ease both;
+            position: relative;
+            overflow: hidden;
         }
-
-        .stat-card:nth-child(1) { animation-delay: 0.1s; }
-        .stat-card:nth-child(2) { animation-delay: 0.2s; }
-        .stat-card:nth-child(3) { animation-delay: 0.3s; }
-        .stat-card:nth-child(4) { animation-delay: 0.4s; }
-
+        .stat-card:nth-child(1) { animation-delay: 0.05s; }
+        .stat-card:nth-child(2) { animation-delay: 0.1s; }
+        .stat-card:nth-child(3) { animation-delay: 0.15s; }
+        .stat-card:nth-child(4) { animation-delay: 0.2s; }
+        .stat-card:nth-child(5) { animation-delay: 0.25s; }
+        .stat-card:nth-child(6) { animation-delay: 0.3s; }
         .stat-card:hover {
-            background: var(--bg-card-hover);
-            transform: translateY(-4px);
-            box-shadow: var(--shadow);
+            transform: translateY(-6px) rotateX(5deg);
+            box-shadow: var(--shadow-hover);
         }
-
         .stat-icon {
-            width: 48px;
-            height: 48px;
+            width: 44px; height: 44px;
             border-radius: 12px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            margin-bottom: 12px;
+            font-size: 18px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
         }
-
-        .stat-card:nth-child(1) .stat-icon { background: var(--info-bg); color: var(--info); }
-        .stat-card:nth-child(2) .stat-icon { background: var(--success-bg); color: var(--success); }
-        .stat-card:nth-child(3) .stat-icon { background: var(--warning-bg); color: var(--warning); }
-        .stat-card:nth-child(4) .stat-icon { background: var(--pink-bg); color: var(--pink); }
-
+        .stat-card:nth-child(1) .stat-icon { background: rgba(224, 122, 95, 0.12); color: var(--primary); }
+        .stat-card:nth-child(2) .stat-icon { background: rgba(129, 178, 154, 0.12); color: var(--accent); }
+        .stat-card:nth-child(3) .stat-icon { background: rgba(212, 160, 90, 0.12); color: var(--warning); }
+        .stat-card:nth-child(4) .stat-icon { background: rgba(122, 154, 184, 0.12); color: var(--info); }
+        .stat-card:nth-child(5) .stat-icon { background: rgba(180, 140, 180, 0.12); color: var(--primary-light); }
+        .stat-card:nth-child(6) .stat-icon { background: rgba(140, 170, 140, 0.12); color: var(--accent); }
         .stat-number {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 700;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
+            color: var(--text);
+            transition: color 0.5s ease;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            transition: color 0.5s ease;
         }
 
-        .stat-label {
+        /* 用户资料卡片 */
+        .profile-mini {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.6s ease both;
+            transition: all 0.5s ease;
+        }
+        .profile-mini-avatar {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+            transition: all 0.5s ease;
+        }
+        .profile-mini-info h3 {
+            font-family: var(--font-serif);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+            transition: color 0.5s ease;
+        }
+        .profile-mini-info p {
             font-size: 13px;
             color: var(--text-muted);
+            transition: color 0.5s ease;
+        }
+        .profile-mini-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+        .profile-mini-tag {
+            font-size: 11px;
+            padding: 2px 8px;
+            background: var(--bg-warm);
+            border-radius: 10px;
+            color: var(--text-light);
+            border: 1px solid var(--border);
+        }
+        .profile-mini-actions {
+            margin-left: auto;
+        }
+        .profile-mini-btn {
+            padding: 8px 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-xs);
+            font-size: 12px;
+            font-family: var(--font-sans);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .profile-mini-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
         }
 
-        /* ==================== 时间轴 ==================== */
+        /* ==================== 时间轴（手账风格） ==================== */
         .timeline-container {
             position: relative;
             padding: 20px 0;
         }
-
         .timeline-line {
             position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
+            left: 24px;
+            top: 0; bottom: 0;
             width: 2px;
             background: linear-gradient(to bottom, var(--primary), var(--accent));
-            transform: translateX(-50%);
+            transition: background 0.5s ease;
         }
-
         .timeline-item {
             display: flex;
             align-items: flex-start;
-            margin-bottom: 40px;
+            margin-bottom: 28px;
             position: relative;
+            padding-left: 56px;
             animation: fadeInUp 0.6s ease both;
         }
-
-        .timeline-item:nth-child(odd) {
-            flex-direction: row-reverse;
-            text-align: right;
-        }
-
-        .timeline-item:nth-child(odd) .timeline-card {
-            margin-right: 60px;
-            margin-left: 0;
-        }
-
-        .timeline-item:nth-child(even) .timeline-card {
-            margin-left: 60px;
-            margin-right: 0;
-        }
-
         .timeline-dot {
             position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 16px;
-            height: 16px;
+            left: 16px;
+            width: 18px; height: 18px;
             border-radius: 50%;
-            border: 3px solid var(--bg-dark);
+            border: 3px solid var(--bg);
             z-index: 2;
+            transition: all 0.5s ease;
         }
-
         .timeline-dot.tag-achievement { background: var(--success); }
         .timeline-dot.tag-milestone { background: var(--info); }
-        .timeline-dot.tag-memory { background: var(--pink); }
-
+        .timeline-dot.tag-memory { background: var(--primary-light); }
         .timeline-card {
-            background: var(--bg-card);
+            background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 20px;
-            max-width: calc(50% - 80px);
+            border-radius: var(--radius-sm);
+            padding: 18px 20px;
             flex: 1;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
         }
-
         .timeline-card:hover {
-            background: var(--bg-card-hover);
+            transform: translateY(-3px) rotate(0.5deg);
             box-shadow: var(--shadow);
         }
-
+        .timeline-card::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 16px;
+            width: 0; height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-right: 8px solid var(--card-bg);
+        }
+        .timeline-card::after {
+            content: '';
+            position: absolute;
+            left: -9px;
+            top: 16px;
+            width: 0; height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-right: 8px solid var(--border);
+            z-index: -1;
+        }
         .timeline-date {
             font-size: 12px;
-            color: var(--text-dim);
-            margin-bottom: 8px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            transition: color 0.5s ease;
         }
-
         .timeline-title {
+            font-family: var(--font-serif);
             font-size: 16px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+            color: var(--text);
+            transition: color 0.5s ease;
         }
-
         .timeline-desc {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-muted);
+            line-height: 1.6;
+            transition: color 0.5s ease;
         }
-
         .timeline-tag {
             display: inline-block;
             padding: 3px 10px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
-            margin-top: 10px;
+            margin-top: 8px;
         }
+        .timeline-tag.tag-achievement { background: rgba(129, 178, 154, 0.12); color: var(--accent); }
+        .timeline-tag.tag-milestone { background: rgba(122, 154, 184, 0.12); color: var(--info); }
+        .timeline-tag.tag-memory { background: rgba(244, 162, 97, 0.12); color: var(--primary-light); }
 
-        .timeline-tag.tag-achievement { background: var(--success-bg); color: var(--success); }
-        .timeline-tag.tag-milestone { background: var(--info-bg); color: var(--info); }
-        .timeline-tag.tag-memory { background: var(--pink-bg); color: var(--pink); }
-
-        /* ==================== 目标卡片 ==================== */
+        /* ==================== 目标卡片（圆形进度） ==================== */
         .goals-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 18px;
         }
-
         .goal-card {
-            background: var(--bg-card);
+            background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 24px;
-            transition: all 0.3s;
+            padding: 22px;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
             animation: fadeInUp 0.6s ease both;
+            position: relative;
+            overflow: hidden;
         }
-
         .goal-card:hover {
-            background: var(--bg-card-hover);
-            box-shadow: var(--shadow);
+            transform: translateY(-4px) perspective(800px) rotateX(2deg);
+            box-shadow: var(--shadow-hover);
         }
-
         .goal-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
-
         .goal-title {
+            font-family: var(--font-serif);
             font-size: 16px;
             font-weight: 600;
+            color: var(--text);
+            transition: color 0.5s ease;
         }
-
         .goal-status {
             padding: 3px 10px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
             white-space: nowrap;
         }
-
-        .goal-status.in-progress { background: var(--info-bg); color: var(--info); }
-        .goal-status.completed { background: var(--success-bg); color: var(--success); }
-        .goal-status.paused { background: var(--warning-bg); color: var(--warning); }
-
+        .goal-status.in-progress { background: rgba(122, 154, 184, 0.12); color: var(--info); }
+        .goal-status.completed { background: rgba(129, 178, 154, 0.12); color: var(--accent); }
+        .goal-status.paused { background: rgba(212, 160, 90, 0.12); color: var(--warning); }
         .goal-desc {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-muted);
             margin-bottom: 16px;
+            line-height: 1.6;
+            transition: color 0.5s ease;
         }
-
-        .goal-progress-bar {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            height: 10px;
-            overflow: hidden;
-            margin-bottom: 8px;
+        .goal-progress-wrap {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
         }
-
-        .goal-progress-fill {
-            height: 100%;
-            border-radius: 10px;
-            transition: width 0.5s ease;
+        .goal-circle-progress {
+            position: relative;
+            width: 56px; height: 56px;
+            flex-shrink: 0;
         }
-
-        .goal-progress-fill.in-progress { background: var(--info); }
-        .goal-progress-fill.completed { background: var(--success); }
-        .goal-progress-fill.paused { background: var(--warning); }
-
+        .goal-circle-progress svg {
+            transform: rotate(-90deg);
+        }
+        .goal-circle-bg {
+            fill: none;
+            stroke: var(--bg-warm);
+            stroke-width: 5;
+        }
+        .goal-circle-fill {
+            fill: none;
+            stroke-width: 5;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .goal-circle-text {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text);
+        }
         .goal-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-muted);
+            transition: color 0.5s ease;
         }
-
         .goal-update-btn {
             padding: 4px 12px;
-            background: rgba(99, 102, 241, 0.15);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            color: var(--primary-light);
+            background: var(--primary);
+            border: none;
+            color: white;
             border-radius: var(--radius-xs);
-            font-size: 12px;
-            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 11px;
+            font-family: var(--font-sans);
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
-
         .goal-update-btn:hover {
-            background: rgba(99, 102, 241, 0.25);
+            background: var(--primary-dark);
+            transform: translateY(-1px);
         }
 
-        /* ==================== 日记卡片 ==================== */
+        /* ==================== 日记卡片（拍立得风格） ==================== */
         .diaries-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
         }
-
         .diary-card {
-            background: var(--bg-card);
+            background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 24px;
-            transition: all 0.3s;
+            border-radius: 4px 4px var(--radius-sm) var(--radius-sm);
+            padding: 16px 16px 20px;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
             animation: fadeInUp 0.6s ease both;
             position: relative;
-        }
-
-        .diary-card:hover {
-            background: var(--bg-card-hover);
             box-shadow: var(--shadow);
+            transform: rotate(-1deg);
         }
-
+        .diary-card:nth-child(even) { transform: rotate(1deg); }
+        .diary-card:hover {
+            transform: rotate(0deg) translateY(-6px) scale(1.02);
+            box-shadow: var(--shadow-hover);
+            z-index: 5;
+        }
+        .diary-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: var(--primary);
+            opacity: 0.3;
+        }
+        .diary-media {
+            width: 100%;
+            border-radius: var(--radius-xs);
+            margin-bottom: 12px;
+            overflow: hidden;
+            background: var(--bg-warm);
+        }
+        .diary-media img {
+            width: 100%;
+            display: block;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .diary-media img:hover { transform: scale(1.03); }
+        .diary-media video, .diary-media audio {
+            width: 100%;
+            display: block;
+        }
         .diary-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
+            align-items: center;
+            margin-bottom: 10px;
         }
-
         .diary-mood {
-            font-size: 28px;
+            font-size: 22px;
         }
-
         .diary-date {
-            font-size: 12px;
-            color: var(--text-dim);
+            font-size: 11px;
+            color: var(--text-muted);
+            transition: color 0.5s ease;
         }
-
         .diary-title {
-            font-size: 17px;
+            font-family: var(--font-serif);
+            font-size: 16px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+            color: var(--text);
+            transition: color 0.5s ease;
         }
-
         .diary-content {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-muted);
             line-height: 1.7;
             display: -webkit-box;
-            -webkit-line-clamp: 3;
+            -webkit-line-clamp: 4;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            transition: color 0.5s ease;
         }
-
         .diary-delete-btn {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            width: 30px;
-            height: 30px;
+            top: 8px;
+            right: 8px;
+            width: 28px; height: 28px;
             border-radius: 50%;
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            color: #fca5a5;
-            font-size: 12px;
+            background: rgba(224, 122, 95, 0.1);
+            border: 1px solid rgba(224, 122, 95, 0.2);
+            color: var(--danger);
+            font-size: 11px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             opacity: 0;
         }
-
-        .diary-card:hover .diary-delete-btn {
-            opacity: 1;
-        }
-
+        .diary-card:hover .diary-delete-btn { opacity: 1; }
         .diary-delete-btn:hover {
-            background: rgba(239, 68, 68, 0.25);
+            background: rgba(224, 122, 95, 0.25);
         }
 
-        /* ==================== 倾诉卡片 ==================== */
+        /* ==================== 倾诉卡片（信封风格） ==================== */
         .confessions-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
             gap: 20px;
         }
-
         .confession-card {
-            background: var(--bg-card);
+            background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 24px;
-            transition: all 0.3s;
+            padding: 0;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
             animation: fadeInUp 0.6s ease both;
+            overflow: hidden;
+            position: relative;
         }
-
         .confession-card:hover {
-            background: var(--bg-card-hover);
-            box-shadow: var(--shadow);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
         }
-
+        .confession-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+        .confession-top {
+            padding: 20px 22px 16px;
+            background: linear-gradient(135deg, var(--bg-warm), var(--card-bg));
+        }
         .confession-meta {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 14px;
+            margin-bottom: 0;
         }
-
         .confession-avatar {
-            width: 32px;
-            height: 32px;
+            width: 32px; height: 32px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+            background: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .confession-author {
             font-size: 14px;
             font-weight: 500;
         }
-
+        .confession-author {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            transition: color 0.5s ease;
+        }
         .confession-anon-tag {
             padding: 2px 8px;
-            background: rgba(148, 163, 184, 0.15);
+            background: var(--bg-warm);
             border-radius: 20px;
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
+            border: 1px solid var(--border);
         }
-
         .confession-content {
             font-size: 14px;
             color: var(--text);
             line-height: 1.7;
-            margin-bottom: 16px;
-            padding: 14px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--radius-sm);
-            border-left: 3px solid var(--primary);
+            padding: 0 22px 16px;
+            transition: color 0.5s ease;
         }
-
         .confession-responses {
-            margin-top: 12px;
+            margin: 0 22px 16px;
+            padding-top: 12px;
+            border-top: 1px dashed var(--border);
         }
-
         .confession-responses h4 {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-muted);
             margin-bottom: 8px;
+            font-weight: 500;
+            transition: color 0.5s ease;
         }
-
         .response-item {
-            padding: 10px 14px;
-            background: rgba(255, 255, 255, 0.03);
+            padding: 8px 12px;
+            background: var(--bg-warm);
             border-radius: var(--radius-xs);
-            margin-bottom: 8px;
-            font-size: 13px;
+            margin-bottom: 6px;
+            font-size: 12px;
+            border: 1px solid var(--border);
         }
-
         .response-item .response-author {
             font-weight: 600;
-            color: var(--primary-light);
+            color: var(--primary);
             margin-right: 6px;
+            transition: color 0.5s ease;
         }
-
         .response-input-row {
             display: flex;
             gap: 8px;
-            margin-top: 12px;
+            margin: 0 22px 20px;
         }
-
         .response-input-row input {
             flex: 1;
-            padding: 8px 14px;
-            background: rgba(255, 255, 255, 0.06);
+            padding: 8px 12px;
+            background: var(--bg);
             border: 1px solid var(--border);
             border-radius: var(--radius-xs);
             color: var(--text);
-            font-family: 'Noto Sans SC', sans-serif;
+            font-family: var(--font-sans);
             font-size: 13px;
             outline: none;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
-
         .response-input-row input:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+            box-shadow: 0 0 0 3px var(--border-focus);
         }
-
         .response-send-btn {
-            padding: 8px 16px;
+            padding: 8px 14px;
             background: var(--primary);
             border: none;
             border-radius: var(--radius-xs);
             color: white;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
-            transition: all 0.3s;
-            white-space: nowrap;
+            transition: all 0.3s ease;
+            font-family: var(--font-sans);
         }
-
         .response-send-btn:hover {
             background: var(--primary-dark);
         }
 
-        /* ==================== 社区分享 ==================== */
+        /* ==================== 分享卡片（杂志剪报风格） ==================== */
         .shares-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
         }
-
         .share-card {
-            background: var(--bg-card);
+            background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 24px;
-            transition: all 0.3s;
+            padding: 22px;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
             animation: fadeInUp 0.6s ease both;
+            position: relative;
+            overflow: hidden;
         }
-
         .share-card:hover {
-            background: var(--bg-card-hover);
-            box-shadow: var(--shadow);
+            transform: translateY(-4px) rotate(-0.5deg);
+            box-shadow: var(--shadow-hover);
         }
-
+        .share-card::after {
+            content: '';
+            position: absolute;
+            top: -20px; right: -20px;
+            width: 60px; height: 60px;
+            background: var(--primary);
+            opacity: 0.08;
+            border-radius: 50%;
+        }
         .share-header {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-bottom: 14px;
         }
-
         .share-avatar {
-            width: 40px;
-            height: 40px;
+            width: 38px; height: 38px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+            background: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-size: 16px;
-            font-weight: 700;
+            font-weight: 500;
         }
-
-        .share-author-info {
-            flex: 1;
-        }
-
+        .share-author-info { flex: 1; }
         .share-author-name {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
+            color: var(--text);
+            transition: color 0.5s ease;
         }
-
         .share-date {
-            font-size: 12px;
-            color: var(--text-dim);
+            font-size: 11px;
+            color: var(--text-muted);
+            transition: color 0.5s ease;
         }
-
         .share-title {
-            font-size: 17px;
+            font-family: var(--font-serif);
+            font-size: 16px;
             font-weight: 600;
             margin-bottom: 8px;
+            color: var(--text);
+            transition: color 0.5s ease;
         }
-
         .share-content {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-muted);
             line-height: 1.7;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
+            transition: color 0.5s ease;
         }
-
         .share-actions {
             display: flex;
-            gap: 16px;
+            gap: 14px;
         }
-
         .like-btn {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.2);
+            gap: 5px;
+            padding: 5px 12px;
+            background: transparent;
+            border: 1px solid var(--border);
             border-radius: 20px;
-            color: #fca5a5;
-            font-size: 13px;
+            color: var(--text-muted);
+            font-size: 12px;
             cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Noto Sans SC', sans-serif;
+            transition: all 0.3s ease;
+            font-family: var(--font-sans);
         }
-
         .like-btn:hover {
-            background: rgba(239, 68, 68, 0.2);
+            border-color: var(--danger);
+            color: var(--danger);
         }
-
         .like-btn.liked {
-            background: rgba(239, 68, 68, 0.25);
-            color: #f87171;
+            background: rgba(224, 122, 95, 0.1);
+            border-color: var(--danger);
+            color: var(--danger);
         }
 
         /* ==================== FAB浮动按钮 ==================== */
         .fab-container {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 28px;
+            right: 28px;
             z-index: 90;
         }
-
         .fab-main {
-            width: 56px;
-            height: 56px;
+            width: 52px; height: 52px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
+            background: var(--primary);
             border: none;
             color: white;
-            font-size: 22px;
+            font-size: 20px;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.5);
-            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(224, 122, 95, 0.4);
+            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             z-index: 2;
         }
-
-        .fab-main:hover {
-            transform: scale(1.1);
-        }
-
-        .fab-main.active {
-            transform: rotate(45deg);
-        }
-
+        .fab-main:hover { transform: scale(1.1); }
+        .fab-main.active { transform: rotate(45deg); }
         .fab-sub-list {
             position: absolute;
-            bottom: 70px;
+            bottom: 64px;
             right: 0;
             display: flex;
             flex-direction: column-reverse;
-            gap: 12px;
+            gap: 10px;
             opacity: 0;
             pointer-events: none;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
-
         .fab-sub-list.show {
             opacity: 1;
             pointer-events: auto;
         }
-
         .fab-sub {
             display: flex;
             align-items: center;
             gap: 10px;
             justify-content: flex-end;
         }
-
         .fab-sub-label {
-            background: rgba(15, 11, 26, 0.9);
-            padding: 6px 12px;
+            background: var(--card-bg);
+            padding: 5px 12px;
             border-radius: var(--radius-xs);
-            font-size: 13px;
+            font-size: 12px;
             white-space: nowrap;
             border: 1px solid var(--border);
+            color: var(--text);
+            box-shadow: var(--shadow);
         }
-
         .fab-sub-btn {
-            width: 44px;
-            height: 44px;
+            width: 40px; height: 40px;
             border-radius: 50%;
             border: none;
             color: white;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
         }
-
-        .fab-sub-btn:hover {
-            transform: scale(1.15);
-        }
-
+        .fab-sub-btn:hover { transform: scale(1.15); }
         .fab-sub-btn:nth-child(2) { background: var(--info); }
-        .fab-sub-btn:nth-child(4) { background: var(--pink); }
-        .fab-sub-btn:nth-child(6) { background: var(--success); }
+        .fab-sub-btn:nth-child(4) { background: var(--primary-light); }
+        .fab-sub-btn:nth-child(6) { background: var(--accent); }
         .fab-sub-btn:nth-child(8) { background: var(--warning); }
         .fab-sub-btn:nth-child(10) { background: var(--primary); }
 
         /* ==================== 模态框 ==================== */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(6px);
             z-index: 200;
             display: flex;
             align-items: center;
@@ -1009,136 +1270,274 @@
             padding: 20px;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s;
+            transition: opacity 0.3s ease;
         }
-
         .modal-overlay.show {
             opacity: 1;
             pointer-events: auto;
         }
-
         .modal-card {
-            background: #1a1530;
-            border: 1px solid var(--border-light);
-            border-radius: 20px;
-            padding: 32px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
             width: 100%;
-            max-width: 500px;
-            max-height: 80vh;
+            max-width: 520px;
+            max-height: 85vh;
             overflow-y: auto;
-            transform: scale(0.9) translateY(20px);
-            transition: transform 0.3s;
+            transform: scale(0.92) translateY(20px);
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
         }
-
         .modal-overlay.show .modal-card {
             transform: scale(1) translateY(0);
         }
-
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
-
         .modal-header h3 {
-            font-size: 20px;
+            font-family: var(--font-serif);
+            font-size: 18px;
             font-weight: 700;
+            color: var(--text);
+            transition: color 0.5s ease;
         }
-
         .modal-close {
-            width: 32px;
-            height: 32px;
+            width: 30px; height: 30px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--bg-warm);
             border: 1px solid var(--border);
             color: var(--text-muted);
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
-
         .modal-close:hover {
-            background: rgba(239, 68, 68, 0.15);
-            color: #fca5a5;
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
         }
-
         .modal-form .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
-
         .modal-form label {
             display: block;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
-            color: var(--text-muted);
-            margin-bottom: 8px;
+            color: var(--text-light);
+            margin-bottom: 6px;
+            transition: color 0.5s ease;
         }
-
         .modal-form input,
         .modal-form textarea,
         .modal-form select {
             width: 100%;
-            padding: 12px 14px;
-            background: rgba(255, 255, 255, 0.06);
+            padding: 10px 12px;
+            background: var(--bg);
             border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
+            border-radius: var(--radius-xs);
             color: var(--text);
-            font-family: 'Noto Sans SC', sans-serif;
-            font-size: 14px;
+            font-family: var(--font-sans);
+            font-size: 13px;
             outline: none;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
-
         .modal-form textarea {
-            min-height: 100px;
+            min-height: 90px;
             resize: vertical;
         }
-
         .modal-form input:focus,
         .modal-form textarea:focus,
         .modal-form select:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+            box-shadow: 0 0 0 3px var(--border-focus);
+            background: var(--card-bg);
         }
-
         .modal-form select option {
-            background: #1a1530;
+            background: var(--card-bg);
+            color: var(--text);
         }
-
         .modal-form .checkbox-group {
             display: flex;
             align-items: center;
             gap: 10px;
         }
-
         .modal-form .checkbox-group input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
+            width: 16px; height: 16px;
             accent-color: var(--primary);
         }
-
         .modal-submit-btn {
             width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 12px;
+            background: var(--primary);
             border: none;
             border-radius: var(--radius-sm);
             color: white;
-            font-family: 'Noto Sans SC', sans-serif;
-            font-size: 15px;
+            font-family: var(--font-sans);
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 8px;
+            transition: all 0.35s ease;
+            margin-top: 6px;
+            letter-spacing: 0.5px;
         }
-
         .modal-submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 6px 20px rgba(224, 122, 95, 0.35);
+            background: var(--primary-dark);
+        }
+
+        /* ==================== 资料设置页 ==================== */
+        .profile-setup-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg);
+            z-index: 500;
+            overflow-y: auto;
+            display: none;
+        }
+        .profile-setup-overlay.show { display: block; }
+        .profile-setup-inner {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 60px 24px 40px;
+        }
+        .profile-setup-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .profile-setup-header h2 {
+            font-family: var(--font-serif);
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+        .profile-setup-header p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        .avatar-selector {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .avatar-option {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            background: var(--bg-warm);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .avatar-option:hover { transform: scale(1.08); }
+        .avatar-option.selected {
+            border-color: var(--primary);
+            background: rgba(224, 122, 95, 0.08);
+            box-shadow: 0 0 0 3px var(--border-focus);
+        }
+        .hobby-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .hobby-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: var(--bg-warm);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--text-light);
+        }
+        .hobby-tag button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 12px;
+            padding: 0;
+            margin-left: 2px;
+        }
+        .hobby-tag button:hover { color: var(--danger); }
+        .hobby-input-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 6px;
+        }
+        .hobby-input-row input {
+            flex: 1;
+        }
+        .hobby-input-row button {
+            padding: 8px 14px;
+            background: var(--primary);
+            border: none;
+            border-radius: var(--radius-xs);
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: var(--font-sans);
+        }
+        .profile-setup-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        .profile-setup-actions .btn-primary,
+        .profile-setup-actions .btn-outline {
+            flex: 1;
+            justify-content: center;
+        }
+
+        /* ==================== 图片放大预览 ==================== */
+        .image-preview-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .image-preview-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .image-preview-overlay img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: var(--radius-xs);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .image-preview-close {
+            position: absolute;
+            top: 20px; right: 20px;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* ==================== Toast ==================== */
@@ -1151,38 +1550,34 @@
             flex-direction: column;
             gap: 8px;
         }
-
         .toast-item {
-            padding: 14px 24px;
+            padding: 12px 20px;
             border-radius: var(--radius-sm);
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             backdrop-filter: blur(10px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--shadow-hover);
             animation: toastIn 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             display: flex;
             align-items: center;
             gap: 10px;
+            font-family: var(--font-sans);
         }
-
         .toast-item.success {
-            background: rgba(34, 197, 94, 0.2);
-            border: 1px solid rgba(34, 197, 94, 0.4);
-            color: #86efac;
+            background: rgba(129, 178, 154, 0.15);
+            border: 1px solid rgba(129, 178, 154, 0.3);
+            color: #5a8a6e;
         }
-
         .toast-item.error {
-            background: rgba(239, 68, 68, 0.2);
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            color: #fca5a5;
+            background: rgba(224, 122, 95, 0.15);
+            border: 1px solid rgba(224, 122, 95, 0.3);
+            color: #b85a42;
         }
-
         .toast-item.info {
-            background: rgba(99, 102, 241, 0.2);
-            border: 1px solid rgba(99, 102, 241, 0.4);
-            color: #a5b4fc;
+            background: rgba(107, 140, 174, 0.15);
+            border: 1px solid rgba(107, 140, 174, 0.3);
+            color: #4a6d8c;
         }
-
         @keyframes toastIn {
             from { opacity: 0; transform: translateX(100px); }
             to { opacity: 1; transform: translateX(0); }
@@ -1191,15 +1586,15 @@
         /* ==================== 页脚 ==================== */
         .footer {
             text-align: center;
-            padding: 40px 24px;
+            padding: 36px 24px;
             border-top: 1px solid var(--border);
-            color: var(--text-dim);
-            font-size: 13px;
+            color: var(--text-muted);
+            font-size: 12px;
+            position: relative;
+            z-index: 2;
+            transition: all 0.5s ease;
         }
-
-        .footer span {
-            margin: 0 8px;
-        }
+        .footer span { margin: 0 8px; }
 
         /* ==================== 动画 ==================== */
         @keyframes fadeInUp {
@@ -1210,69 +1605,71 @@
         /* ==================== 空状态 ==================== */
         .empty-state {
             text-align: center;
-            padding: 60px 20px;
-            color: var(--text-dim);
+            padding: 50px 20px;
+            color: var(--text-muted);
+            transition: color 0.5s ease;
         }
-
         .empty-state i {
-            font-size: 48px;
-            margin-bottom: 16px;
+            font-size: 40px;
+            margin-bottom: 14px;
             opacity: 0.3;
         }
-
         .empty-state p {
-            font-size: 15px;
+            font-size: 14px;
         }
 
         /* ==================== 响应式 ==================== */
         @media (max-width: 768px) {
             .nav-links { display: none; }
             .hero-title { font-size: 28px; }
-            .timeline-line { left: 20px; }
-            .timeline-item,
-            .timeline-item:nth-child(odd) {
-                flex-direction: column;
-                text-align: left;
-                padding-left: 50px;
-            }
-            .timeline-dot {
-                left: 20px;
-            }
-            .timeline-item:nth-child(odd) .timeline-card,
-            .timeline-item:nth-child(even) .timeline-card {
-                margin-left: 0;
-                margin-right: 0;
-                max-width: 100%;
-            }
-            .goals-grid,
-            .diaries-grid,
-            .shares-grid,
-            .confessions-grid {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .goals-grid, .diaries-grid, .shares-grid, .confessions-grid {
                 grid-template-columns: 1fr;
             }
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .profile-mini {
+                flex-direction: column;
+                text-align: center;
             }
+            .profile-mini-actions { margin-left: 0; margin-top: 12px; }
+            .avatar-selector { grid-template-columns: repeat(4, 1fr); }
         }
-
         @media (max-width: 480px) {
             .section { padding: 50px 16px; }
             .hero { min-height: 60vh; padding-top: calc(var(--nav-height) + 20px); }
             .hero-title { font-size: 24px; }
-            .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-            .stat-card { padding: 16px; }
-            .stat-number { font-size: 24px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .stat-card { padding: 16px 10px; }
+            .stat-number { font-size: 22px; }
             .fab-container { bottom: 20px; right: 20px; }
+            .modal-card { padding: 20px 16px; }
+            .avatar-selector { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+            .avatar-option { font-size: 24px; }
         }
     </style>
 </head>
 <body>
+    <!-- 加载动画 -->
+    <div class="loader-overlay" id="loaderOverlay">
+        <div class="loader-logo">
+            <svg viewBox="0 0 60 60">
+                <path d="M30 5 C15 5, 5 18, 5 30 C5 45, 18 55, 30 55 C42 55, 55 45, 55 30 C55 18, 45 5, 30 5 Z M30 15 C22 15, 15 22, 15 30 C15 38, 22 45, 30 45 C38 45, 45 38, 45 30 C45 22, 38 15, 30 15 Z M30 22 C26 22, 22 26, 22 30 C22 34, 26 38, 30 38 C34 38, 38 34, 38 30 C38 26, 34 22, 30 22 Z"/>
+            </svg>
+        </div>
+        <div class="loader-text">人生进度</div>
+    </div>
+
+    <!-- 自定义光标 -->
+    <div class="custom-cursor" id="cursor"></div>
+    <div class="custom-cursor-follower" id="cursorFollower"></div>
+
+    <!-- 纸质纹理 -->
+    <div class="paper-texture"></div>
 
     <!-- ==================== 导航栏 ==================== -->
     <nav class="navbar" id="navbar">
         <div class="nav-inner">
             <a href="#" class="nav-logo">
-                <div class="nav-logo-icon"><i class="fas fa-heartbeat"></i></div>
+                <div class="nav-logo-icon"><i class="fas fa-seedling"></i></div>
                 <span class="nav-logo-text">人生进度</span>
             </a>
             <ul class="nav-links">
@@ -1284,20 +1681,62 @@
                 <li><a href="#shares"><i class="fas fa-share-nodes"></i> 分享</a></li>
             </ul>
             <div class="nav-right">
-                <div class="user-avatar" id="navAvatar">U</div>
+                <div class="theme-switcher-nav">
+                    <button class="theme-btn-nav active" data-theme="warm" title="暖橙" onclick="switchTheme('warm')"></button>
+                    <button class="theme-btn-nav" data-theme="twilight" title="暮蓝" onclick="switchTheme('twilight')"></button>
+                    <button class="theme-btn-nav" data-theme="forest" title="森绿" onclick="switchTheme('forest')"></button>
+                    <button class="theme-btn-nav" data-theme="pink" title="粉黛" onclick="switchTheme('pink')"></button>
+                </div>
+                <div class="user-avatar" id="navAvatar" onclick="openProfileSetup()" title="编辑资料">U</div>
                 <span class="user-name" id="navNickname">用户</span>
-                <button class="logout-btn" onclick="handleLogout()"><i class="fas fa-right-from-bracket"></i> 退出</button>
+                <button class="logout-btn" onclick="handleLogout()"><i class="fas fa-right-from-bracket"></i></button>
             </div>
         </div>
     </nav>
 
     <!-- ==================== 英雄区域 ==================== -->
     <section class="hero" id="hero">
-        <canvas id="heroCanvas"></canvas>
+        <div class="hero-svg-bg">
+            <svg viewBox="0 0 1440 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:var(--primary-light);stop-opacity:0.15"/>
+                        <stop offset="100%" style="stop-color:var(--bg);stop-opacity:0"/>
+                    </linearGradient>
+                </defs>
+                <rect width="1440" height="600" fill="url(#skyGrad)"/>
+                <!-- 太阳 -->
+                <circle cx="1200" cy="100" r="50" fill="var(--primary-light)" opacity="0.2"/>
+                <circle cx="1200" cy="100" r="35" fill="var(--primary-light)" opacity="0.3"/>
+                <!-- 云朵 -->
+                <g fill="var(--card-bg)" opacity="0.6">
+                    <ellipse cx="200" cy="120" rx="60" ry="25"/>
+                    <ellipse cx="250" cy="105" rx="45" ry="22"/>
+                    <ellipse cx="155" cy="115" rx="38" ry="18"/>
+                </g>
+                <g fill="var(--card-bg)" opacity="0.4">
+                    <ellipse cx="900" cy="180" rx="50" ry="20"/>
+                    <ellipse cx="940" cy="168" rx="38" ry="17"/>
+                    <ellipse cx="860" cy="175" rx="32" ry="15"/>
+                </g>
+                <!-- 远山 -->
+                <path d="M0 450 Q180 320, 360 380 T720 340 T1080 360 T1440 400 L1440 600 L0 600 Z" fill="var(--accent)" opacity="0.1"/>
+                <path d="M0 500 Q240 400, 480 440 T960 400 T1440 450 L1440 600 L0 600 Z" fill="var(--primary)" opacity="0.06"/>
+                <!-- 飞鸟 -->
+                <g stroke="var(--text)" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.15">
+                    <path d="M300 200 Q306 192, 312 200 Q318 192, 324 200"/>
+                    <path d="M340 170 Q344 165, 348 170 Q352 165, 356 170"/>
+                    <path d="M260 230 Q264 225, 268 230 Q272 225, 276 230"/>
+                </g>
+                <!-- 底部草地 -->
+                <path d="M0 550 Q360 530, 720 540 T1440 530 L1440 600 L0 600 Z" fill="var(--accent)" opacity="0.08"/>
+            </svg>
+        </div>
         <div class="hero-content">
             <div class="hero-greeting"><i class="fas fa-sparkles"></i> 欢迎回来</div>
             <h1 class="hero-title">你好，<span id="heroNickname">用户</span>！</h1>
             <p class="hero-subtitle">每一个计划都是蓝图，每一个脚印都是记号</p>
+            <p class="hero-bio" id="heroBio" style="display:none"></p>
             <div class="hero-buttons">
                 <a href="#diaries" class="btn-primary"><i class="fas fa-pen-fancy"></i> 开始记录</a>
                 <a href="#timeline" class="btn-outline"><i class="fas fa-clock-rotate-left"></i> 回顾过往</a>
@@ -1310,6 +1749,17 @@
         <div class="section-header">
             <h2><i class="fas fa-chart-pie"></i> 人生进度总览</h2>
             <p>你的生命旅程，每一步都算数</p>
+        </div>
+        <div class="profile-mini" id="profileMini" style="display:none">
+            <div class="profile-mini-avatar" id="profileMiniAvatar"></div>
+            <div class="profile-mini-info">
+                <h3 id="profileMiniName">用户</h3>
+                <p id="profileMiniDetail">完善资料，让人生进度更精准</p>
+                <div class="profile-mini-tags" id="profileMiniTags"></div>
+            </div>
+            <div class="profile-mini-actions">
+                <button class="profile-mini-btn" onclick="openProfileSetup()"><i class="fas fa-pen"></i> 编辑资料</button>
+            </div>
         </div>
         <div class="progress-overview">
             <div class="life-progress-bar">
@@ -1330,9 +1780,9 @@
                 <div class="stat-label">日记篇数</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-trophy"></i></div>
-                <div class="stat-number" id="statTimeline">0</div>
-                <div class="stat-label">人生足迹</div>
+                <div class="stat-icon"><i class="fas fa-comments"></i></div>
+                <div class="stat-number" id="statConfessions">0</div>
+                <div class="stat-label">倾诉次数</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
@@ -1340,9 +1790,19 @@
                 <div class="stat-label">目标数量</div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-comments"></i></div>
-                <div class="stat-number" id="statConfessions">0</div>
-                <div class="stat-label">倾诉次数</div>
+                <div class="stat-icon"><i class="fas fa-share-nodes"></i></div>
+                <div class="stat-number" id="statShares">0</div>
+                <div class="stat-label">分享次数</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-clock-rotate-left"></i></div>
+                <div class="stat-number" id="statTimeline">0</div>
+                <div class="stat-label">人生足迹</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-heart"></i></div>
+                <div class="stat-number" id="statLikes">0</div>
+                <div class="stat-label">获赞总数</div>
             </div>
         </div>
     </section>
@@ -1355,7 +1815,6 @@
         </div>
         <div class="timeline-container" id="timelineContainer">
             <div class="timeline-line"></div>
-            <!-- 动态渲染 -->
         </div>
     </section>
 
@@ -1365,9 +1824,7 @@
             <h2><i class="fas fa-bullseye"></i> 未来蓝图</h2>
             <p>每一个目标都值得被认真对待</p>
         </div>
-        <div class="goals-grid" id="goalsGrid">
-            <!-- 动态渲染 -->
-        </div>
+        <div class="goals-grid" id="goalsGrid"></div>
     </section>
 
     <!-- ==================== 人生日记 ==================== -->
@@ -1376,9 +1833,7 @@
             <h2><i class="fas fa-book"></i> 人生日记</h2>
             <p>用文字记录生活的温度</p>
         </div>
-        <div class="diaries-grid" id="diariesGrid">
-            <!-- 动态渲染 -->
-        </div>
+        <div class="diaries-grid" id="diariesGrid"></div>
     </section>
 
     <!-- ==================== 人生倾诉 ==================== -->
@@ -1387,9 +1842,7 @@
             <h2><i class="fas fa-comments"></i> 人生倾诉</h2>
             <p>说出心里话，温暖你我他</p>
         </div>
-        <div class="confessions-grid" id="confessionsGrid">
-            <!-- 动态渲染 -->
-        </div>
+        <div class="confessions-grid" id="confessionsGrid"></div>
     </section>
 
     <!-- ==================== 社区精选 ==================== -->
@@ -1398,9 +1851,7 @@
             <h2><i class="fas fa-share-nodes"></i> 社区精选</h2>
             <p>分享你的故事，照亮别人的路</p>
         </div>
-        <div class="shares-grid" id="sharesGrid">
-            <!-- 动态渲染 -->
-        </div>
+        <div class="shares-grid" id="sharesGrid"></div>
     </section>
 
     <!-- ==================== FAB浮动按钮 ==================== -->
@@ -1439,9 +1890,112 @@
                 <h3 id="modalTitle">标题</h3>
                 <button class="modal-close" onclick="closeModal()"><i class="fas fa-xmark"></i></button>
             </div>
-            <div id="modalBody">
-                <!-- 动态渲染 -->
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- ==================== 图片预览 ==================== -->
+    <div class="image-preview-overlay" id="imagePreviewOverlay" onclick="closeImagePreview()">
+        <button class="image-preview-close" onclick="closeImagePreview()"><i class="fas fa-xmark"></i></button>
+        <img id="imagePreviewImg" src="" alt="预览">
+    </div>
+
+    <!-- ==================== 资料设置页 ==================== -->
+    <div class="profile-setup-overlay" id="profileSetupOverlay">
+        <div class="profile-setup-inner">
+            <div class="profile-setup-header">
+                <h2><i class="fas fa-user-circle"></i> 完善你的资料</h2>
+                <p>让我们更了解你，为你提供更精准的人生进度追踪</p>
             </div>
+            <form class="modal-form" onsubmit="saveProfile(event)">
+                <div class="form-group">
+                    <label>选择头像</label>
+                    <div class="avatar-selector" id="avatarSelector">
+                        <div class="avatar-option" data-avatar="&#x1F9D1;&#x200D;&#x1F4BB;" onclick="selectAvatar(this)">&#x1F9D1;&#x200D;&#x1F4BB;</div>
+                        <div class="avatar-option" data-avatar="&#x1F469;&#x200D;&#x1F393;" onclick="selectAvatar(this)">&#x1F469;&#x200D;&#x1F393;</div>
+                        <div class="avatar-option" data-avatar="&#x1F9D1;&#x200D;&#x1F680;" onclick="selectAvatar(this)">&#x1F9D1;&#x200D;&#x1F680;</div>
+                        <div class="avatar-option" data-avatar="&#x1F9D1;&#x200D;&#x1F3A8;" onclick="selectAvatar(this)">&#x1F9D1;&#x200D;&#x1F3A8;</div>
+                        <div class="avatar-option" data-avatar="&#x1F9D1;&#x200D;&#x1F52C;" onclick="selectAvatar(this)">&#x1F9D1;&#x200D;&#x1F52C;</div>
+                        <div class="avatar-option" data-avatar="&#x1F9D1;&#x200D;&#x1F373;" onclick="selectAvatar(this)">&#x1F9D1;&#x200D;&#x1F373;</div>
+                        <div class="avatar-option" data-avatar="&#x1F9D1;&#x200D;&#x1F33E;" onclick="selectAvatar(this)">&#x1F9D1;&#x200D;&#x1F33E;</div>
+                        <div class="avatar-option" data-avatar="&#x1F9D1;&#x200D;&#x1F3EB;" onclick="selectAvatar(this)">&#x1F9D1;&#x200D;&#x1F3EB;</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>昵称</label>
+                    <input type="text" id="profileNickname" placeholder="你的昵称" required>
+                </div>
+                <div class="form-group">
+                    <label>出生日期</label>
+                    <input type="date" id="profileBirthDate" required>
+                </div>
+                <div class="form-group">
+                    <label>性别</label>
+                    <select id="profileGender">
+                        <option value="">请选择</option>
+                        <option value="男">男</option>
+                        <option value="女">女</option>
+                        <option value="保密">保密</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>当前状态</label>
+                    <select id="profileStatus">
+                        <option value="">请选择</option>
+                        <option value="在校学生">在校学生</option>
+                        <option value="职场新人">职场新人</option>
+                        <option value="职场老手">职场老手</option>
+                        <option value="自由职业">自由职业</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>专业/职业</label>
+                    <input type="text" id="profileMajor" placeholder="例如：计算机科学 / 产品经理">
+                </div>
+                <div class="form-group">
+                    <label>年级/工作年限</label>
+                    <input type="text" id="profileYear" placeholder="例如：大三 / 3年">
+                </div>
+                <div class="form-group">
+                    <label>感情状态</label>
+                    <select id="profileRelationship">
+                        <option value="">请选择</option>
+                        <option value="单身">单身</option>
+                        <option value="恋爱中">恋爱中</option>
+                        <option value="已婚">已婚</option>
+                        <option value="保密">保密</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>身高（cm）</label>
+                    <input type="number" id="profileHeight" placeholder="例如：175" min="50" max="250">
+                </div>
+                <div class="form-group">
+                    <label>体重（kg）</label>
+                    <input type="number" id="profileWeight" placeholder="例如：65" min="20" max="300">
+                </div>
+                <div class="form-group">
+                    <label>兴趣爱好</label>
+                    <div class="hobby-tags" id="hobbyTags"></div>
+                    <div class="hobby-input-row">
+                        <input type="text" id="hobbyInput" placeholder="输入爱好后按添加">
+                        <button type="button" onclick="addHobby()"><i class="fas fa-plus"></i> 添加</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>个性签名</label>
+                    <textarea id="profileBio" placeholder="一句话介绍自己..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>人生格言</label>
+                    <textarea id="profileMotto" placeholder="你信奉的一句话..."></textarea>
+                </div>
+                <div class="profile-setup-actions">
+                    <button type="submit" class="btn-primary"><i class="fas fa-check"></i> 保存资料</button>
+                    <button type="button" class="btn-outline" onclick="closeProfileSetup()"><i class="fas fa-times"></i> 稍后完善</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -1457,6 +2011,55 @@
     // ==================== 全局变量 ====================
     let currentUser = null;
     let db = null;
+    let currentHobbies = [];
+    let selectedAvatar = '';
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isRecording = false;
+
+    // ==================== 主题切换 ====================
+    function switchTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        document.querySelectorAll('.theme-btn-nav').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.theme === theme);
+        });
+        localStorage.setItem('preferredTheme', theme);
+        if (currentUser && db) {
+            dbGet('users', currentUser.id).then(user => {
+                if (user) {
+                    user.theme = theme;
+                    dbPut('users', user);
+                }
+            }).catch(()=>{});
+        }
+    }
+
+    // ==================== 自定义光标 ====================
+    const cursor = document.getElementById('cursor');
+    const cursorFollower = document.getElementById('cursorFollower');
+    let cursorX = 0, cursorY = 0;
+    let followerX = 0, followerY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+        cursorX = e.clientX;
+        cursorY = e.clientY;
+        cursor.style.transform = `translate(${cursorX - 6}px, ${cursorY - 6}px)`;
+    });
+
+    function animateCursor() {
+        followerX += (cursorX - followerX) * 0.12;
+        followerY += (cursorY - followerY) * 0.12;
+        cursorFollower.style.transform = `translate(${followerX - 16}px, ${followerY - 16}px)`;
+        requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+
+    // ==================== 加载动画 ====================
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            document.getElementById('loaderOverlay').classList.add('hidden');
+        }, 1200);
+    });
 
     // ==================== 认证检查 ====================
     (function checkAuth() {
@@ -1472,6 +2075,8 @@
                 window.location.href = 'login.html';
                 return;
             }
+            const savedTheme = localStorage.getItem('preferredTheme');
+            if (savedTheme) switchTheme(savedTheme);
         } catch (e) {
             localStorage.removeItem('currentUser');
             window.location.href = 'login.html';
@@ -1481,36 +2086,29 @@
     // ==================== IndexedDB 初始化 ====================
     function openDB() {
         return new Promise((resolve, reject) => {
-            const request = indexedDB.open('LifeProgressDB', 1);
+            const request = indexedDB.open('LifeProgressDB', 2);
             request.onupgradeneeded = (e) => {
                 const db = e.target.result;
-                // users
                 if (!db.objectStoreNames.contains('users')) {
                     const us = db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
                     us.createIndex('username', 'username', { unique: true });
                 }
-                // diaries
                 if (!db.objectStoreNames.contains('diaries')) {
                     const ds = db.createObjectStore('diaries', { keyPath: 'id', autoIncrement: true });
                     ds.createIndex('userId', 'userId', { unique: false });
-                    ds.createIndex('date', 'date', { unique: false });
                 }
-                // confessions
                 if (!db.objectStoreNames.contains('confessions')) {
                     const cs = db.createObjectStore('confessions', { keyPath: 'id', autoIncrement: true });
                     cs.createIndex('userId', 'userId', { unique: false });
                 }
-                // timeline
                 if (!db.objectStoreNames.contains('timeline')) {
                     const ts = db.createObjectStore('timeline', { keyPath: 'id', autoIncrement: true });
                     ts.createIndex('userId', 'userId', { unique: false });
                 }
-                // goals
                 if (!db.objectStoreNames.contains('goals')) {
                     const gs = db.createObjectStore('goals', { keyPath: 'id', autoIncrement: true });
                     gs.createIndex('userId', 'userId', { unique: false });
                 }
-                // shares
                 if (!db.objectStoreNames.contains('shares')) {
                     db.createObjectStore('shares', { keyPath: 'id', autoIncrement: true });
                 }
@@ -1582,32 +2180,194 @@
         });
     }
 
+    // ==================== 用户资料系统 ====================
+    async function loadUserProfile() {
+        try {
+            const user = await dbGet('users', currentUser.id);
+            if (!user) return;
+            currentUser.nickname = user.nickname;
+            currentUser.avatar = user.avatar;
+            currentUser.theme = user.theme || 'warm';
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            if (user.theme) switchTheme(user.theme);
+            updateUserUI(user);
+            if (user.birthDate || user.bio || user.avatar) {
+                showProfileMini(user);
+            }
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('setup') === 'profile' || currentUser.isNewUser) {
+                openProfileSetup();
+                if (currentUser.isNewUser) {
+                    delete currentUser.isNewUser;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                }
+                if (urlParams.get('setup')) {
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
+            }
+        } catch (e) {
+            console.error('加载用户资料失败', e);
+        }
+    }
+
+    function updateUserUI(user) {
+        const nickname = user.nickname || currentUser.nickname || currentUser.username;
+        const avatar = user.avatar;
+        document.getElementById('navAvatar').textContent = avatar || nickname.charAt(0);
+        document.getElementById('navNickname').textContent = nickname;
+        document.getElementById('heroNickname').textContent = nickname;
+        if (user.bio) {
+            const bioEl = document.getElementById('heroBio');
+            bioEl.textContent = user.bio;
+            bioEl.style.display = 'inline-block';
+        }
+    }
+
+    function showProfileMini(user) {
+        const mini = document.getElementById('profileMini');
+        mini.style.display = 'flex';
+        document.getElementById('profileMiniAvatar').textContent = user.avatar || user.nickname.charAt(0);
+        document.getElementById('profileMiniName').textContent = user.nickname;
+        const details = [];
+        if (user.gender) details.push(user.gender);
+        if (user.status) details.push(user.status);
+        if (user.major) details.push(user.major);
+        const detailText = details.length > 0 ? details.join(' \u00b7 ') : '完善资料，让人生进度更精准';
+        document.getElementById('profileMiniDetail').textContent = detailText;
+        const tagsContainer = document.getElementById('profileMiniTags');
+        tagsContainer.innerHTML = '';
+        if (user.relationship) {
+            tagsContainer.innerHTML += `<span class="profile-mini-tag">${user.relationship}</span>`;
+        }
+        if (user.hobbies && user.hobbies.length > 0) {
+            user.hobbies.slice(0, 3).forEach(h => {
+                tagsContainer.innerHTML += `<span class="profile-mini-tag">${escapeHtml(h)}</span>`;
+            });
+        }
+    }
+
+    function openProfileSetup() {
+        const overlay = document.getElementById('profileSetupOverlay');
+        overlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        dbGet('users', currentUser.id).then(user => {
+            if (!user) return;
+            document.getElementById('profileNickname').value = user.nickname || '';
+            document.getElementById('profileBirthDate').value = user.birthDate || '';
+            document.getElementById('profileGender').value = user.gender || '';
+            document.getElementById('profileStatus').value = user.status || '';
+            document.getElementById('profileMajor').value = user.major || '';
+            document.getElementById('profileYear').value = user.year || '';
+            document.getElementById('profileRelationship').value = user.relationship || '';
+            document.getElementById('profileHeight').value = user.height || '';
+            document.getElementById('profileWeight').value = user.weight || '';
+            document.getElementById('profileBio').value = user.bio || '';
+            document.getElementById('profileMotto').value = user.motto || '';
+            if (user.avatar) {
+                document.querySelectorAll('.avatar-option').forEach(opt => {
+                    opt.classList.toggle('selected', opt.dataset.avatar === user.avatar);
+                });
+                selectedAvatar = user.avatar;
+            }
+            currentHobbies = user.hobbies || [];
+            renderHobbies();
+        }).catch(() => {});
+    }
+
+    function closeProfileSetup() {
+        document.getElementById('profileSetupOverlay').classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    function selectAvatar(el) {
+        document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedAvatar = el.dataset.avatar;
+    }
+
+    function addHobby() {
+        const input = document.getElementById('hobbyInput');
+        const val = input.value.trim();
+        if (!val) return;
+        if (currentHobbies.includes(val)) {
+            showToast('该爱好已存在', 'error');
+            return;
+        }
+        currentHobbies.push(val);
+        input.value = '';
+        renderHobbies();
+    }
+
+    function removeHobby(hobby) {
+        currentHobbies = currentHobbies.filter(h => h !== hobby);
+        renderHobbies();
+    }
+
+    function renderHobbies() {
+        const container = document.getElementById('hobbyTags');
+        container.innerHTML = currentHobbies.map(h =>
+            `<span class="hobby-tag">${escapeHtml(h)} <button type="button" onclick="removeHobby('${escapeHtml(h)}')"><i class="fas fa-times"></i></button></span>`
+        ).join('');
+    }
+
+    async function saveProfile(e) {
+        e.preventDefault();
+        try {
+            const user = await dbGet('users', currentUser.id);
+            if (!user) return;
+            user.nickname = document.getElementById('profileNickname').value.trim();
+            user.avatar = selectedAvatar || user.avatar;
+            user.birthDate = document.getElementById('profileBirthDate').value;
+            user.gender = document.getElementById('profileGender').value;
+            user.status = document.getElementById('profileStatus').value;
+            user.major = document.getElementById('profileMajor').value.trim();
+            user.year = document.getElementById('profileYear').value.trim();
+            user.relationship = document.getElementById('profileRelationship').value;
+            user.height = document.getElementById('profileHeight').value ? parseFloat(document.getElementById('profileHeight').value) : null;
+            user.weight = document.getElementById('profileWeight').value ? parseFloat(document.getElementById('profileWeight').value) : null;
+            user.hobbies = currentHobbies;
+            user.bio = document.getElementById('profileBio').value.trim();
+            user.motto = document.getElementById('profileMotto').value.trim();
+            await dbPut('users', user);
+            currentUser.nickname = user.nickname;
+            currentUser.avatar = user.avatar;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            updateUserUI(user);
+            showProfileMini(user);
+            renderLifeProgress();
+            closeProfileSetup();
+            showToast('资料保存成功！', 'success');
+        } catch (err) {
+            showToast('保存失败：' + err.message, 'error');
+        }
+    }
+
     // ==================== 预置数据 ====================
     async function seedData() {
         const diaries = await dbGetAll('diaries');
-        if (diaries.length > 0) return; // 已有数据，不重复插入
-
+        if (diaries.length > 0) return;
         const uid = currentUser.id;
         const now = new Date().toISOString();
 
-        // 3条日记
         await dbAdd('diaries', {
             userId: uid, title: '新的一天，新的开始',
             content: '今天阳光明媚，心情格外好。早上去了公园散步，看到樱花开了，粉粉的一片，美极了。生活就是这样，总有一些小确幸值得记录。',
-            mood: 'happy', date: '2024-03-15', createdAt: now
+            mood: 'happy', date: '2024-03-15', createdAt: now,
+            images: [], videos: [], audios: []
         });
         await dbAdd('diaries', {
             userId: uid, title: '深夜的思考',
             content: '深夜总是容易让人陷入沉思。回顾过去的一年，虽然有很多挑战，但也收获了很多成长。感谢身边一直支持我的朋友们，你们是我前进的动力。',
-            mood: 'thoughtful', date: '2024-03-10', createdAt: now
+            mood: 'thoughtful', date: '2024-03-10', createdAt: now,
+            images: [], videos: [], audios: []
         });
         await dbAdd('diaries', {
             userId: uid, title: '读完了一本好书',
             content: '今天终于读完了《百年孤独》，马尔克斯的魔幻现实主义让我深深着迷。书中关于孤独、时间、命运的描写，让我对人生有了新的理解。推荐给每一个热爱阅读的人。',
-            mood: 'inspired', date: '2024-03-05', createdAt: now
+            mood: 'inspired', date: '2024-03-05', createdAt: now,
+            images: [], videos: [], audios: []
         });
 
-        // 2条倾诉
         await dbAdd('confessions', {
             userId: uid, content: '最近工作压力好大，感觉每天都在赶deadline。有时候真的很想停下来，好好休息一下，但又怕落后于人。不知道大家都是怎么调节的？',
             anonymous: false, responses: [
@@ -1622,7 +2382,6 @@
             ], createdAt: now
         });
 
-        // 5条时间轴事件
         await dbAdd('timeline', {
             userId: uid, title: '大学毕业', description: '四年大学生活画上句号，带着满满的回忆和期待走向社会。',
             date: '2020-06-30', tag: 'milestone', createdAt: now
@@ -1644,7 +2403,6 @@
             date: '2023-01-20', tag: 'memory', createdAt: now
         });
 
-        // 6个目标
         await dbAdd('goals', {
             userId: uid, title: '学习一门新语言', description: '目标：日语N2水平，每天学习30分钟',
             progress: 35, status: 'in-progress', deadline: '2024-12-31', createdAt: now
@@ -1670,7 +2428,6 @@
             progress: 80, status: 'in-progress', deadline: '2024-09-30', createdAt: now
         });
 
-        // 3条社区分享
         await dbAdd('shares', {
             userId: uid, nickname: currentUser.nickname, title: '我的时间管理心得',
             content: '经过两年的摸索，我找到了适合自己的时间管理方法：番茄工作法+周复盘。每天专注工作25分钟，休息5分钟，一周做一次总结和调整。效率提升了至少50%！',
@@ -1691,61 +2448,65 @@
     }
 
     // ==================== 渲染函数 ====================
-
-    // 更新用户信息显示
-    function updateUserUI() {
-        const nickname = currentUser.nickname || currentUser.username;
-        const initial = nickname.charAt(0).toUpperCase();
-        document.getElementById('navAvatar').textContent = initial;
-        document.getElementById('navNickname').textContent = nickname;
-        document.getElementById('heroNickname').textContent = nickname;
-    }
-
-    // 渲染统计
     async function renderStats() {
         const diaries = await dbGetByIndex('diaries', 'userId', currentUser.id);
         const timeline = await dbGetByIndex('timeline', 'userId', currentUser.id);
         const goals = await dbGetByIndex('goals', 'userId', currentUser.id);
         const confessions = await dbGetByIndex('confessions', 'userId', currentUser.id);
+        const shares = await dbGetAll('shares');
+        const userShares = shares.filter(s => s.userId === currentUser.id);
+        const totalLikes = shares.reduce((sum, s) => sum + (s.likes || 0), 0);
 
         document.getElementById('statDiaries').textContent = diaries.length;
         document.getElementById('statTimeline').textContent = timeline.length;
         document.getElementById('statGoals').textContent = goals.length;
         document.getElementById('statConfessions').textContent = confessions.length;
+        document.getElementById('statShares').textContent = userShares.length;
+        document.getElementById('statLikes').textContent = totalLikes;
     }
 
-    // 渲染生命进度条
-    function renderLifeProgress() {
-        const age = 28;
-        const lifespan = 80;
-        const percent = Math.round((age / lifespan) * 100);
-        setTimeout(() => {
-            document.getElementById('lifeProgressFill').style.width = percent + '%';
-            document.getElementById('lifeProgressText').textContent = percent + '%';
-        }, 300);
-        document.getElementById('lifeProgressAge').textContent = age + '岁 / ' + lifespan + '岁';
+    async function renderLifeProgress() {
+        try {
+            const user = await dbGet('users', currentUser.id);
+            let age = 28;
+            const lifespan = 80;
+            if (user && user.birthDate) {
+                const birth = new Date(user.birthDate);
+                const today = new Date();
+                age = today.getFullYear() - birth.getFullYear();
+                const monthDiff = today.getMonth() - birth.getMonth();
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                    age--;
+                }
+            }
+            const percent = Math.round((age / lifespan) * 100);
+            setTimeout(() => {
+                document.getElementById('lifeProgressFill').style.width = percent + '%';
+                document.getElementById('lifeProgressText').textContent = percent + '%';
+            }, 300);
+            document.getElementById('lifeProgressAge').textContent = age + '岁 / ' + lifespan + '岁';
+        } catch (e) {
+            document.getElementById('lifeProgressFill').style.width = '35%';
+            document.getElementById('lifeProgressText').textContent = '35%';
+            document.getElementById('lifeProgressAge').textContent = '28岁 / 80岁';
+        }
     }
 
-    // 渲染时间轴
     async function renderTimeline() {
         const items = await dbGetByIndex('timeline', 'userId', currentUser.id);
         const container = document.getElementById('timelineContainer');
         const line = '<div class="timeline-line"></div>';
-
         if (items.length === 0) {
             container.innerHTML = line + '<div class="empty-state"><i class="fas fa-clock-rotate-left"></i><p>还没有人生足迹，快去添加吧</p></div>';
             return;
         }
-
-        // 按日期排序（最新在前）
         items.sort((a, b) => new Date(b.date) - new Date(a.date));
-
         let html = line;
         items.forEach((item, i) => {
             const tagClass = item.tag || 'achievement';
             const tagLabel = tagClass === 'achievement' ? '成就' : tagClass === 'milestone' ? '里程碑' : '回忆';
             html += `
-                <div class="timeline-item" style="animation-delay: ${i * 0.1}s">
+                <div class="timeline-item" style="animation-delay: ${i * 0.08}s">
                     <div class="timeline-dot tag-${tagClass}"></div>
                     <div class="timeline-card">
                         <div class="timeline-date"><i class="far fa-calendar"></i> ${item.date}</div>
@@ -1758,63 +2519,81 @@
         container.innerHTML = html;
     }
 
-    // 渲染目标
     async function renderGoals() {
         const items = await dbGetByIndex('goals', 'userId', currentUser.id);
         const grid = document.getElementById('goalsGrid');
-
         if (items.length === 0) {
             grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-bullseye"></i><p>还没有目标，快去规划你的未来蓝图吧</p></div>';
             return;
         }
-
         let html = '';
         items.forEach((item, i) => {
             const statusLabel = item.status === 'completed' ? '已完成' : item.status === 'paused' ? '已暂停' : '进行中';
+            const circumference = 2 * Math.PI * 22;
+            const offset = circumference - (Math.min(item.progress, 100) / 100) * circumference;
+            const strokeColor = item.status === 'completed' ? 'var(--accent)' : item.status === 'paused' ? 'var(--warning)' : 'var(--info)';
             html += `
-                <div class="goal-card" style="animation-delay: ${i * 0.1}s">
+                <div class="goal-card" style="animation-delay: ${i * 0.08}s">
                     <div class="goal-header">
                         <div class="goal-title">${escapeHtml(item.title)}</div>
                         <span class="goal-status ${item.status}">${statusLabel}</span>
                     </div>
                     <div class="goal-desc">${escapeHtml(item.description)}</div>
-                    <div class="goal-progress-bar">
-                        <div class="goal-progress-fill ${item.status}" style="width: ${Math.min(item.progress, 100)}%"></div>
-                    </div>
-                    <div class="goal-footer">
-                        <span>进度 ${item.progress}%</span>
-                        ${item.status !== 'completed' ? `<button class="goal-update-btn" onclick="updateGoalProgress(${item.id}, ${item.progress})"><i class="fas fa-plus"></i> +5%</button>` : '<i class="fas fa-check-circle" style="color:var(--success)"></i>'}
+                    <div class="goal-progress-wrap">
+                        <div class="goal-circle-progress">
+                            <svg width="56" height="56" viewBox="0 0 56 56">
+                                <circle class="goal-circle-bg" cx="28" cy="28" r="22"/>
+                                <circle class="goal-circle-fill" cx="28" cy="28" r="22"
+                                    stroke="${strokeColor}"
+                                    stroke-dasharray="${circumference}"
+                                    stroke-dashoffset="${offset}"/>
+                            </svg>
+                            <div class="goal-circle-text">${item.progress}%</div>
+                        </div>
+                        <div style="flex:1">
+                            <div class="goal-footer" style="margin-bottom:4px">
+                                <span>截止日期 ${item.deadline}</span>
+                            </div>
+                            <div style="text-align:right">
+                                ${item.status !== 'completed' ? `<button class="goal-update-btn" onclick="updateGoalProgress(${item.id}, ${item.progress})"><i class="fas fa-plus"></i> +5%</button>` : '<span style="color:var(--accent);font-size:12px"><i class="fas fa-check-circle"></i> 已完成</span>'}
+                            </div>
+                        </div>
                     </div>
                 </div>`;
         });
         grid.innerHTML = html;
     }
 
-    // 渲染日记
     async function renderDiaries() {
         const items = await dbGetByIndex('diaries', 'userId', currentUser.id);
         const grid = document.getElementById('diariesGrid');
-
         if (items.length === 0) {
             grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-book"></i><p>还没有日记，快去记录你的生活吧</p></div>';
             return;
         }
-
-        // 按日期排序（最新在前）
         items.sort((a, b) => new Date(b.date) - new Date(a.date));
-
         const moodMap = {
-            happy: '&#128522;', sad: '&#128546;', angry: '&#128545;',
-            excited: '&#129321;', calm: '&#128524;', thoughtful: '&#129300;',
-            inspired: '&#129504;', grateful: '&#128151;', anxious: '&#128550;'
+            happy: '\u{1F60A}', sad: '\u{1F622}', angry: '\u{1F620}',
+            excited: '\u{1F929}', calm: '\u{1F60C}', thoughtful: '\u{1F914}',
+            inspired: '\u{1F9E0}', grateful: '\u{2764}', anxious: '\u{1F628}'
         };
-
         let html = '';
         items.forEach((item, i) => {
-            const moodEmoji = moodMap[item.mood] || '&#128516;';
+            const moodEmoji = moodMap[item.mood] || '\u{1F60A}';
+            let mediaHtml = '';
+            if (item.images && item.images.length > 0) {
+                mediaHtml += `<div class="diary-media"><img src="${item.images[0]}" alt="日记图片" onclick="openImagePreview('${item.images[0]}')"></div>`;
+            }
+            if (item.videos && item.videos.length > 0) {
+                mediaHtml += `<div class="diary-media"><video controls src="${item.videos[0]}"></video></div>`;
+            }
+            if (item.audios && item.audios.length > 0) {
+                mediaHtml += `<div class="diary-media"><audio controls src="${item.audios[0]}"></audio></div>`;
+            }
             html += `
-                <div class="diary-card" style="animation-delay: ${i * 0.1}s">
+                <div class="diary-card" style="animation-delay: ${i * 0.08}s">
                     <button class="diary-delete-btn" onclick="deleteDiary(${item.id})" title="删除"><i class="fas fa-trash"></i></button>
+                    ${mediaHtml}
                     <div class="diary-header">
                         <div class="diary-mood">${moodEmoji}</div>
                         <div class="diary-date"><i class="far fa-calendar"></i> ${item.date}</div>
@@ -1826,22 +2605,18 @@
         grid.innerHTML = html;
     }
 
-    // 渲染倾诉
     async function renderConfessions() {
         const items = await dbGetAll('confessions');
         const grid = document.getElementById('confessionsGrid');
-
         if (items.length === 0) {
             grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-comments"></i><p>还没有倾诉，说出你的心里话吧</p></div>';
             return;
         }
-
         let html = '';
         items.forEach((item, i) => {
             const displayName = item.anonymous ? '匿名用户' : (item.nickname || '用户');
             const initial = displayName.charAt(0);
             const anonTag = item.anonymous ? '<span class="confession-anon-tag"><i class="fas fa-user-secret"></i> 匿名</span>' : '';
-
             let responsesHtml = '';
             if (item.responses && item.responses.length > 0) {
                 responsesHtml = '<div class="confession-responses"><h4><i class="fas fa-reply"></i> 回应 (' + item.responses.length + ')</h4>';
@@ -1850,13 +2625,14 @@
                 });
                 responsesHtml += '</div>';
             }
-
             html += `
-                <div class="confession-card" style="animation-delay: ${i * 0.1}s">
-                    <div class="confession-meta">
-                        <div class="confession-avatar">${initial}</div>
-                        <span class="confession-author">${escapeHtml(displayName)}</span>
-                        ${anonTag}
+                <div class="confession-card" style="animation-delay: ${i * 0.08}s">
+                    <div class="confession-top">
+                        <div class="confession-meta">
+                            <div class="confession-avatar">${initial}</div>
+                            <span class="confession-author">${escapeHtml(displayName)}</span>
+                            ${anonTag}
+                        </div>
                     </div>
                     <div class="confession-content">${escapeHtml(item.content)}</div>
                     ${responsesHtml}
@@ -1869,24 +2645,20 @@
         grid.innerHTML = html;
     }
 
-    // 渲染分享
     async function renderShares() {
         const items = await dbGetAll('shares');
         const grid = document.getElementById('sharesGrid');
-
         if (items.length === 0) {
             grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-share-nodes"></i><p>还没有分享，快去分享你的故事吧</p></div>';
             return;
         }
-
         let html = '';
         items.forEach((item, i) => {
             const nickname = item.nickname || '用户';
             const initial = nickname.charAt(0);
             const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString('zh-CN') : '';
-
             html += `
-                <div class="share-card" style="animation-delay: ${i * 0.1}s">
+                <div class="share-card" style="animation-delay: ${i * 0.08}s">
                     <div class="share-header">
                         <div class="share-avatar">${initial}</div>
                         <div class="share-author-info">
@@ -1907,8 +2679,6 @@
     }
 
     // ==================== 操作函数 ====================
-
-    // 更新目标进度
     async function updateGoalProgress(id, currentProgress) {
         const newProgress = Math.min(currentProgress + 5, 100);
         const newStatus = newProgress >= 100 ? 'completed' : 'in-progress';
@@ -1927,7 +2697,6 @@
         }
     }
 
-    // 删除日记
     async function deleteDiary(id) {
         if (!confirm('确定要删除这篇日记吗？此操作不可恢复。')) return;
         try {
@@ -1940,7 +2709,6 @@
         }
     }
 
-    // 添加回应
     async function addResponse(confessionId) {
         const input = document.getElementById('responseInput_' + confessionId);
         const content = input.value.trim();
@@ -1966,7 +2734,6 @@
         }
     }
 
-    // 点赞分享
     async function likeShare(shareId) {
         try {
             const item = await dbGet('shares', shareId);
@@ -1976,15 +2743,27 @@
                 document.getElementById('likeCount_' + shareId).textContent = item.likes;
                 document.getElementById('likeBtn_' + shareId).classList.add('liked');
                 showToast('已点赞', 'success');
+                await renderStats();
             }
         } catch (e) {
             showToast('操作失败：' + e.message, 'error');
         }
     }
 
+    // ==================== 图片预览 ====================
+    function openImagePreview(src) {
+        const overlay = document.getElementById('imagePreviewOverlay');
+        document.getElementById('imagePreviewImg').src = src;
+        overlay.classList.add('show');
+    }
+
+    function closeImagePreview() {
+        document.getElementById('imagePreviewOverlay').classList.remove('show');
+    }
+
     // ==================== 模态框系统 ====================
     function openModal(type) {
-        toggleFab(true); // 关闭FAB
+        toggleFab(true);
         const overlay = document.getElementById('modalOverlay');
         const title = document.getElementById('modalTitle');
         const body = document.getElementById('modalBody');
@@ -2005,16 +2784,36 @@
                         <div class="form-group">
                             <label>心情</label>
                             <select id="diaryMood" required>
-                                <option value="happy">开心 &#128522;</option>
-                                <option value="calm">平静 &#128524;</option>
-                                <option value="thoughtful">沉思 &#129300;</option>
-                                <option value="inspired">受启发 &#129504;</option>
-                                <option value="grateful">感恩 &#128151;</option>
-                                <option value="excited">兴奋 &#129321;</option>
-                                <option value="sad">难过 &#128546;</option>
-                                <option value="anxious">焦虑 &#128550;</option>
-                                <option value="angry">生气 &#128545;</option>
+                                <option value="happy">开心 \u{1F60A}</option>
+                                <option value="calm">平静 \u{1F60C}</option>
+                                <option value="thoughtful">沉思 \u{1F914}</option>
+                                <option value="inspired">受启发 \u{1F9E0}</option>
+                                <option value="grateful">感恩 \u{2764}</option>
+                                <option value="excited">兴奋 \u{1F929}</option>
+                                <option value="sad">难过 \u{1F622}</option>
+                                <option value="anxious">焦虑 \u{1F628}</option>
+                                <option value="angry">生气 \u{1F620}</option>
                             </select>
+                        </div>
+                        <div class="form-group">
+                            <label>图片</label>
+                            <input type="file" id="diaryImages" accept="image/*" multiple onchange="handleFileSelect(this, 'images')">
+                            <div id="previewImages" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>视频</label>
+                            <input type="file" id="diaryVideos" accept="video/*" onchange="handleFileSelect(this, 'videos')">
+                            <div id="previewVideos" style="margin-top:8px"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>录音</label>
+                            <div style="display:flex;gap:8px;align-items:center">
+                                <button type="button" class="btn-outline" id="recordBtn" onclick="toggleRecording()" style="padding:8px 16px;font-size:12px">
+                                    <i class="fas fa-microphone"></i> 开始录音
+                                </button>
+                                <span id="recordStatus" style="font-size:12px;color:var(--text-muted)"></span>
+                            </div>
+                            <div id="previewAudios" style="margin-top:8px"></div>
                         </div>
                         <button type="submit" class="modal-submit-btn"><i class="fas fa-check"></i> 保存日记</button>
                     </form>`
@@ -2101,19 +2900,111 @@
 
         const config = forms[type];
         if (!config) return;
-
         title.innerHTML = config.title;
         body.innerHTML = config.html;
         overlay.classList.add('show');
+        window.diaryImages = [];
+        window.diaryVideos = [];
+        window.diaryAudios = [];
     }
 
     function closeModal() {
         document.getElementById('modalOverlay').classList.remove('show');
+        if (isRecording) toggleRecording();
     }
 
     function closeModalOnOverlay(e) {
         if (e.target === document.getElementById('modalOverlay')) {
             closeModal();
+        }
+    }
+
+    // ==================== 多媒体处理 ====================
+    async function handleFileSelect(input, type) {
+        const files = Array.from(input.files);
+        if (!files.length) return;
+        for (const file of files) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const base64 = e.target.result;
+                if (type === 'images') {
+                    window.diaryImages = window.diaryImages || [];
+                    window.diaryImages.push(base64);
+                    const preview = document.getElementById('previewImages');
+                    const img = document.createElement('img');
+                    img.src = base64;
+                    img.style.cssText = 'width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--border)';
+                    preview.appendChild(img);
+                } else if (type === 'videos') {
+                    window.diaryVideos = window.diaryVideos || [];
+                    window.diaryVideos.push(base64);
+                    const preview = document.getElementById('previewVideos');
+                    const video = document.createElement('video');
+                    video.src = base64;
+                    video.controls = true;
+                    video.style.cssText = 'width:100%;max-height:150px;border-radius:8px';
+                    preview.innerHTML = '';
+                    preview.appendChild(video);
+                } else if (type === 'audios') {
+                    window.diaryAudios = window.diaryAudios || [];
+                    window.diaryAudios.push(base64);
+                    const preview = document.getElementById('previewAudios');
+                    const audio = document.createElement('audio');
+                    audio.src = base64;
+                    audio.controls = true;
+                    audio.style.cssText = 'width:100%';
+                    preview.innerHTML = '';
+                    preview.appendChild(audio);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    async function toggleRecording() {
+        const btn = document.getElementById('recordBtn');
+        const status = document.getElementById('recordStatus');
+
+        if (!isRecording) {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                mediaRecorder.ondataavailable = (e) => {
+                    if (e.data.size > 0) audioChunks.push(e.data);
+                };
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const base64 = e.target.result;
+                        window.diaryAudios = window.diaryAudios || [];
+                        window.diaryAudios.push(base64);
+                        const preview = document.getElementById('previewAudios');
+                        const audio = document.createElement('audio');
+                        audio.src = base64;
+                        audio.controls = true;
+                        audio.style.cssText = 'width:100%';
+                        preview.innerHTML = '';
+                        preview.appendChild(audio);
+                    };
+                    reader.readAsDataURL(blob);
+                    stream.getTracks().forEach(t => t.stop());
+                };
+                mediaRecorder.start();
+                isRecording = true;
+                btn.innerHTML = '<i class="fas fa-stop"></i> 停止录音';
+                btn.style.background = 'var(--danger)';
+                status.textContent = '正在录音...';
+            } catch (err) {
+                showToast('无法访问麦克风：' + err.message, 'error');
+            }
+        } else {
+            mediaRecorder.stop();
+            isRecording = false;
+            btn.innerHTML = '<i class="fas fa-microphone"></i> 开始录音';
+            btn.style.background = '';
+            status.textContent = '';
         }
     }
 
@@ -2130,7 +3021,10 @@
             await dbAdd('diaries', {
                 userId: currentUser.id, title, content, mood,
                 date: new Date().toISOString().split('T')[0],
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                images: window.diaryImages || [],
+                videos: window.diaryVideos || [],
+                audios: window.diaryAudios || []
             });
             showToast('日记保存成功', 'success');
             closeModal();
@@ -2245,7 +3139,7 @@
     }
 
     // ==================== Toast ====================
-    function showToast(message, type = 'info') {
+    function showToast(message, type) {
         const container = document.getElementById('toastContainer');
         const toast = document.createElement('div');
         toast.className = 'toast-item ' + type;
@@ -2275,7 +3169,7 @@
         return div.innerHTML;
     }
 
-    // ==================== 导航栏滚动阴影 ====================
+    // ==================== 导航栏滚动 ====================
     window.addEventListener('scroll', () => {
         const navbar = document.getElementById('navbar');
         if (window.scrollY > 10) {
@@ -2285,87 +3179,11 @@
         }
     });
 
-    // ==================== 英雄区域粒子动画 ====================
-    (function initHeroCanvas() {
-        const canvas = document.getElementById('heroCanvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let animId;
-
-        function resize() {
-            const hero = document.getElementById('hero');
-            canvas.width = hero.offsetWidth;
-            canvas.height = hero.offsetHeight;
-        }
-
-        class HeroParticle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.5;
-                this.speedY = (Math.random() - 0.5) * 0.5;
-                this.opacity = Math.random() * 0.4 + 0.1;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(99, 102, 241, ${this.opacity})`;
-                ctx.fill();
-            }
-        }
-
-        function init() {
-            resize();
-            particles = [];
-            const count = Math.min(60, Math.floor((canvas.width * canvas.height) / 20000));
-            for (let i = 0; i < count; i++) {
-                particles.push(new HeroParticle());
-            }
-        }
-
-        function connect() {
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 100) {
-                        const opacity = (1 - dist / 100) * 0.12;
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(99, 102, 241, ${opacity})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            connect();
-            animId = requestAnimationFrame(animate);
-        }
-
-        init();
-        animate();
-        window.addEventListener('resize', () => { cancelAnimationFrame(animId); init(); animate(); });
-    })();
-
     // ==================== 页面初始化 ====================
     async function init() {
         try {
             db = await openDB();
-            updateUserUI();
+            await loadUserProfile();
             renderLifeProgress();
             await seedData();
             await renderStats();
