@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>人生进度 - 记录你的每一步</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -14,19 +14,35 @@
             --secondary: #f59e0b;
             --success: #10b981;
             --danger: #ef4444;
-            --bg: #f8fafc;
+            --bg: #f0f2f5;
             --card-bg: #ffffff;
             --text: #1e293b;
             --text-light: #64748b;
             --border: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.12);
+            --shadow-xl: 0 20px 40px -10px rgba(0,0,0,0.15);
+            --diary-warm: #ff6b6b;
+            --diary-warm-light: #ffa8a8;
+            --diary-warm-bg: linear-gradient(135deg, #fff5f5, #ffe3e3);
+            --confide-blue: #7c3aed;
+            --confide-blue-light: #a78bfa;
+            --confide-blue-bg: linear-gradient(135deg, #f5f3ff, #ede9fe);
+            --share-orange: #f97316;
+            --share-orange-light: #fb923c;
+            --share-orange-bg: linear-gradient(135deg, #fff7ed, #ffedd5);
+            --glass-bg: rgba(255,255,255,0.7);
+            --glass-border: rgba(255,255,255,0.3);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -37,12 +53,13 @@
             overflow-x: hidden;
         }
 
-        /* 导航栏 */
+        /* ===== 导航栏 ===== */
         .navbar {
-            background: rgba(255,255,255,0.9);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 2rem;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 0.8rem 2rem;
             position: fixed;
             width: 100%;
             top: 0;
@@ -50,41 +67,93 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            padding: 0.5rem 2rem;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--confide-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
+        .logo i {
+            -webkit-text-fill-color: var(--primary);
+            font-size: 1.3rem;
+        }
+
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 1.5rem;
             list-style: none;
+            align-items: center;
         }
 
         .nav-links a {
             text-decoration: none;
             color: var(--text-light);
             font-weight: 500;
-            transition: color 0.3s;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            position: relative;
+            padding: 0.3rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--confide-blue));
+            transition: width 0.3s;
+            border-radius: 2px;
         }
 
         .nav-links a:hover {
             color: var(--primary);
         }
 
-        /* 英雄区域 */
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        /* ===== 英雄区域 ===== */
         .hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             color: white;
             text-align: center;
             padding: 2rem;
@@ -92,15 +161,13 @@
             overflow: hidden;
         }
 
-        .hero::before {
-            content: '';
+        #particleCanvas {
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
-            background-size: cover;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
         }
 
         .hero-content {
@@ -110,17 +177,21 @@
         }
 
         .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
+            font-size: 3.8rem;
+            font-weight: 900;
             margin-bottom: 1rem;
             animation: fadeInUp 1s ease;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            letter-spacing: -0.02em;
         }
 
         .hero p {
             font-size: 1.25rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
+            margin-bottom: 2.5rem;
+            opacity: 0.92;
             animation: fadeInUp 1s ease 0.2s both;
+            font-weight: 300;
+            line-height: 1.8;
         }
 
         .hero-buttons {
@@ -131,7 +202,7 @@
         }
 
         .btn {
-            padding: 0.75rem 2rem;
+            padding: 0.8rem 2rem;
             border-radius: 50px;
             font-weight: 600;
             text-decoration: none;
@@ -139,36 +210,99 @@
             border: none;
             cursor: pointer;
             font-size: 1rem;
+            font-family: 'Noto Sans SC', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .btn-primary {
             background: white;
             color: var(--primary);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
         }
 
         .btn-outline {
             background: transparent;
             color: white;
-            border: 2px solid white;
+            border: 2px solid rgba(255,255,255,0.7);
         }
 
         .btn-outline:hover {
             background: white;
             color: var(--primary);
+            border-color: white;
+            transform: translateY(-3px);
         }
 
-        /* 人生进度总览 */
-        .life-overview {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
+        /* 浮动装饰元素 */
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
         }
 
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            background: white;
+            top: -50px;
+            right: -80px;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            background: white;
+            bottom: 10%;
+            left: -60px;
+            animation-delay: 2s;
+            border-radius: 30%;
+        }
+
+        .shape:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            background: white;
+            top: 30%;
+            right: 15%;
+            animation-delay: 4s;
+            border-radius: 20%;
+        }
+
+        .shape:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            background: white;
+            bottom: 20%;
+            right: 30%;
+            animation-delay: 1s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* ===== 通用区块样式 ===== */
         .section-title {
             text-align: center;
             margin-bottom: 3rem;
@@ -176,21 +310,69 @@
 
         .section-title h2 {
             font-size: 2.5rem;
+            font-weight: 700;
             color: var(--text);
             margin-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--confide-blue));
+            border-radius: 2px;
         }
 
         .section-title p {
             color: var(--text-light);
             font-size: 1.1rem;
+            margin-top: 1rem;
+        }
+
+        /* ===== 卡片入场动画 ===== */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== 人生进度总览 ===== */
+        .life-overview {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .progress-container {
             background: var(--card-bg);
-            border-radius: 20px;
-            padding: 2rem;
+            border-radius: 24px;
+            padding: 2.5rem;
             box-shadow: var(--shadow-lg);
             margin-bottom: 2rem;
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--confide-blue), var(--secondary));
         }
 
         .progress-header {
@@ -206,26 +388,31 @@
         }
 
         .life-percentage {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--confide-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .progress-bar {
             width: 100%;
-            height: 20px;
-            background: var(--border);
-            border-radius: 10px;
+            height: 24px;
+            background: #e8ecf1;
+            border-radius: 12px;
             overflow: hidden;
             margin-bottom: 1rem;
+            position: relative;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--primary-light));
-            border-radius: 10px;
-            transition: width 2s ease;
+            background: linear-gradient(90deg, var(--primary), var(--confide-blue), var(--secondary));
+            border-radius: 12px;
+            transition: width 2s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
+            width: 0%;
         }
 
         .progress-fill::after {
@@ -235,7 +422,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
             animation: shimmer 2s infinite;
         }
 
@@ -247,25 +434,32 @@
         }
 
         .stat-card {
-            background: var(--bg);
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
             padding: 1.5rem;
-            border-radius: 15px;
+            border-radius: 16px;
             text-align: center;
-            transition: transform 0.3s;
+            transition: all 0.3s;
+            border: 1px solid var(--border);
         }
 
         .stat-card:hover {
             transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
         }
 
         .stat-icon {
             font-size: 2rem;
-            color: var(--primary);
             margin-bottom: 0.5rem;
+            display: inline-block;
         }
 
+        .stat-icon.purple { color: var(--primary); }
+        .stat-icon.amber { color: var(--secondary); }
+        .stat-icon.green { color: var(--success); }
+        .stat-icon.rose { color: var(--diary-warm); }
+
         .stat-value {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: var(--text);
         }
@@ -275,9 +469,9 @@
             font-size: 0.9rem;
         }
 
-        /* 时间轴 */
+        /* ===== 时间轴 ===== */
         .timeline-section {
-            background: white;
+            background: linear-gradient(180deg, #ffffff, #f8fafc);
             padding: 5rem 2rem;
         }
 
@@ -292,15 +486,16 @@
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-            width: 2px;
+            width: 3px;
             height: 100%;
-            background: var(--border);
+            background: linear-gradient(180deg, var(--primary), var(--confide-blue), var(--secondary));
+            border-radius: 2px;
         }
 
         .timeline-item {
             display: flex;
             justify-content: flex-end;
-            padding-right: 2rem;
+            padding-right: 3rem;
             position: relative;
             margin-bottom: 3rem;
             width: 50%;
@@ -308,7 +503,7 @@
 
         .timeline-item:nth-child(even) {
             justify-content: flex-start;
-            padding-left: 2rem;
+            padding-left: 3rem;
             padding-right: 0;
             margin-left: 50%;
         }
@@ -316,30 +511,37 @@
         .timeline-content {
             background: var(--card-bg);
             padding: 1.5rem;
-            border-radius: 15px;
+            border-radius: 16px;
             box-shadow: var(--shadow);
             max-width: 400px;
             position: relative;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
         }
 
         .timeline-content::before {
             content: '';
             position: absolute;
             top: 20px;
-            width: 15px;
-            height: 15px;
+            width: 16px;
+            height: 16px;
             background: var(--primary);
             border-radius: 50%;
             border: 3px solid white;
-            box-shadow: 0 0 0 3px var(--primary);
+            box-shadow: 0 0 0 3px var(--primary), 0 2px 8px rgba(99,102,241,0.3);
         }
 
         .timeline-item:nth-child(odd) .timeline-content::before {
-            right: -39px;
+            right: -42px;
         }
 
         .timeline-item:nth-child(even) .timeline-content::before {
-            left: -39px;
+            left: -42px;
         }
 
         .timeline-date {
@@ -374,22 +576,11 @@
             font-weight: 500;
         }
 
-        .tag-achievement {
-            background: #d1fae5;
-            color: #065f46;
-        }
+        .tag-achievement { background: #d1fae5; color: #065f46; }
+        .tag-milestone { background: #dbeafe; color: #1e40af; }
+        .tag-memory { background: #fce7f3; color: #9d174d; }
 
-        .tag-milestone {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-
-        .tag-memory {
-            background: #fce7f3;
-            color: #9d174d;
-        }
-
-        /* 未来规划 */
+        /* ===== 未来规划 ===== */
         .future-section {
             padding: 5rem 2rem;
             max-width: 1200px;
@@ -398,7 +589,7 @@
 
         .goals-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
         }
 
@@ -407,13 +598,26 @@
             border-radius: 20px;
             padding: 2rem;
             box-shadow: var(--shadow);
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all 0.3s;
             border-left: 4px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .goal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, transparent, rgba(99,102,241,0.05));
+            border-radius: 0 20px 0 80px;
         }
 
         .goal-card:hover {
             transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--shadow-xl);
         }
 
         .goal-header {
@@ -429,30 +633,20 @@
         }
 
         .goal-status {
-            padding: 0.25rem 0.75rem;
+            padding: 0.3rem 0.8rem;
             border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 500;
         }
 
-        .status-active {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .status-planned {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .status-completed {
-            background: #dbeafe;
-            color: #1e40af;
-        }
+        .status-active { background: #d1fae5; color: #065f46; }
+        .status-planned { background: #fef3c7; color: #92400e; }
+        .status-completed { background: #dbeafe; color: #1e40af; }
 
         .goal-desc {
             color: var(--text-light);
             margin-bottom: 1rem;
+            font-size: 0.95rem;
         }
 
         .goal-progress {
@@ -462,16 +656,17 @@
         .goal-progress-bar {
             width: 100%;
             height: 8px;
-            background: var(--border);
+            background: #e8ecf1;
             border-radius: 4px;
             overflow: hidden;
         }
 
         .goal-progress-fill {
             height: 100%;
-            background: var(--primary);
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
             border-radius: 4px;
-            transition: width 1s ease;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0%;
         }
 
         .goal-progress-text {
@@ -490,50 +685,875 @@
             margin-top: 0.5rem;
         }
 
-        /* 添加按钮 */
-        .add-btn {
+        /* ===== 人生日记 ===== */
+        .diary-section {
+            padding: 5rem 2rem;
+            background: var(--diary-warm-bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .diary-section::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,107,107,0.1), transparent);
+            border-radius: 50%;
+        }
+
+        .diary-section .section-title h2::after {
+            background: linear-gradient(90deg, var(--diary-warm), var(--secondary));
+        }
+
+        .diary-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .diary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .diary-card {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(255,107,107,0.1);
+            border: 1px solid rgba(255,107,107,0.15);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .diary-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(255,107,107,0.15);
+        }
+
+        .diary-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .diary-date {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .diary-mood {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .mood-happy { background: #fef3c7; color: #92400e; }
+        .mood-calm { background: #d1fae5; color: #065f46; }
+        .mood-moved { background: #fce7f3; color: #9d174d; }
+        .mood-sad { background: #dbeafe; color: #1e40af; }
+        .mood-angry { background: #fee2e2; color: #991b1b; }
+        .mood-excited { background: #ede9fe; color: #5b21b6; }
+
+        .diary-content {
+            color: var(--text);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+            white-space: pre-wrap;
+        }
+
+        .diary-delete {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #cbd5e1;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+            padding: 0.3rem;
+        }
+
+        .diary-delete:hover {
+            color: var(--danger);
+        }
+
+        /* ===== 人生倾诉 ===== */
+        .confide-section {
+            padding: 5rem 2rem;
+            background: var(--confide-blue-bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .confide-section::before {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: -100px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(124,58,237,0.08), transparent);
+            border-radius: 50%;
+        }
+
+        .confide-section .section-title h2::after {
+            background: linear-gradient(90deg, var(--confide-blue), var(--primary));
+        }
+
+        .confide-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .confide-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .confide-card {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(124,58,237,0.08);
+            border: 1px solid rgba(124,58,237,0.12);
+            transition: all 0.3s;
+        }
+
+        .confide-card:hover {
+            box-shadow: 0 8px 25px rgba(124,58,237,0.12);
+        }
+
+        .confide-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .confide-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--confide-blue), var(--primary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .confide-avatar.anonymous {
+            background: linear-gradient(135deg, #94a3b8, #64748b);
+        }
+
+        .confide-meta {
+            flex: 1;
+        }
+
+        .confide-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .confide-anonymous-badge {
+            background: #f1f5f9;
+            color: #64748b;
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 10px;
+        }
+
+        .confide-time {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .confide-content {
+            color: var(--text);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+            white-space: pre-wrap;
+        }
+
+        .confide-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .confide-action-btn {
+            background: none;
+            border: 1px solid var(--border);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+
+        .confide-action-btn:hover {
+            border-color: var(--confide-blue);
+            color: var(--confide-blue);
+            background: rgba(124,58,237,0.05);
+        }
+
+        .confide-responses {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px dashed var(--border);
+        }
+
+        .confide-responses-title {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .response-item {
+            display: flex;
+            gap: 0.6rem;
+            margin-bottom: 0.6rem;
+            align-items: flex-start;
+        }
+
+        .response-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--success), #34d399);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.65rem;
+            flex-shrink: 0;
+        }
+
+        .response-content {
+            background: #f8fafc;
+            padding: 0.5rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            color: var(--text);
+            flex: 1;
+        }
+
+        .response-time {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            margin-top: 0.2rem;
+        }
+
+        .response-input-wrap {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+        }
+
+        .response-input-wrap input {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-family: 'Noto Sans SC', sans-serif;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .response-input-wrap input:focus {
+            border-color: var(--confide-blue);
+        }
+
+        .response-input-wrap button {
+            padding: 0.5rem 1rem;
+            background: var(--confide-blue);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-family: 'Noto Sans SC', sans-serif;
+            transition: background 0.3s;
+        }
+
+        .response-input-wrap button:hover {
+            background: var(--confide-blue-light);
+        }
+
+        /* ===== 人生分享 ===== */
+        .share-section {
+            padding: 5rem 2rem;
+            background: var(--share-orange-bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .share-section::before {
+            content: '';
+            position: absolute;
+            top: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(249,115,22,0.06), transparent);
+            border-radius: 50%;
+        }
+
+        .share-section .section-title h2::after {
+            background: linear-gradient(90deg, var(--share-orange), var(--secondary));
+        }
+
+        .share-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .share-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .share-card {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(249,115,22,0.08);
+            border: 1px solid rgba(249,115,22,0.12);
+            transition: all 0.3s;
+        }
+
+        .share-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(249,115,22,0.15);
+        }
+
+        .share-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .share-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .share-avatar.av1 { background: linear-gradient(135deg, #f97316, #fb923c); }
+        .share-avatar.av2 { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
+        .share-avatar.av3 { background: linear-gradient(135deg, #06b6d4, #22d3ee); }
+
+        .share-user-info {
+            flex: 1;
+        }
+
+        .share-username {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .share-time {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .share-content {
+            color: var(--text);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .share-stats {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .share-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .share-stat:hover {
+            color: var(--share-orange);
+        }
+
+        .share-stat.liked {
+            color: var(--share-orange);
+        }
+
+        /* ===== 模态框 ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: var(--shadow-xl);
+            animation: slideUp 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0.3rem;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--text);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-family: 'Noto Sans SC', sans-serif;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background: #f8fafc;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+            background: white;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group select {
+            cursor: pointer;
+        }
+
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .form-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--confide-blue);
+            cursor: pointer;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 0.8rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+
+        .modal-btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .modal-btn-cancel {
+            background: #f1f5f9;
+            color: var(--text-light);
+        }
+
+        .modal-btn-cancel:hover {
+            background: #e2e8f0;
+        }
+
+        .modal-btn-confirm {
+            background: linear-gradient(135deg, var(--primary), var(--confide-blue));
+            color: white;
+        }
+
+        .modal-btn-confirm:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .modal-btn-confirm.diary-confirm {
+            background: linear-gradient(135deg, var(--diary-warm), var(--secondary));
+        }
+
+        .modal-btn-confirm.confide-confirm {
+            background: linear-gradient(135deg, var(--confide-blue), var(--primary));
+        }
+
+        .modal-btn-confirm.timeline-confirm {
+            background: linear-gradient(135deg, var(--primary), var(--confide-blue));
+        }
+
+        .modal-btn-confirm.goal-confirm {
+            background: linear-gradient(135deg, var(--success), #34d399);
+        }
+
+        /* ===== 浮动按钮菜单 ===== */
+        .fab-container {
             position: fixed;
             bottom: 2rem;
             right: 2rem;
+            z-index: 1000;
+        }
+
+        .fab-menu {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            align-items: flex-end;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .fab-menu.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .fab-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: pointer;
+            animation: fadeInUp 0.3s ease both;
+        }
+
+        .fab-item:nth-child(1) { animation-delay: 0.05s; }
+        .fab-item:nth-child(2) { animation-delay: 0.1s; }
+        .fab-item:nth-child(3) { animation-delay: 0.15s; }
+        .fab-item:nth-child(4) { animation-delay: 0.2s; }
+
+        .fab-item-label {
+            background: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: var(--shadow);
+            white-space: nowrap;
+            color: var(--text);
+        }
+
+        .fab-item-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fab-item-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .fab-item-btn.diary-btn { background: linear-gradient(135deg, var(--diary-warm), var(--secondary)); }
+        .fab-item-btn.confide-btn { background: linear-gradient(135deg, var(--confide-blue), var(--primary)); }
+        .fab-item-btn.timeline-btn { background: linear-gradient(135deg, var(--primary), var(--confide-blue)); }
+        .fab-item-btn.goal-btn { background: linear-gradient(135deg, var(--success), #34d399); }
+
+        .fab-main {
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--confide-blue));
             color: white;
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            box-shadow: var(--shadow-lg);
-            transition: transform 0.3s;
-            z-index: 100;
+            box-shadow: 0 6px 20px rgba(99,102,241,0.4);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .add-btn:hover {
+        .fab-main:hover {
             transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(99,102,241,0.5);
         }
 
-        /* 页脚 */
+        .fab-main.open {
+            transform: rotate(45deg);
+        }
+
+        .fab-main.open:hover {
+            transform: rotate(45deg) scale(1.1);
+        }
+
+        /* ===== 确认对话框 ===== */
+        .confirm-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .confirm-overlay.active {
+            display: flex;
+        }
+
+        .confirm-box {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: var(--shadow-xl);
+            animation: slideUp 0.3s ease;
+        }
+
+        .confirm-icon {
+            font-size: 3rem;
+            color: var(--danger);
+            margin-bottom: 1rem;
+        }
+
+        .confirm-text {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .confirm-actions {
+            display: flex;
+            gap: 0.8rem;
+            justify-content: center;
+        }
+
+        .confirm-btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .confirm-btn-cancel {
+            background: #f1f5f9;
+            color: var(--text-light);
+        }
+
+        .confirm-btn-delete {
+            background: var(--danger);
+            color: white;
+        }
+
+        .confirm-btn-delete:hover {
+            opacity: 0.9;
+        }
+
+        /* ===== Toast 提示 ===== */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 1rem;
+            z-index: 4000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .toast {
+            background: white;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            animation: slideInRight 0.3s ease;
+            border-left: 4px solid var(--success);
+            max-width: 300px;
+        }
+
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+
+        /* ===== 页脚 ===== */
         .footer {
-            background: var(--text);
+            background: linear-gradient(135deg, #1e293b, #0f172a);
             color: white;
             text-align: center;
-            padding: 2rem;
+            padding: 3rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--confide-blue), var(--secondary), var(--diary-warm));
         }
 
         .footer p {
             opacity: 0.8;
         }
 
-        /* 动画 */
+        .footer .footer-brand {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            opacity: 1;
+        }
+
+        /* ===== 动画 ===== */
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         @keyframes shimmer {
@@ -541,14 +1561,41 @@
             100% { transform: translateX(100%); }
         }
 
-        /* 响应式 */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* ===== 响应式 ===== */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
+            .hero h1 { font-size: 2.2rem; }
+            .hero p { font-size: 1rem; }
 
             .nav-links {
                 display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(255,255,255,0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 1rem 2rem;
+                gap: 0.8rem;
+                border-bottom: 1px solid var(--border);
+                box-shadow: var(--shadow-lg);
+            }
+
+            .nav-links.mobile-open {
+                display: flex;
+            }
+
+            .nav-toggle {
+                display: block;
+            }
+
+            .section-title h2 {
+                font-size: 1.8rem;
             }
 
             .timeline-container::before {
@@ -566,73 +1613,129 @@
 
             .timeline-item:nth-child(odd) .timeline-content::before,
             .timeline-item:nth-child(even) .timeline-content::before {
-                left: -34px;
+                left: -38px;
                 right: auto;
             }
+
+            .goals-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .diary-grid,
+            .share-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .fab-container {
+                bottom: 1.5rem;
+                right: 1.5rem;
+            }
+
+            .fab-item-label {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.8rem; }
+            .hero-buttons { flex-direction: column; align-items: center; }
+            .life-percentage { font-size: 2rem; }
+            .progress-header h3 { font-size: 1.2rem; }
+        }
+
+        /* ===== 滚动条美化 ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
         }
     </style>
 </head>
 <body>
     <!-- 导航栏 -->
-    <nav class="navbar">
+    <nav class="navbar" id="navbar">
         <div class="logo">
             <i class="fas fa-heartbeat"></i>
             人生进度
         </div>
-        <ul class="nav-links">
-            <li><a href="#overview">总览</a></li>
+        <button class="nav-toggle" id="navToggle" aria-label="菜单">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#overview" class="active">总览</a></li>
             <li><a href="#timeline">回顾</a></li>
             <li><a href="#future">规划</a></li>
+            <li><a href="#diary">日记</a></li>
+            <li><a href="#confide">倾诉</a></li>
+            <li><a href="#share">分享</a></li>
         </ul>
     </nav>
 
     <!-- 英雄区域 -->
-    <section class="hero">
+    <section class="hero" id="hero">
+        <canvas id="particleCanvas"></canvas>
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
         <div class="hero-content">
             <h1>记录人生，规划未来</h1>
-            <p>每一个计划都是蓝图，每一个脚印都是记号。在这里，书写属于你的生命故事。</p>
+            <p>每一个计划都是蓝图，每一个脚印都是记号。<br>在这里，书写属于你的生命故事。</p>
             <div class="hero-buttons">
-                <a href="#overview" class="btn btn-primary">开始记录</a>
-                <a href="#timeline" class="btn btn-outline">回顾过往</a>
+                <a href="#overview" class="btn btn-primary"><i class="fas fa-play"></i> 开始记录</a>
+                <a href="#timeline" class="btn btn-outline"><i class="fas fa-history"></i> 回顾过往</a>
             </div>
         </div>
     </section>
 
     <!-- 人生进度总览 -->
     <section class="life-overview" id="overview">
-        <div class="section-title">
+        <div class="section-title fade-in-up">
             <h2>人生进度</h2>
             <p>你已经走过了人生的一段旅程，继续向前，未来可期</p>
         </div>
 
-        <div class="progress-container">
+        <div class="progress-container fade-in-up">
             <div class="progress-header">
-                <h3>生命进度条</h3>
-                <div class="life-percentage">28.5%</div>
+                <h3><i class="fas fa-heartbeat" style="color:var(--primary);margin-right:0.5rem;"></i>生命进度条</h3>
+                <div class="life-percentage" id="lifePercentage">28.5%</div>
             </div>
             <div class="progress-bar">
-                <div class="progress-fill" style="width: 28.5%"></div>
+                <div class="progress-fill" id="mainProgressFill" data-width="28.5"></div>
             </div>
             <p style="color: var(--text-light); text-align: center;">假设寿命80岁，你已经度过了28年的人生旅程</p>
 
             <div class="life-stats">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+                <div class="stat-card fade-in-up">
+                    <div class="stat-icon purple"><i class="fas fa-calendar-alt"></i></div>
                     <div class="stat-value">10,220</div>
                     <div class="stat-label">已度过天数</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                <div class="stat-card fade-in-up">
+                    <div class="stat-icon amber"><i class="fas fa-trophy"></i></div>
                     <div class="stat-value">47</div>
                     <div class="stat-label">达成成就</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-flag-checkered"></i></div>
+                <div class="stat-card fade-in-up">
+                    <div class="stat-icon green"><i class="fas fa-flag-checkered"></i></div>
                     <div class="stat-value">12</div>
                     <div class="stat-label">里程碑</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
+                <div class="stat-card fade-in-up">
+                    <div class="stat-icon rose"><i class="fas fa-bullseye"></i></div>
                     <div class="stat-value">8</div>
                     <div class="stat-label">进行中目标</div>
                 </div>
@@ -642,249 +1745,1005 @@
 
     <!-- 时间轴回顾 -->
     <section class="timeline-section" id="timeline">
-        <div class="section-title">
+        <div class="section-title fade-in-up">
             <h2>人生足迹</h2>
             <p>回顾那些重要的时刻，它们塑造了今天的你</p>
         </div>
 
-        <div class="timeline-container">
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-date">2024年6月</div>
-                    <div class="timeline-title">获得晋升</div>
-                    <div class="timeline-desc">经过两年的努力，终于从初级工程师晋升为高级工程师，这是职业生涯的重要里程碑。</div>
-                    <div class="timeline-tags">
-                        <span class="tag tag-achievement">成就</span>
-                        <span class="tag tag-milestone">里程碑</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-date">2023年12月</div>
-                    <div class="timeline-title">第一次马拉松</div>
-                    <div class="timeline-desc">完成了人生第一个全程马拉松，用时4小时15分钟。证明了坚持训练的力量。</div>
-                    <div class="timeline-tags">
-                        <span class="tag tag-achievement">成就</span>
-                        <span class="tag tag-memory">回忆</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-date">2022年8月</div>
-                    <div class="timeline-title">买房安家</div>
-                    <div class="timeline-desc">在这个城市拥有了属于自己的小窝，从此不再漂泊，有了真正的归属感。</div>
-                    <div class="timeline-tags">
-                        <span class="tag tag-milestone">里程碑</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-date">2020年7月</div>
-                    <div class="timeline-title">毕业工作</div>
-                    <div class="timeline-desc">从大学毕业，进入第一家公司，开启了职业生涯的新篇章。</div>
-                    <div class="timeline-tags">
-                        <span class="tag tag-milestone">里程碑</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-date">2016年9月</div>
-                    <div class="timeline-title">大学入学</div>
-                    <div class="timeline-desc">踏入大学校园，开始了四年的求学之旅，结识了一生的挚友。</div>
-                    <div class="timeline-tags">
-                        <span class="tag tag-memory">回忆</span>
-                    </div>
-                </div>
-            </div>
+        <div class="timeline-container" id="timelineContainer">
+            <!-- 时间轴事件由JS渲染 -->
         </div>
     </section>
 
     <!-- 未来规划 -->
     <section class="future-section" id="future">
-        <div class="section-title">
+        <div class="section-title fade-in-up">
             <h2>未来蓝图</h2>
             <p>规划你的未来，让每一步都朝着梦想前进</p>
         </div>
 
-        <div class="goals-grid">
-            <div class="goal-card">
-                <div class="goal-header">
-                    <div class="goal-title">学习一门新语言</div>
-                    <span class="goal-status status-active">进行中</span>
-                </div>
-                <div class="goal-desc">计划学习日语，目标是在两年内达到N2水平，为未来的日本旅行做准备。</div>
-                <div class="goal-progress">
-                    <div class="goal-progress-bar">
-                        <div class="goal-progress-fill" style="width: 35%"></div>
-                    </div>
-                    <div class="goal-progress-text">35%</div>
-                </div>
-                <div class="goal-deadline">
-                    <i class="far fa-clock"></i>
-                    目标日期：2026年12月
-                </div>
-            </div>
+        <div class="goals-grid" id="goalsGrid">
+            <!-- 目标卡片由JS渲染 -->
+        </div>
+    </section>
 
-            <div class="goal-card">
-                <div class="goal-header">
-                    <div class="goal-title">完成半程铁人三项</div>
-                    <span class="goal-status status-active">进行中</span>
-                </div>
-                <div class="goal-desc">挑战自我，完成1.9km游泳 + 90km自行车 + 21km跑步的半程铁人三项。</div>
-                <div class="goal-progress">
-                    <div class="goal-progress-bar">
-                        <div class="goal-progress-fill" style="width: 60%"></div>
-                    </div>
-                    <div class="goal-progress-text">60%</div>
-                </div>
-                <div class="goal-deadline">
-                    <i class="far fa-clock"></i>
-                    目标日期：2025年9月
-                </div>
-            </div>
+    <!-- 人生日记 -->
+    <section class="diary-section" id="diary">
+        <div class="section-title fade-in-up">
+            <h2>人生日记</h2>
+            <p>记录每一天的心情与感悟，留住那些珍贵的瞬间</p>
+        </div>
 
-            <div class="goal-card">
-                <div class="goal-header">
-                    <div class="goal-title">出版个人技术博客集</div>
-                    <span class="goal-status status-planned">计划中</span>
-                </div>
-                <div class="goal-desc">将多年积累的技术文章整理成册，出版一本属于自己的技术博客集。</div>
-                <div class="goal-progress">
-                    <div class="goal-progress-bar">
-                        <div class="goal-progress-fill" style="width: 10%"></div>
-                    </div>
-                    <div class="goal-progress-text">10%</div>
-                </div>
-                <div class="goal-deadline">
-                    <i class="far fa-clock"></i>
-                    目标日期：2027年6月
-                </div>
+        <div class="diary-container">
+            <div class="diary-grid" id="diaryGrid">
+                <!-- 日记卡片由JS渲染 -->
             </div>
+        </div>
+    </section>
 
-            <div class="goal-card">
-                <div class="goal-header">
-                    <div class="goal-title">环游世界30个国家</div>
-                    <span class="goal-status status-active">进行中</span>
-                </div>
-                <div class="goal-desc">在35岁之前游历30个国家，体验不同的文化和风景。</div>
-                <div class="goal-progress">
-                    <div class="goal-progress-bar">
-                        <div class="goal-progress-fill" style="width: 40%"></div>
-                    </div>
-                    <div class="goal-progress-text">12/30</div>
-                </div>
-                <div class="goal-deadline">
-                    <i class="far fa-clock"></i>
-                    目标日期：2031年12月
-                </div>
+    <!-- 人生倾诉 -->
+    <section class="confide-section" id="confide">
+        <div class="section-title fade-in-up">
+            <h2>人生倾诉</h2>
+            <p>说出你的心事，收获来自陌生人的温暖</p>
+        </div>
+
+        <div class="confide-container">
+            <div class="confide-list" id="confideList">
+                <!-- 倾诉卡片由JS渲染 -->
             </div>
+        </div>
+    </section>
 
-            <div class="goal-card">
-                <div class="goal-header">
-                    <div class="goal-title">建立被动收入来源</div>
-                    <span class="goal-status status-planned">计划中</span>
-                </div>
-                <div class="goal-desc">通过投资理财和副业，建立稳定的被动收入来源，实现财务自由。</div>
-                <div class="goal-progress">
-                    <div class="goal-progress-bar">
-                        <div class="goal-progress-fill" style="width: 15%"></div>
-                    </div>
-                    <div class="goal-progress-text">15%</div>
-                </div>
-                <div class="goal-deadline">
-                    <i class="far fa-clock"></i>
-                    目标日期：2030年12月
-                </div>
-            </div>
+    <!-- 人生分享 -->
+    <section class="share-section" id="share">
+        <div class="section-title fade-in-up">
+            <h2>社区精选</h2>
+            <p>来自其他用户的人生故事，感受不同的生命旅程</p>
+        </div>
 
-            <div class="goal-card">
-                <div class="goal-header">
-                    <div class="goal-title">完成100本书阅读挑战</div>
-                    <span class="goal-status status-active">进行中</span>
-                </div>
-                <div class="goal-desc">每年阅读20本书，五年内完成100本书的阅读挑战，涵盖技术、人文、历史等领域。</div>
-                <div class="goal-progress">
-                    <div class="goal-progress-bar">
-                        <div class="goal-progress-fill" style="width: 45%"></div>
-                    </div>
-                    <div class="goal-progress-text">45/100</div>
-                </div>
-                <div class="goal-deadline">
-                    <i class="far fa-clock"></i>
-                    目标日期：2028年12月
-                </div>
+        <div class="share-container">
+            <div class="share-grid" id="shareGrid">
+                <!-- 分享卡片由JS渲染 -->
             </div>
         </div>
     </section>
 
     <!-- 页脚 -->
     <footer class="footer">
-        <p>人生进度 - 记录每一步，规划每一天</p>
-        <p style="margin-top: 0.5rem; font-size: 0.9rem;">TRAE AI创造力大赛参赛作品</p>
+        <div class="footer-brand"><i class="fas fa-heartbeat"></i> 人生进度</div>
+        <p>记录每一步，规划每一天</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.6;">TRAE AI创造力大赛参赛作品</p>
     </footer>
 
-    <!-- 添加按钮 -->
-    <button class="add-btn" onclick="showAddModal()">
-        <i class="fas fa-plus"></i>
-    </button>
+    <!-- 浮动按钮菜单 -->
+    <div class="fab-container">
+        <div class="fab-menu" id="fabMenu">
+            <div class="fab-item" onclick="openModal('diary')">
+                <span class="fab-item-label">写日记</span>
+                <button class="fab-item-btn diary-btn"><i class="fas fa-book"></i></button>
+            </div>
+            <div class="fab-item" onclick="openModal('confide')">
+                <span class="fab-item-label">发倾诉</span>
+                <button class="fab-item-btn confide-btn"><i class="fas fa-comment-dots"></i></button>
+            </div>
+            <div class="fab-item" onclick="openModal('timeline')">
+                <span class="fab-item-label">加事件</span>
+                <button class="fab-item-btn timeline-btn"><i class="fas fa-plus-circle"></i></button>
+            </div>
+            <div class="fab-item" onclick="openModal('goal')">
+                <span class="fab-item-label">加目标</span>
+                <button class="fab-item-btn goal-btn"><i class="fas fa-bullseye"></i></button>
+            </div>
+        </div>
+        <button class="fab-main" id="fabMain" aria-label="操作菜单">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+
+    <!-- 日记模态框 -->
+    <div class="modal-overlay" id="diaryModal">
+        <div class="modal">
+            <div class="modal-title">
+                <i class="fas fa-book" style="color:var(--diary-warm)"></i> 写日记
+                <button class="modal-close" onclick="closeModal('diary')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="form-group">
+                <label>日期</label>
+                <input type="date" id="diaryDate">
+            </div>
+            <div class="form-group">
+                <label>心情</label>
+                <select id="diaryMood">
+                    <option value="happy">开心</option>
+                    <option value="calm">平静</option>
+                    <option value="moved">感动</option>
+                    <option value="sad">难过</option>
+                    <option value="angry">愤怒</option>
+                    <option value="excited">兴奋</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>内容</label>
+                <textarea id="diaryContent" placeholder="写下今天的心情和感悟..."></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" onclick="closeModal('diary')">取消</button>
+                <button class="modal-btn modal-btn-confirm diary-confirm" onclick="saveDiary()">保存日记</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 倾诉模态框 -->
+    <div class="modal-overlay" id="confideModal">
+        <div class="modal">
+            <div class="modal-title">
+                <i class="fas fa-comment-dots" style="color:var(--confide-blue)"></i> 发倾诉
+                <button class="modal-close" onclick="closeModal('confide')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="form-group">
+                <label>你的名字（选填）</label>
+                <input type="text" id="confideName" placeholder="留空则为匿名倾诉">
+            </div>
+            <div class="form-group">
+                <label class="form-checkbox">
+                    <input type="checkbox" id="confideAnonymous" checked>
+                    匿名倾诉
+                </label>
+            </div>
+            <div class="form-group">
+                <label>心事内容</label>
+                <textarea id="confideContent" placeholder="说出你的心事，这里是一个安全的角落..."></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" onclick="closeModal('confide')">取消</button>
+                <button class="modal-btn modal-btn-confirm confide-confirm" onclick="saveConfide()">发布倾诉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 时间轴事件模态框 -->
+    <div class="modal-overlay" id="timelineModal">
+        <div class="modal">
+            <div class="modal-title">
+                <i class="fas fa-plus-circle" style="color:var(--primary)"></i> 添加人生事件
+                <button class="modal-close" onclick="closeModal('timeline')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="form-group">
+                <label>日期</label>
+                <input type="text" id="timelineDate" placeholder="例如：2024年6月">
+            </div>
+            <div class="form-group">
+                <label>标题</label>
+                <input type="text" id="timelineTitle" placeholder="事件标题">
+            </div>
+            <div class="form-group">
+                <label>描述</label>
+                <textarea id="timelineDesc" placeholder="描述这个重要时刻..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>标签</label>
+                <select id="timelineTag">
+                    <option value="achievement">成就</option>
+                    <option value="milestone">里程碑</option>
+                    <option value="memory">回忆</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" onclick="closeModal('timeline')">取消</button>
+                <button class="modal-btn modal-btn-confirm timeline-confirm" onclick="saveTimelineEvent()">添加事件</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 目标模态框 -->
+    <div class="modal-overlay" id="goalModal">
+        <div class="modal">
+            <div class="modal-title">
+                <i class="fas fa-bullseye" style="color:var(--success)"></i> 添加新目标
+                <button class="modal-close" onclick="closeModal('goal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="form-group">
+                <label>目标名称</label>
+                <input type="text" id="goalTitle" placeholder="你的目标是什么？">
+            </div>
+            <div class="form-group">
+                <label>描述</label>
+                <textarea id="goalDesc" placeholder="详细描述你的目标..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>状态</label>
+                <select id="goalStatus">
+                    <option value="active">进行中</option>
+                    <option value="planned">计划中</option>
+                    <option value="completed">已完成</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>当前进度 (%)</label>
+                <input type="number" id="goalProgress" min="0" max="100" value="0" placeholder="0-100">
+            </div>
+            <div class="form-group">
+                <label>目标日期</label>
+                <input type="text" id="goalDeadline" placeholder="例如：2026年12月">
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" onclick="closeModal('goal')">取消</button>
+                <button class="modal-btn modal-btn-confirm goal-confirm" onclick="saveGoal()">添加目标</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 确认对话框 -->
+    <div class="confirm-overlay" id="confirmOverlay">
+        <div class="confirm-box">
+            <div class="confirm-icon"><i class="fas fa-exclamation-triangle"></i></div>
+            <div class="confirm-text" id="confirmText">确定要删除这条日记吗？</div>
+            <div class="confirm-actions">
+                <button class="confirm-btn confirm-btn-cancel" onclick="closeConfirm()">取消</button>
+                <button class="confirm-btn confirm-btn-delete" id="confirmBtn" onclick="confirmAction()">删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast容器 -->
+    <div class="toast-container" id="toastContainer"></div>
 
     <script>
-        // 平滑滚动
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
+    /* ===== 数据管理 ===== */
+    const STORAGE_KEYS = {
+        diary: 'lifeProgress_diary',
+        confide: 'lifeProgress_confide',
+        timeline: 'lifeProgress_timeline',
+        goals: 'lifeProgress_goals'
+    };
+
+    /* 心情配置 */
+    const MOOD_MAP = {
+        happy:   { label: '开心', icon: 'fa-face-smile',    cls: 'mood-happy' },
+        calm:    { label: '平静', icon: 'fa-face-meh',      cls: 'mood-calm' },
+        moved:   { label: '感动', icon: 'fa-face-grin-tears', cls: 'mood-moved' },
+        sad:     { label: '难过', icon: 'fa-face-sad-tear',  cls: 'mood-sad' },
+        angry:   { label: '愤怒', icon: 'fa-face-angry',     cls: 'mood-angry' },
+        excited: { label: '兴奋', icon: 'fa-face-grin-stars', cls: 'mood-excited' }
+    };
+
+    const TAG_MAP = {
+        achievement: { label: '成就', cls: 'tag-achievement' },
+        milestone:   { label: '里程碑', cls: 'tag-milestone' },
+        memory:      { label: '回忆', cls: 'tag-memory' }
+    };
+
+    const STATUS_MAP = {
+        active:    { label: '进行中', cls: 'status-active' },
+        planned:   { label: '计划中', cls: 'status-planned' },
+        completed: { label: '已完成', cls: 'status-completed' }
+    };
+
+    /* 默认预置数据 */
+    function getDefaultDiaries() {
+        return [
+            { id: 1, date: '2026-06-15', mood: 'happy', content: '今天收到了期待已久的offer！三年的努力终于有了回报。晚上和朋友们庆祝了一下，感觉人生充满了希望。未来的路还很长，但我已经准备好了。' },
+            { id: 2, date: '2026-06-10', mood: 'moved', content: '下班路上看到一个小女孩在给流浪猫喂食，她妈妈站在旁边微笑着看着她。这个画面让我觉得世界真的很美好，善良是会传承的。' },
+            { id: 3, date: '2026-06-05', mood: 'calm', content: '周末去公园跑了5公里，虽然速度不快，但跑完后整个人都放松了。有时候不需要追求极致，享受过程本身就是一种幸福。' }
+        ];
+    }
+
+    function getDefaultConfides() {
+        return [
+            {
+                id: 1,
+                name: '',
+                anonymous: true,
+                content: '最近工作压力很大，感觉自己一直在追赶别人的脚步。有时候会想，是不是应该停下来，好好想想自己真正想要的是什么...',
+                time: '2026-06-14 22:30',
+                responses: [
+                    { id: 1, content: '停下来思考不是退缩，而是为了更好地出发。相信自己的节奏，你比你想象的更优秀。', time: '2026-06-14 23:15' },
+                    { id: 2, content: '我也有同样的感受，后来发现按自己的节奏走反而走得更远。加油！', time: '2026-06-15 08:20' }
+                ]
+            },
+            {
+                id: 2,
+                name: '小星星',
+                anonymous: false,
+                content: '今天终于鼓起勇气跟暗恋了两年的人表白了，虽然被拒绝了，但至少不再遗憾了。感谢这段暗恋教会我的勇气。',
+                time: '2026-06-12 20:00',
+                responses: [
+                    { id: 1, content: '勇敢的人值得被爱！你的真诚终将遇到对的人。', time: '2026-06-12 21:30' }
+                ]
+            }
+        ];
+    }
+
+    function getDefaultTimeline() {
+        return [
+            { id: 1, date: '2024年6月', title: '获得晋升', desc: '经过两年的努力，终于从初级工程师晋升为高级工程师，这是职业生涯的重要里程碑。', tags: ['achievement', 'milestone'] },
+            { id: 2, date: '2023年12月', title: '第一次马拉松', desc: '完成了人生第一个全程马拉松，用时4小时15分钟。证明了坚持训练的力量。', tags: ['achievement', 'memory'] },
+            { id: 3, date: '2022年8月', title: '买房安家', desc: '在这个城市拥有了属于自己的小窝，从此不再漂泊，有了真正的归属感。', tags: ['milestone'] },
+            { id: 4, date: '2020年7月', title: '毕业工作', desc: '从大学毕业，进入第一家公司，开启了职业生涯的新篇章。', tags: ['milestone'] },
+            { id: 5, date: '2016年9月', title: '大学入学', desc: '踏入大学校园，开始了四年的求学之旅，结识了一生的挚友。', tags: ['memory'] }
+        ];
+    }
+
+    function getDefaultGoals() {
+        return [
+            { id: 1, title: '学习一门新语言', desc: '计划学习日语，目标是在两年内达到N2水平，为未来的日本旅行做准备。', status: 'active', progress: 35, deadline: '2026年12月' },
+            { id: 2, title: '完成半程铁人三项', desc: '挑战自我，完成1.9km游泳 + 90km自行车 + 21km跑步的半程铁人三项。', status: 'active', progress: 60, deadline: '2025年9月' },
+            { id: 3, title: '出版个人技术博客集', desc: '将多年积累的技术文章整理成册，出版一本属于自己的技术博客集。', status: 'planned', progress: 10, deadline: '2027年6月' },
+            { id: 4, title: '环游世界30个国家', desc: '在35岁之前游历30个国家，体验不同的文化和风景。', status: 'active', progress: 40, deadline: '2031年12月', progressText: '12/30' },
+            { id: 5, title: '建立被动收入来源', desc: '通过投资理财和副业，建立稳定的被动收入来源，实现财务自由。', status: 'planned', progress: 15, deadline: '2030年12月' },
+            { id: 6, title: '完成100本书阅读挑战', desc: '每年阅读20本书，五年内完成100本书的阅读挑战，涵盖技术、人文、历史等领域。', status: 'active', progress: 45, deadline: '2028年12月', progressText: '45/100' }
+        ];
+    }
+
+    function getDefaultShares() {
+        return [
+            {
+                id: 1,
+                username: '追梦人阿杰',
+                avatarClass: 'av1',
+                avatarText: '杰',
+                time: '2小时前',
+                content: '用了三年时间，终于从零基础学会了弹吉他。从最初的手指疼痛到如今能弹奏一首完整的曲子，这个过程教会了我：只要不放弃，时间会给你答案。',
+                likes: 128,
+                comments: 23,
+                liked: false
+            },
+            {
+                id: 2,
+                username: '旅行的蜗牛',
+                avatarClass: 'av2',
+                avatarText: '蜗',
+                time: '5小时前',
+                content: '30岁那年，我辞掉了稳定的工作，开始了间隔年旅行。走过了东南亚、欧洲和南美。回来后发现，世界很大，但最重要的是找到了内心的平静。人生不只有一种活法。',
+                likes: 256,
+                comments: 45,
+                liked: false
+            },
+            {
+                id: 3,
+                username: '码农小王',
+                avatarClass: 'av3',
+                avatarText: '王',
+                time: '1天前',
+                content: '今天是我坚持写技术博客的第365天。从最初的几篇没人看的文章，到现在有了自己的读者群。分享知识的过程让我学到了更多，也认识了很多志同道合的朋友。坚持做一件事，真的会有复利效应。',
+                likes: 89,
+                comments: 16,
+                liked: false
+            }
+        ];
+    }
+
+    /* LocalStorage 读写 */
+    function loadData(key, defaultFn) {
+        try {
+            const data = localStorage.getItem(key);
+            if (data) return JSON.parse(data);
+        } catch(e) {}
+        const def = defaultFn();
+        localStorage.setItem(key, JSON.stringify(def));
+        return def;
+    }
+
+    function saveData(key, data) {
+        localStorage.setItem(key, JSON.stringify(data));
+    }
+
+    /* ===== 全局状态 ===== */
+    let diaries = loadData(STORAGE_KEYS.diary, getDefaultDiaries);
+    let confides = loadData(STORAGE_KEYS.confide, getDefaultConfides);
+    let timelineEvents = loadData(STORAGE_KEYS.timeline, getDefaultTimeline);
+    let goals = loadData(STORAGE_KEYS.goals, getDefaultGoals);
+    let shares = getDefaultShares(); // 社区分享不持久化
+
+    let pendingConfirmAction = null;
+
+    /* ===== 渲染函数 ===== */
+
+    /* 时间轴 */
+    function renderTimeline() {
+        const container = document.getElementById('timelineContainer');
+        if (timelineEvents.length === 0) {
+            container.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:2rem;">暂无时间轴事件，点击右下角按钮添加你的第一个人生足迹吧！</p>';
+            return;
+        }
+        container.innerHTML = timelineEvents.map((item, i) => `
+            <div class="timeline-item fade-in-up" style="transition-delay:${i * 0.1}s">
+                <div class="timeline-content">
+                    <div class="timeline-date"><i class="far fa-calendar-alt" style="margin-right:0.3rem;"></i>${item.date}</div>
+                    <div class="timeline-title">${item.title}</div>
+                    <div class="timeline-desc">${item.desc}</div>
+                    <div class="timeline-tags">
+                        ${item.tags.map(t => `<span class="tag ${TAG_MAP[t].cls}">${TAG_MAP[t].label}</span>`).join('')}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        observeFadeIn();
+    }
+
+    /* 目标 */
+    function renderGoals() {
+        const grid = document.getElementById('goalsGrid');
+        if (goals.length === 0) {
+            grid.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:2rem;grid-column:1/-1;">暂无目标，点击右下角按钮添加你的第一个人生目标吧！</p>';
+            return;
+        }
+        grid.innerHTML = goals.map((g, i) => `
+            <div class="goal-card fade-in-up" style="transition-delay:${i * 0.1}s">
+                <div class="goal-header">
+                    <div class="goal-title">${g.title}</div>
+                    <span class="goal-status ${STATUS_MAP[g.status].cls}">${STATUS_MAP[g.status].label}</span>
+                </div>
+                <div class="goal-desc">${g.desc}</div>
+                <div class="goal-progress">
+                    <div class="goal-progress-bar">
+                        <div class="goal-progress-fill" data-width="${g.progress}"></div>
+                    </div>
+                    <div class="goal-progress-text">${g.progressText || g.progress + '%'}</div>
+                </div>
+                <div class="goal-deadline">
+                    <i class="far fa-clock"></i>
+                    目标日期：${g.deadline}
+                </div>
+            </div>
+        `).join('');
+        observeFadeIn();
+        observeProgressBars();
+    }
+
+    /* 日记 */
+    function renderDiaries() {
+        const grid = document.getElementById('diaryGrid');
+        if (diaries.length === 0) {
+            grid.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:2rem;grid-column:1/-1;">还没有日记，点击右下角按钮写下你的第一篇日记吧！</p>';
+            return;
+        }
+        // 按日期倒序
+        const sorted = [...diaries].sort((a, b) => b.date.localeCompare(a.date));
+        grid.innerHTML = sorted.map((d, i) => {
+            const mood = MOOD_MAP[d.mood] || MOOD_MAP.calm;
+            return `
+            <div class="diary-card fade-in-up" style="transition-delay:${i * 0.08}s">
+                <button class="diary-delete" onclick="deleteDiary(${d.id})" title="删除日记"><i class="fas fa-trash-alt"></i></button>
+                <div class="diary-card-header">
+                    <div class="diary-date"><i class="far fa-calendar"></i> ${d.date}</div>
+                    <span class="diary-mood ${mood.cls}"><i class="fas ${mood.icon}"></i> ${mood.label}</span>
+                </div>
+                <div class="diary-content">${d.content}</div>
+            </div>`;
+        }).join('');
+        observeFadeIn();
+    }
+
+    /* 倾诉 */
+    function renderConfides() {
+        const list = document.getElementById('confideList');
+        if (confides.length === 0) {
+            list.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:2rem;">还没有倾诉，点击右下角按钮说出你的心事吧！</p>';
+            return;
+        }
+        const sorted = [...confides].sort((a, b) => b.time.localeCompare(a.time));
+        list.innerHTML = sorted.map((c, i) => {
+            const displayName = c.anonymous ? '匿名用户' : (c.name || '热心网友');
+            const avatarCls = c.anonymous ? 'anonymous' : '';
+            const avatarIcon = c.anonymous ? '<i class="fas fa-user-secret"></i>' : '<i class="fas fa-user"></i>';
+            const badge = c.anonymous ? '<span class="confide-anonymous-badge"><i class="fas fa-mask"></i> 匿名</span>' : '';
+            const responsesHtml = (c.responses || []).map(r => `
+                <div class="response-item">
+                    <div class="response-avatar"><i class="fas fa-heart"></i></div>
+                    <div>
+                        <div class="response-content">${r.content}</div>
+                        <div class="response-time">${r.time}</div>
+                    </div>
+                </div>
+            `).join('');
+            return `
+            <div class="confide-card fade-in-up" style="transition-delay:${i * 0.08}s">
+                <div class="confide-header">
+                    <div class="confide-avatar ${avatarCls}">${avatarIcon}</div>
+                    <div class="confide-meta">
+                        <div class="confide-name">${displayName} ${badge}</div>
+                        <div class="confide-time"><i class="far fa-clock"></i> ${c.time}</div>
+                    </div>
+                </div>
+                <div class="confide-content">${c.content}</div>
+                <div class="confide-responses">
+                    <div class="confide-responses-title"><i class="fas fa-heart" style="color:var(--diary-warm)"></i> 暖心回应 (${(c.responses || []).length})</div>
+                    ${responsesHtml}
+                    <div class="response-input-wrap">
+                        <input type="text" placeholder="给予温暖的回应..." id="responseInput_${c.id}">
+                        <button onclick="addResponse(${c.id})">回应</button>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+        observeFadeIn();
+    }
+
+    /* 分享 */
+    function renderShares() {
+        const grid = document.getElementById('shareGrid');
+        grid.innerHTML = shares.map((s, i) => `
+            <div class="share-card fade-in-up" style="transition-delay:${i * 0.1}s">
+                <div class="share-card-header">
+                    <div class="share-avatar ${s.avatarClass}">${s.avatarText}</div>
+                    <div class="share-user-info">
+                        <div class="share-username">${s.username}</div>
+                        <div class="share-time">${s.time}</div>
+                    </div>
+                </div>
+                <div class="share-content">${s.content}</div>
+                <div class="share-stats">
+                    <span class="share-stat ${s.liked ? 'liked' : ''}" onclick="toggleLike(${s.id})">
+                        <i class="${s.liked ? 'fas' : 'far'} fa-heart"></i> ${s.likes}
+                    </span>
+                    <span class="share-stat">
+                        <i class="far fa-comment"></i> ${s.comments}
+                    </span>
+                </div>
+            </div>
+        `).join('');
+        observeFadeIn();
+    }
+
+    /* ===== 交互函数 ===== */
+
+    /* 模态框 */
+    function openModal(type) {
+        closeFabMenu();
+        const modal = document.getElementById(type + 'Modal');
+        if (modal) {
+            modal.classList.add('active');
+            // 设置默认日期
+            if (type === 'diary') {
+                document.getElementById('diaryDate').value = new Date().toISOString().split('T')[0];
+            }
+        }
+    }
+
+    function closeModal(type) {
+        const modal = document.getElementById(type + 'Modal');
+        if (modal) modal.classList.remove('active');
+    }
+
+    /* 点击overlay关闭模态框 */
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+            }
         });
+    });
 
-        // 进度条动画
-        const observerOptions = {
-            threshold: 0.5
+    /* 保存日记 */
+    function saveDiary() {
+        const date = document.getElementById('diaryDate').value;
+        const mood = document.getElementById('diaryMood').value;
+        const content = document.getElementById('diaryContent').value.trim();
+        if (!date || !content) {
+            showToast('请填写日期和内容', true);
+            return;
+        }
+        const newDiary = {
+            id: Date.now(),
+            date: date,
+            mood: mood,
+            content: content
         };
+        diaries.push(newDiary);
+        saveData(STORAGE_KEYS.diary, diaries);
+        renderDiaries();
+        closeModal('diary');
+        // 清空表单
+        document.getElementById('diaryContent').value = '';
+        showToast('日记保存成功！');
+    }
 
+    /* 删除日记 */
+    function deleteDiary(id) {
+        pendingConfirmAction = function() {
+            diaries = diaries.filter(d => d.id !== id);
+            saveData(STORAGE_KEYS.diary, diaries);
+            renderDiaries();
+            showToast('日记已删除');
+        };
+        document.getElementById('confirmText').textContent = '确定要删除这条日记吗？此操作不可撤销。';
+        document.getElementById('confirmOverlay').classList.add('active');
+    }
+
+    /* 保存倾诉 */
+    function saveConfide() {
+        const anonymous = document.getElementById('confideAnonymous').checked;
+        const name = document.getElementById('confideName').value.trim();
+        const content = document.getElementById('confideContent').value.trim();
+        if (!content) {
+            showToast('请填写倾诉内容', true);
+            return;
+        }
+        const now = new Date();
+        const timeStr = now.getFullYear() + '-' +
+            String(now.getMonth()+1).padStart(2,'0') + '-' +
+            String(now.getDate()).padStart(2,'0') + ' ' +
+            String(now.getHours()).padStart(2,'0') + ':' +
+            String(now.getMinutes()).padStart(2,'0');
+        const newConfide = {
+            id: Date.now(),
+            name: anonymous ? '' : name,
+            anonymous: anonymous,
+            content: content,
+            time: timeStr,
+            responses: []
+        };
+        confides.push(newConfide);
+        saveData(STORAGE_KEYS.confide, confides);
+        renderConfides();
+        closeModal('confide');
+        document.getElementById('confideContent').value = '';
+        document.getElementById('confideName').value = '';
+        showToast('倾诉发布成功！');
+    }
+
+    /* 添加回应 */
+    function addResponse(confideId) {
+        const input = document.getElementById('responseInput_' + confideId);
+        const content = input.value.trim();
+        if (!content) {
+            showToast('请输入回应内容', true);
+            return;
+        }
+        const now = new Date();
+        const timeStr = now.getFullYear() + '-' +
+            String(now.getMonth()+1).padStart(2,'0') + '-' +
+            String(now.getDate()).padStart(2,'0') + ' ' +
+            String(now.getHours()).padStart(2,'0') + ':' +
+            String(now.getMinutes()).padStart(2,'0');
+        const confide = confides.find(c => c.id === confideId);
+        if (confide) {
+            if (!confide.responses) confide.responses = [];
+            confide.responses.push({
+                id: Date.now(),
+                content: content,
+                time: timeStr
+            });
+            saveData(STORAGE_KEYS.confide, confides);
+            renderConfides();
+            showToast('回应发送成功！');
+        }
+    }
+
+    /* 保存时间轴事件 */
+    function saveTimelineEvent() {
+        const date = document.getElementById('timelineDate').value.trim();
+        const title = document.getElementById('timelineTitle').value.trim();
+        const desc = document.getElementById('timelineDesc').value.trim();
+        const tag = document.getElementById('timelineTag').value;
+        if (!date || !title) {
+            showToast('请填写日期和标题', true);
+            return;
+        }
+        const newEvent = {
+            id: Date.now(),
+            date: date,
+            title: title,
+            desc: desc || '这是一个重要的人生时刻。',
+            tags: [tag]
+        };
+        timelineEvents.unshift(newEvent);
+        saveData(STORAGE_KEYS.timeline, timelineEvents);
+        renderTimeline();
+        closeModal('timeline');
+        document.getElementById('timelineDate').value = '';
+        document.getElementById('timelineTitle').value = '';
+        document.getElementById('timelineDesc').value = '';
+        showToast('事件添加成功！');
+    }
+
+    /* 保存目标 */
+    function saveGoal() {
+        const title = document.getElementById('goalTitle').value.trim();
+        const desc = document.getElementById('goalDesc').value.trim();
+        const status = document.getElementById('goalStatus').value;
+        const progress = parseInt(document.getElementById('goalProgress').value) || 0;
+        const deadline = document.getElementById('goalDeadline').value.trim();
+        if (!title) {
+            showToast('请填写目标名称', true);
+            return;
+        }
+        const clampedProgress = Math.max(0, Math.min(100, progress));
+        const newGoal = {
+            id: Date.now(),
+            title: title,
+            desc: desc || '向目标前进中...',
+            status: status,
+            progress: clampedProgress,
+            deadline: deadline || '待定'
+        };
+        goals.push(newGoal);
+        saveData(STORAGE_KEYS.goals, goals);
+        renderGoals();
+        closeModal('goal');
+        document.getElementById('goalTitle').value = '';
+        document.getElementById('goalDesc').value = '';
+        document.getElementById('goalProgress').value = '0';
+        document.getElementById('goalDeadline').value = '';
+        showToast('目标添加成功！');
+    }
+
+    /* 点赞 */
+    function toggleLike(shareId) {
+        const share = shares.find(s => s.id === shareId);
+        if (share) {
+            share.liked = !share.liked;
+            share.likes += share.liked ? 1 : -1;
+            renderShares();
+        }
+    }
+
+    /* 确认对话框 */
+    function closeConfirm() {
+        document.getElementById('confirmOverlay').classList.remove('active');
+        pendingConfirmAction = null;
+    }
+
+    function confirmAction() {
+        if (pendingConfirmAction) {
+            pendingConfirmAction();
+        }
+        closeConfirm();
+    }
+
+    /* Toast提示 */
+    function showToast(message, isError) {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = 'toast' + (isError ? ' error' : '');
+        toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}" style="color:${isError ? 'var(--danger)' : 'var(--success)'}"></i> ${message}`;
+        container.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(100px)';
+            toast.style.transition = 'all 0.3s';
+            setTimeout(() => toast.remove(), 300);
+        }, 2500);
+    }
+
+    /* ===== FAB菜单 ===== */
+    const fabMain = document.getElementById('fabMain');
+    const fabMenu = document.getElementById('fabMenu');
+
+    fabMain.addEventListener('click', () => {
+        fabMain.classList.toggle('open');
+        fabMenu.classList.toggle('open');
+    });
+
+    function closeFabMenu() {
+        fabMain.classList.remove('open');
+        fabMenu.classList.remove('open');
+    }
+
+    /* 点击外部关闭FAB */
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.fab-container')) {
+            closeFabMenu();
+        }
+    });
+
+    /* ===== 导航栏 ===== */
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    navToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('mobile-open');
+    });
+
+    /* 导航栏滚动效果 */
+    window.addEventListener('scroll', () => {
+        const navbar = document.getElementById('navbar');
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+
+        // 高亮当前导航
+        const sections = ['overview', 'timeline', 'future', 'diary', 'confide', 'share'];
+        let current = '';
+        sections.forEach(id => {
+            const section = document.getElementById(id);
+            if (section) {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 150) {
+                    current = id;
+                }
+            }
+        });
+        document.querySelectorAll('.nav-links a').forEach(a => {
+            a.classList.remove('active');
+            if (a.getAttribute('href') === '#' + current) {
+                a.classList.add('active');
+            }
+        });
+    });
+
+    /* 平滑滚动 */
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+                navLinks.classList.remove('mobile-open');
+            }
+        });
+    });
+
+    /* ===== 入场动画观察器 ===== */
+    function observeFadeIn() {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const progressFills = entry.target.querySelectorAll('.progress-fill, .goal-progress-fill');
-                    progressFills.forEach(fill => {
-                        const width = fill.style.width;
-                        fill.style.width = '0%';
-                        setTimeout(() => {
-                            fill.style.width = width;
-                        }, 100);
-                    });
+                    entry.target.classList.add('visible');
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-        document.querySelectorAll('.progress-container, .goal-card').forEach(el => {
+        document.querySelectorAll('.fade-in-up:not(.visible)').forEach(el => {
             observer.observe(el);
         });
+    }
 
-        // 添加按钮点击
-        function showAddModal() {
-            alert('添加功能：可以添加新的人生里程碑、成就或未来目标！\n\n在实际应用中，这里会弹出一个表单，让你记录新的事件或目标。');
+    /* 进度条动画观察器 */
+    function observeProgressBars() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const fills = entry.target.querySelectorAll('.goal-progress-fill[data-width]');
+                    fills.forEach(fill => {
+                        setTimeout(() => {
+                            fill.style.width = fill.dataset.width + '%';
+                        }, 200);
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('.goal-card').forEach(el => observer.observe(el));
+    }
+
+    /* 主进度条动画 */
+    function animateMainProgress() {
+        const fill = document.getElementById('mainProgressFill');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        fill.style.width = fill.dataset.width + '%';
+                    }, 300);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        observer.observe(fill.parentElement);
+    }
+
+    /* ===== 粒子动画 ===== */
+    function initParticles() {
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animationId;
+
+        function resize() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
         }
 
-        // 导航栏滚动效果
-        window.addEventListener('scroll', () => {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 100) {
-                navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+        resize();
+        window.addEventListener('resize', resize);
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = (Math.random() - 0.5) * 0.8;
+                this.speedY = (Math.random() - 0.5) * 0.8;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        // 创建粒子
+        const count = Math.min(80, Math.floor(canvas.width * canvas.height / 15000));
+        for (let i = 0; i < count; i++) {
+            particles.push(new Particle());
+        }
+
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 120) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.15 * (1 - dist / 120)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            connectParticles();
+            animationId = requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // 页面不可见时暂停动画
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                cancelAnimationFrame(animationId);
             } else {
-                navbar.style.boxShadow = 'none';
+                animate();
             }
         });
+    }
+
+    /* ===== 匿名复选框联动 ===== */
+    document.getElementById('confideAnonymous').addEventListener('change', function() {
+        const nameInput = document.getElementById('confideName');
+        if (this.checked) {
+            nameInput.value = '';
+            nameInput.disabled = true;
+            nameInput.placeholder = '匿名模式下无需填写';
+        } else {
+            nameInput.disabled = false;
+            nameInput.placeholder = '输入你的名字';
+        }
+    });
+
+    /* ===== 初始化 ===== */
+    function init() {
+        renderTimeline();
+        renderGoals();
+        renderDiaries();
+        renderConfides();
+        renderShares();
+        animateMainProgress();
+        initParticles();
+        observeFadeIn();
+        // 初始化匿名输入框状态
+        document.getElementById('confideName').disabled = true;
+        document.getElementById('confideName').placeholder = '匿名模式下无需填写';
+    }
+
+    init();
     </script>
 </body>
 </html>
