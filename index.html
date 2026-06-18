@@ -2095,6 +2095,9 @@
     </footer>
 
     <script>
+    // ==================== API基础URL - IGA Pages Serverless Functions ====================
+    const API_BASE = window.location.origin + '/api';
+
     // ==================== 全局变量 ====================
     let currentUser = null;
     let db = null;
@@ -2423,9 +2426,36 @@
             showProfileMini(user);
             renderLifeProgress();
             closeProfileSetup();
+            // 同步用户信息到服务端
+            syncUserToServer(user);
             showToast('资料保存成功！', 'success');
         } catch (err) {
             showToast('保存失败：' + err.message, 'error');
+        }
+    }
+
+    // 同步用户信息到服务端API
+    async function syncUserToServer(user) {
+        try {
+            await fetch(API_BASE + '/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: user.id,
+                    username: currentUser.username,
+                    nickname: user.nickname,
+                    avatar: user.avatar,
+                    bio: user.bio,
+                    status: user.status,
+                    major: user.major,
+                    year: user.year,
+                    gender: user.gender,
+                    relationship: user.relationship,
+                    motto: user.motto
+                })
+            });
+        } catch (e) {
+            console.warn('同步用户信息到服务端失败:', e.message);
         }
     }
 
@@ -2439,8 +2469,18 @@
         const diaries = await dbGetByIndex('diaries', 'userId', currentUser.id);
         const timeline = await dbGetByIndex('timeline', 'userId', currentUser.id);
         const goals = await dbGetByIndex('goals', 'userId', currentUser.id);
+        // 个人数据继续使用IndexedDB
         const confessions = await dbGetByIndex('confessions', 'userId', currentUser.id);
-        const shares = await dbGetAll('shares');
+        // 社区数据尝试从API获取，失败则用本地
+        let shares = [];
+        try {
+            const res = await fetch(API_BASE + '/shares');
+            if (res.ok) {
+                shares = await res.json() || [];
+            }
+        } catch (e) {
+            shares = await dbGetAll('shares');
+        }
         const userShares = shares.filter(s => s.userId === currentUser.id);
         const totalLikes = shares.reduce((sum, s) => sum + (s.likes || 0), 0);
 
@@ -2593,76 +2633,163 @@
     }
 
     async function renderConfessions() {
-        const items = await dbGetAll('confessions');
         const grid = document.getElementById('confessionsGrid');
-        if (items.length === 0) {
-            grid.innerHTML = `<div class="empty-state"><div class="empty-particles"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-comment-dots"></i></div><div class="empty-title">还没有人倾诉</div><div class="empty-desc">说出你的心里话<br>收获来自陌生人的温暖与回应</div><button class="empty-action-btn" onclick="openModal('confession')"><i class="fas fa-plus"></i> 发出第一条倾诉</button></div>`;
-            return;
-        }
-        let html = '';
-        items.forEach((item, i) => {
-            const displayName = item.anonymous ? '匿名用户' : (item.nickname || '用户');
-            const initial = displayName.charAt(0);
-            const anonTag = item.anonymous ? '<span class="confession-anon-tag"><i class="fas fa-user-secret"></i> 匿名</span>' : '';
-            let responsesHtml = '';
-            if (item.responses && item.responses.length > 0) {
-                responsesHtml = '<div class="confession-responses"><h4><i class="fas fa-reply"></i> 回应 (' + item.responses.length + ')</h4>';
-                item.responses.forEach(r => {
-                    responsesHtml += `<div class="response-item"><span class="response-author">${escapeHtml(r.author)}</span>${escapeHtml(r.content)}</div>`;
-                });
-                responsesHtml += '</div>';
+        try {
+            const res = await fetch(API_BASE + '/confessions');
+            if (!res.ok) throw new Error('API请求失败');
+            const items = await res.json();
+            if (!items || items.length === 0) {
+                grid.innerHTML = `<div class="empty-state"><div class="empty-particles"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-comment-dots"></i></div><div class="empty-title">还没有人倾诉</div><div class="empty-desc">说出你的心里话<br>收获来自陌生人的温暖与回应</div><button class="empty-action-btn" onclick="openModal('confession')"><i class="fas fa-plus"></i> 发出第一条倾诉</button></div>`;
+                return;
             }
-            html += `
-                <div class="confession-card" style="animation-delay: ${i * 0.08}s">
-                    <div class="confession-top">
-                        <div class="confession-meta">
-                            <div class="confession-avatar">${initial}</div>
-                            <span class="confession-author">${escapeHtml(displayName)}</span>
-                            ${anonTag}
+            let html = '';
+            items.forEach((item, i) => {
+                const displayName = item.anonymous ? '匿名用户' : (item.nickname || '用户');
+                const initial = displayName.charAt(0);
+                const anonTag = item.anonymous ? '<span class="confession-anon-tag"><i class="fas fa-user-secret"></i> 匿名</span>' : '';
+                let responsesHtml = '';
+                if (item.responses && item.responses.length > 0) {
+                    responsesHtml = '<div class="confession-responses"><h4><i class="fas fa-reply"></i> 回应 (' + item.responses.length + ')</h4>';
+                    item.responses.forEach(r => {
+                        responsesHtml += `<div class="response-item"><span class="response-author">${escapeHtml(r.author)}</span>${escapeHtml(r.content)}</div>`;
+                    });
+                    responsesHtml += '</div>';
+                }
+                html += `
+                    <div class="confession-card" style="animation-delay: ${i * 0.08}s">
+                        <div class="confession-top">
+                            <div class="confession-meta">
+                                <div class="confession-avatar">${initial}</div>
+                                <span class="confession-author">${escapeHtml(displayName)}</span>
+                                ${anonTag}
+                            </div>
                         </div>
-                    </div>
-                    <div class="confession-content">${escapeHtml(item.content)}</div>
-                    ${responsesHtml}
-                    <div class="response-input-row">
-                        <input type="text" placeholder="写下你的回应..." id="responseInput_${item.id}">
-                        <button class="response-send-btn" onclick="addResponse(${item.id})"><i class="fas fa-paper-plane"></i> 发送</button>
-                    </div>
-                </div>`;
-        });
-        grid.innerHTML = html;
+                        <div class="confession-content">${escapeHtml(item.content)}</div>
+                        ${responsesHtml}
+                        <div class="response-input-row">
+                            <input type="text" placeholder="写下你的回应..." id="responseInput_${item.id}">
+                            <button class="response-send-btn" onclick="addResponse(${item.id})"><i class="fas fa-paper-plane"></i> 发送</button>
+                        </div>
+                    </div>`;
+            });
+            grid.innerHTML = html;
+        } catch (e) {
+            console.warn('加载倾诉列表失败，尝试本地数据:', e.message);
+            // 优雅降级：尝试从本地IndexedDB加载
+            try {
+                const items = await dbGetAll('confessions');
+                if (items.length === 0) {
+                    grid.innerHTML = '<div class="empty-state"><p>社区功能需要在线环境</p></div>';
+                    return;
+                }
+                let html = '';
+                items.forEach((item, i) => {
+                    const displayName = item.anonymous ? '匿名用户' : (item.nickname || '用户');
+                    const initial = displayName.charAt(0);
+                    const anonTag = item.anonymous ? '<span class="confession-anon-tag"><i class="fas fa-user-secret"></i> 匿名</span>' : '';
+                    let responsesHtml = '';
+                    if (item.responses && item.responses.length > 0) {
+                        responsesHtml = '<div class="confession-responses"><h4><i class="fas fa-reply"></i> 回应 (' + item.responses.length + ')</h4>';
+                        item.responses.forEach(r => {
+                            responsesHtml += `<div class="response-item"><span class="response-author">${escapeHtml(r.author)}</span>${escapeHtml(r.content)}</div>`;
+                        });
+                        responsesHtml += '</div>';
+                    }
+                    html += `
+                        <div class="confession-card" style="animation-delay: ${i * 0.08}s">
+                            <div class="confession-top">
+                                <div class="confession-meta">
+                                    <div class="confession-avatar">${initial}</div>
+                                    <span class="confession-author">${escapeHtml(displayName)}</span>
+                                    ${anonTag}
+                                </div>
+                            </div>
+                            <div class="confession-content">${escapeHtml(item.content)}</div>
+                            ${responsesHtml}
+                            <div class="response-input-row">
+                                <input type="text" placeholder="写下你的回应..." id="responseInput_${item.id}">
+                                <button class="response-send-btn" onclick="addResponse(${item.id})"><i class="fas fa-paper-plane"></i> 发送</button>
+                            </div>
+                        </div>`;
+                });
+                grid.innerHTML = html;
+            } catch (e2) {
+                grid.innerHTML = '<div class="empty-state"><p>加载失败，请稍后重试</p></div>';
+            }
+        }
     }
 
     async function renderShares() {
-        const items = await dbGetAll('shares');
         const grid = document.getElementById('sharesGrid');
-        if (items.length === 0) {
-            grid.innerHTML = `<div class="empty-state"><div class="empty-particles"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-share-nodes"></i></div><div class="empty-title">社区还没有任何分享</div><div class="empty-desc">分享你的故事和经验<br>照亮别人的路，也温暖自己的心</div><button class="empty-action-btn" onclick="openModal('share')"><i class="fas fa-plus"></i> 分享第一个故事</button></div>`;
-            return;
-        }
-        let html = '';
-        items.forEach((item, i) => {
-            const nickname = item.nickname || '用户';
-            const initial = nickname.charAt(0);
-            const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString('zh-CN') : '';
-            html += `
-                <div class="share-card" style="animation-delay: ${i * 0.08}s">
-                    <div class="share-header">
-                        <div class="share-avatar">${initial}</div>
-                        <div class="share-author-info">
-                            <div class="share-author-name">${escapeHtml(nickname)}</div>
-                            <div class="share-date">${dateStr}</div>
+        try {
+            const res = await fetch(API_BASE + '/shares');
+            if (!res.ok) throw new Error('API请求失败');
+            const items = await res.json();
+            if (!items || items.length === 0) {
+                grid.innerHTML = `<div class="empty-state"><div class="empty-particles"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-share-nodes"></i></div><div class="empty-title">社区还没有任何分享</div><div class="empty-desc">分享你的故事和经验<br>照亮别人的路，也温暖自己的心</div><button class="empty-action-btn" onclick="openModal('share')"><i class="fas fa-plus"></i> 分享第一个故事</button></div>`;
+                return;
+            }
+            let html = '';
+            items.forEach((item, i) => {
+                const nickname = item.nickname || '用户';
+                const initial = nickname.charAt(0);
+                const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString('zh-CN') : '';
+                html += `
+                    <div class="share-card" style="animation-delay: ${i * 0.08}s">
+                        <div class="share-header">
+                            <div class="share-avatar">${initial}</div>
+                            <div class="share-author-info">
+                                <div class="share-author-name">${escapeHtml(nickname)}</div>
+                                <div class="share-date">${dateStr}</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="share-title">${escapeHtml(item.title)}</div>
-                    <div class="share-content">${escapeHtml(item.content)}</div>
-                    <div class="share-actions">
-                        <button class="like-btn" onclick="likeShare(${item.id})" id="likeBtn_${item.id}">
-                            <i class="fas fa-heart"></i> <span id="likeCount_${item.id}">${item.likes || 0}</span>
-                        </button>
-                    </div>
-                </div>`;
-        });
-        grid.innerHTML = html;
+                        <div class="share-title">${escapeHtml(item.title)}</div>
+                        <div class="share-content">${escapeHtml(item.content)}</div>
+                        <div class="share-actions">
+                            <button class="like-btn" onclick="likeShare(${item.id})" id="likeBtn_${item.id}">
+                                <i class="fas fa-heart"></i> <span id="likeCount_${item.id}">${item.likes || 0}</span>
+                            </button>
+                        </div>
+                    </div>`;
+            });
+            grid.innerHTML = html;
+        } catch (e) {
+            console.warn('加载分享列表失败，尝试本地数据:', e.message);
+            // 优雅降级：尝试从本地IndexedDB加载
+            try {
+                const items = await dbGetAll('shares');
+                if (items.length === 0) {
+                    grid.innerHTML = '<div class="empty-state"><p>社区功能需要在线环境</p></div>';
+                    return;
+                }
+                let html = '';
+                items.forEach((item, i) => {
+                    const nickname = item.nickname || '用户';
+                    const initial = nickname.charAt(0);
+                    const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString('zh-CN') : '';
+                    html += `
+                        <div class="share-card" style="animation-delay: ${i * 0.08}s">
+                            <div class="share-header">
+                                <div class="share-avatar">${initial}</div>
+                                <div class="share-author-info">
+                                    <div class="share-author-name">${escapeHtml(nickname)}</div>
+                                    <div class="share-date">${dateStr}</div>
+                                </div>
+                            </div>
+                            <div class="share-title">${escapeHtml(item.title)}</div>
+                            <div class="share-content">${escapeHtml(item.content)}</div>
+                            <div class="share-actions">
+                                <button class="like-btn" onclick="likeShare(${item.id})" id="likeBtn_${item.id}">
+                                    <i class="fas fa-heart"></i> <span id="likeCount_${item.id}">${item.likes || 0}</span>
+                                </button>
+                            </div>
+                        </div>`;
+                });
+                grid.innerHTML = html;
+            } catch (e2) {
+                grid.innerHTML = '<div class="empty-state"><p>加载失败，请稍后重试</p></div>';
+            }
+        }
     }
 
     // ==================== 操作函数 ====================
@@ -2704,36 +2831,71 @@
             return;
         }
         try {
-            const item = await dbGet('confessions', confessionId);
-            if (item) {
-                if (!item.responses) item.responses = [];
-                item.responses.push({
+            const res = await fetch(API_BASE + '/confessions/respond', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    confessionId: confessionId,
                     author: currentUser.nickname || currentUser.username,
-                    content: content,
-                    createdAt: new Date().toISOString()
-                });
-                await dbPut('confessions', item);
-                showToast('回应已发送', 'success');
-                await renderConfessions();
-            }
+                    content: content
+                })
+            });
+            if (!res.ok) throw new Error('API请求失败');
+            input.value = '';
+            showToast('回应发送成功', 'success');
+            await renderConfessions();
         } catch (e) {
-            showToast('发送失败：' + e.message, 'error');
+            console.warn('通过API发送回应失败，尝试本地:', e.message);
+            // 优雅降级：尝试本地IndexedDB
+            try {
+                const item = await dbGet('confessions', confessionId);
+                if (item) {
+                    if (!item.responses) item.responses = [];
+                    item.responses.push({
+                        author: currentUser.nickname || currentUser.username,
+                        content: content,
+                        createdAt: new Date().toISOString()
+                    });
+                    await dbPut('confessions', item);
+                    input.value = '';
+                    showToast('回应已发送（本地模式）', 'success');
+                    await renderConfessions();
+                }
+            } catch (e2) {
+                showToast('发送失败：' + e2.message, 'error');
+            }
         }
     }
 
     async function likeShare(shareId) {
         try {
-            const item = await dbGet('shares', shareId);
-            if (item) {
-                item.likes = (item.likes || 0) + 1;
-                await dbPut('shares', item);
-                document.getElementById('likeCount_' + shareId).textContent = item.likes;
-                document.getElementById('likeBtn_' + shareId).classList.add('liked');
-                showToast('已点赞', 'success');
-                await renderStats();
-            }
+            const res = await fetch(API_BASE + '/shares/like', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ shareId: shareId })
+            });
+            if (!res.ok) throw new Error('API请求失败');
+            const data = await res.json();
+            document.getElementById('likeCount_' + shareId).textContent = data.likes || 0;
+            document.getElementById('likeBtn_' + shareId).classList.add('liked');
+            showToast('已点赞', 'success');
+            await renderStats();
         } catch (e) {
-            showToast('操作失败：' + e.message, 'error');
+            console.warn('通过API点赞失败，尝试本地:', e.message);
+            // 优雅降级：尝试本地IndexedDB
+            try {
+                const item = await dbGet('shares', shareId);
+                if (item) {
+                    item.likes = (item.likes || 0) + 1;
+                    await dbPut('shares', item);
+                    document.getElementById('likeCount_' + shareId).textContent = item.likes;
+                    document.getElementById('likeBtn_' + shareId).classList.add('liked');
+                    showToast('已点赞（本地模式）', 'success');
+                    await renderStats();
+                }
+            } catch (e2) {
+                showToast('操作失败：' + e2.message, 'error');
+            }
         }
     }
 
@@ -3030,18 +3192,38 @@
         if (!content) { showToast('请填写倾诉内容', 'error'); return; }
 
         try {
-            await dbAdd('confessions', {
-                userId: currentUser.id, content, anonymous,
-                nickname: currentUser.nickname,
-                responses: [],
-                createdAt: new Date().toISOString()
+            const res = await fetch(API_BASE + '/confessions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: currentUser.id,
+                    nickname: currentUser.nickname,
+                    content: content,
+                    anonymous: anonymous
+                })
             });
+            if (!res.ok) throw new Error('API请求失败');
             showToast('倾诉发布成功', 'success');
             closeModal();
             await renderConfessions();
             await renderStats();
         } catch (e) {
-            showToast('发布失败：' + e.message, 'error');
+            console.warn('通过API发布倾诉失败，尝试本地:', e.message);
+            // 优雅降级：尝试本地IndexedDB
+            try {
+                await dbAdd('confessions', {
+                    userId: currentUser.id, content, anonymous,
+                    nickname: currentUser.nickname,
+                    responses: [],
+                    createdAt: new Date().toISOString()
+                });
+                showToast('倾诉发布成功（本地模式）', 'success');
+                closeModal();
+                await renderConfessions();
+                await renderStats();
+            } catch (e2) {
+                showToast('发布失败：' + e2.message, 'error');
+            }
         }
     }
 
@@ -3099,16 +3281,37 @@
         if (!title || !content) { showToast('请填写完整信息', 'error'); return; }
 
         try {
-            await dbAdd('shares', {
-                userId: currentUser.id, nickname: currentUser.nickname,
-                title, content, likes: 0,
-                createdAt: new Date().toISOString()
+            const res = await fetch(API_BASE + '/shares', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: currentUser.id,
+                    nickname: currentUser.nickname,
+                    title: title,
+                    content: content,
+                    likes: 0,
+                    createdAt: new Date().toISOString()
+                })
             });
+            if (!res.ok) throw new Error('API请求失败');
             showToast('分享发布成功', 'success');
             closeModal();
             await renderShares();
         } catch (e) {
-            showToast('发布失败：' + e.message, 'error');
+            console.warn('通过API发布分享失败，尝试本地:', e.message);
+            // 优雅降级：尝试本地IndexedDB
+            try {
+                await dbAdd('shares', {
+                    userId: currentUser.id, nickname: currentUser.nickname,
+                    title, content, likes: 0,
+                    createdAt: new Date().toISOString()
+                });
+                showToast('分享发布成功（本地模式）', 'success');
+                closeModal();
+                await renderShares();
+            } catch (e2) {
+                showToast('发布失败：' + e2.message, 'error');
+            }
         }
     }
 
