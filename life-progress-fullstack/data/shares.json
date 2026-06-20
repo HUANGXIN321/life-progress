@@ -1,0 +1,5 @@
+[
+  { "id": "1", "userId": "2", "nickname": "测试用户", "avatar": "T", "title": "我的30岁感悟", "content": "30岁了，回头看这十年，有欢笑有泪水。最重要的是学会了接受不完美的自己，也学会了珍惜身边的人。", "likes": 42, "comments": 8, "createdAt": "2026-06-14" },
+  { "id": "2", "userId": "1", "nickname": "Demo用户", "avatar": "D", "title": "坚持跑步1000天", "content": "从2023年开始每天跑步，到现在已经1000天了。身体变好了，心态也变得更积极了。坚持真的会有回报！", "likes": 128, "comments": 23, "createdAt": "2026-06-10" },
+  { "id": "3", "userId": "2", "nickname": "测试用户", "avatar": "T", "title": "一个人旅行的意义", "content": "上个月一个人去了云南，在大理的洱海边坐了一整个下午。有时候独处不是孤独，而是和自己对话的最好方式。", "likes": 89, "comments": 15, "createdAt": "2026-06-08" }
+]

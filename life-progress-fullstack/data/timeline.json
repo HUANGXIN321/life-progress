@@ -1,0 +1,7 @@
+[
+  { "id": "1", "userId": "1", "date": "2024-06", "title": "获得晋升", "desc": "从初级工程师晋升为高级工程师", "tags": ["achievement", "milestone"] },
+  { "id": "2", "userId": "1", "date": "2023-12", "title": "第一次马拉松", "desc": "完成人生第一个全程马拉松", "tags": ["achievement", "memory"] },
+  { "id": "3", "userId": "1", "date": "2022-08", "title": "买房安家", "desc": "在城市拥有了属于自己的小窝", "tags": ["milestone"] },
+  { "id": "4", "userId": "1", "date": "2020-07", "title": "毕业工作", "desc": "大学毕业，开启职业生涯", "tags": ["milestone"] },
+  { "id": "5", "userId": "1", "date": "2016-09", "title": "大学入学", "desc": "踏入大学校园，结识一生挚友", "tags": ["memory"] }
+]

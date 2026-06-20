@@ -1,0 +1,8 @@
+[
+  { "id": "1", "userId": "1", "title": "学习日语N2", "desc": "两年内达到N2水平", "progress": 35, "status": "active", "deadline": "2026-12" },
+  { "id": "2", "userId": "1", "title": "完成半程铁人三项", "desc": "游泳+自行车+跑步", "progress": 60, "status": "active", "deadline": "2025-09" },
+  { "id": "3", "userId": "1", "title": "出版技术博客集", "desc": "整理技术文章成册", "progress": 10, "status": "planned", "deadline": "2027-06" },
+  { "id": "4", "userId": "1", "title": "环游30个国家", "desc": "35岁前游历30国", "progress": 40, "status": "active", "deadline": "2031-12" },
+  { "id": "5", "userId": "1", "title": "建立被动收入", "desc": "投资理财实现财务自由", "progress": 15, "status": "planned", "deadline": "2030-12" },
+  { "id": "6", "userId": "1", "title": "读100本书", "desc": "五年内完成阅读挑战", "progress": 45, "status": "active", "deadline": "2028-12" }
+]

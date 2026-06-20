@@ -1,0 +1,4123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人生进度 - 记录每一步</title>
+    <meta name="description" content="人生进度 - 记录每一步，规划每一天。一个温暖的人生记录与规划应用。">
+    <meta property="og:title" content="人生进度 - 记录每一步">
+    <meta property="og:description" content="记录人生足迹、写日记、设定目标、倾诉心声、分享故事。">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="zh_CN">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ==================== 主题变量系统 ==================== */
+        :root {
+            --primary: #e07a5f;
+            --primary-light: #f4a261;
+            --primary-dark: #c45d42;
+            --accent: #81b29a;
+            --accent-light: #a8d5ba;
+            --bg: #fefae0;
+            --bg-warm: #fdf6e3;
+            --card-bg: #ffffff;
+            --card-bg-rgb: 255, 255, 255;
+            --text: #3d405b;
+            --text-light: #5a5d7a;
+            --text-muted: #8b8fa3;
+            --border: rgba(61, 64, 91, 0.1);
+            --border-light: rgba(61, 64, 91, 0.06);
+            --shadow: 0 8px 32px rgba(61, 64, 91, 0.08);
+            --shadow-hover: 0 16px 48px rgba(61, 64, 91, 0.12);
+            --danger: #e07a5f;
+            --success: #81b29a;
+            --info: #7a9ab8;
+            --warning: #d4a05a;
+            --radius: 20px;
+            --radius-sm: 14px;
+            --radius-xs: 10px;
+            --nav-height: 64px;
+            --font-serif: 'Noto Serif SC', serif;
+            --font-sans: 'Noto Sans SC', sans-serif;
+        }
+
+        [data-theme="twilight"] {
+            --primary: #6b8cae;
+            --primary-light: #8fb0cc;
+            --primary-dark: #4a6d8c;
+            --accent: #a0a8b8;
+            --accent-light: #c0c6d2;
+            --bg: #e8ecf1;
+            --bg-warm: #dfe4ea;
+            --card-bg: #f5f7fa;
+            --card-bg-rgb: 245, 247, 250;
+            --text: #2c3e50;
+            --text-light: #4a5568;
+            --text-muted: #718096;
+            --border: rgba(44, 62, 80, 0.1);
+            --border-light: rgba(44, 62, 80, 0.06);
+            --shadow: 0 8px 32px rgba(44, 62, 80, 0.08);
+            --shadow-hover: 0 16px 48px rgba(44, 62, 80, 0.12);
+            --danger: #c07070;
+            --success: #7a9a8a;
+            --info: #6b8cae;
+            --warning: #b8a070;
+        }
+
+        [data-theme="forest"] {
+            --primary: #5d7a5d;
+            --primary-light: #7a9a7a;
+            --primary-dark: #4a634a;
+            --accent: #a67c52;
+            --accent-light: #c49a70;
+            --bg: #f5f0e8;
+            --bg-warm: #ebe5da;
+            --card-bg: #faf8f3;
+            --card-bg-rgb: 250, 248, 243;
+            --text: #3a3a30;
+            --text-light: #55554a;
+            --text-muted: #7a7a6a;
+            --border: rgba(58, 58, 48, 0.1);
+            --border-light: rgba(58, 58, 48, 0.06);
+            --shadow: 0 8px 32px rgba(58, 58, 48, 0.08);
+            --shadow-hover: 0 16px 48px rgba(58, 58, 48, 0.12);
+            --danger: #a07060;
+            --success: #6a8a6a;
+            --info: #7a8a7a;
+            --warning: #a08050;
+        }
+
+        [data-theme="pink"] {
+            --primary: #d4849c;
+            --primary-light: #e8a4b8;
+            --primary-dark: #b86880;
+            --accent: #b8a8c8;
+            --accent-light: #d0c4dc;
+            --bg: #fdf6f8;
+            --bg-warm: #f8eef2;
+            --card-bg: #fffafc;
+            --card-bg-rgb: 255, 250, 252;
+            --text: #4a3a42;
+            --text-light: #66565e;
+            --text-muted: #8a7a82;
+            --border: rgba(74, 58, 66, 0.1);
+            --border-light: rgba(74, 58, 66, 0.06);
+            --shadow: 0 8px 32px rgba(74, 58, 66, 0.08);
+            --shadow-hover: 0 16px 48px rgba(74, 58, 66, 0.12);
+            --danger: #c07080;
+            --success: #8aaa8a;
+            --info: #a090b0;
+            --warning: #c0a070;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; opacity: 0.3; }
+
+        /* ==================== Skip Link ==================== */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary);
+            color: white;
+            padding: 8px 16px;
+            z-index: 10000;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 0 0 var(--radius-xs) 0;
+            transition: top 0.2s;
+        }
+        .skip-link:focus { top: 0; }
+
+        /* ==================== 焦点状态 ==================== */
+        :focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+        button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        /* ==================== 加载动画 ==================== */
+        .loader-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--bg);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        .loader-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .loader-logo {
+            width: 60px; height: 60px;
+        }
+        .loader-logo svg { width: 100%; height: 100%; }
+        .loader-logo path {
+            stroke: var(--primary);
+            stroke-width: 3;
+            fill: none;
+            stroke-dasharray: 300;
+            stroke-dashoffset: 300;
+            animation: drawLogo 1.5s ease forwards;
+        }
+        @keyframes drawLogo { to { stroke-dashoffset: 0; } }
+        .loader-text {
+            font-family: var(--font-serif);
+            font-size: 18px;
+            color: var(--text);
+            margin-top: 16px;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 0.8s both;
+        }
+
+        /* ==================== 自定义光标 ==================== */
+        .custom-cursor {
+            position: fixed;
+            width: 12px; height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99999;
+            transition: transform 0.15s ease-out, opacity 0.15s ease;
+            mix-blend-mode: difference;
+        }
+        .custom-cursor-follower {
+            position: fixed;
+            width: 32px; height: 32px;
+            border: 1.5px solid var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99998;
+            transition: transform 0.35s ease-out, opacity 0.35s ease;
+            opacity: 0.4;
+        }
+        @media (pointer: coarse) {
+            .custom-cursor, .custom-cursor-follower { display: none !important; }
+        }
+
+        /* ==================== 纸质纹理 ==================== */
+        .paper-texture {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.025;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* ==================== 导航栏 ==================== */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: var(--nav-height);
+            background: rgba(var(--card-bg-rgb), 0.75);
+            backdrop-filter: blur(20px) saturate(1.2);
+            -webkit-backdrop-filter: blur(20px) saturate(1.2);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .navbar.scrolled {
+            height: 52px;
+            box-shadow: var(--shadow);
+            background: rgba(var(--card-bg-rgb), 0.9);
+        }
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .nav-logo-icon {
+            width: 34px; height: 34px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            transform: rotate(-3deg);
+            transition: all 0.5s ease;
+        }
+        .nav-logo-text {
+            font-family: var(--font-serif);
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
+            transition: color 0.5s ease;
+        }
+        .nav-links {
+            display: flex;
+            gap: 4px;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 500;
+            padding: 7px 14px;
+            border-radius: var(--radius-xs);
+            transition: all 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: var(--text);
+            background: var(--border-light);
+        }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .theme-switcher-nav {
+            display: flex;
+            gap: 5px;
+            background: var(--bg-warm);
+            padding: 4px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+        .theme-btn-nav {
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .theme-btn-nav:hover { transform: scale(1.15); }
+        .theme-btn-nav.active { border-color: var(--text); transform: scale(1.1); }
+        .theme-btn-nav[data-theme="warm"] { background: linear-gradient(135deg, #e07a5f, #f4a261); }
+        .theme-btn-nav[data-theme="twilight"] { background: linear-gradient(135deg, #6b8cae, #a0a8b8); }
+        .theme-btn-nav[data-theme="forest"] { background: linear-gradient(135deg, #5d7a5d, #a67c52); }
+        .theme-btn-nav[data-theme="pink"] { background: linear-gradient(135deg, #d4849c, #b8a8c8); }
+        .user-avatar {
+            width: 34px; height: 34px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .user-avatar:hover { transform: scale(1.1); }
+        .user-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+            transition: color 0.5s ease;
+        }
+        .logout-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 5px 12px;
+            border-radius: var(--radius-xs);
+            font-size: 12px;
+            font-family: var(--font-sans);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .logout-btn:hover {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+
+        /* ==================== Hero区域重构 ==================== */
+        .hero {
+            position: relative;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            padding: calc(var(--nav-height) + 40px) 24px 60px;
+            overflow: hidden;
+        }
+        .hero-bg-gradient {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 0;
+            background: linear-gradient(135deg, var(--bg), var(--bg-warm), var(--bg));
+            background-size: 400% 400%;
+            animation: heroGradientShift 15s ease infinite;
+        }
+        @keyframes heroGradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .hero-particles-canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        .hero-left {
+            flex: 0 0 55%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero-right {
+            flex: 0 0 40%;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .life-ring-canvas {
+            width: 380px;
+            height: 380px;
+        }
+        .hero-greeting {
+            font-size: 15px;
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 4px;
+            animation: fadeInUp 0.6s ease both;
+        }
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: 36px;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 8px;
+            animation: fadeInUp 0.6s ease 0.1s both;
+            color: var(--text);
+            transition: color 0.5s ease;
+        }
+        .hero-title span {
+            color: var(--primary);
+            transition: color 0.5s ease;
+        }
+        .hero-subtitle {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            animation: fadeInUp 0.6s ease 0.2s both;
+            transition: color 0.5s ease;
+        }
+        .hero-bio {
+            font-size: 14px;
+            color: var(--text-light);
+            font-style: italic;
+            padding: 12px 24px;
+            background: var(--card-bg);
+            border-radius: var(--radius-sm);
+            display: inline-block;
+            border: 1px solid var(--border);
+            animation: fadeInUp 0.6s ease 0.25s both;
+            transition: all 0.5s ease;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.6s ease 0.3s both;
+        }
+        .hero-stats-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            animation: fadeInUp 0.6s ease 0.35s both;
+        }
+        .hero-stat-mini {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .hero-stat-mini:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        .hero-stat-mini .num {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+            font-variant-numeric: tabular-nums;
+            line-height: 1.2;
+        }
+        .hero-stat-mini .lbl {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .btn-primary {
+            padding: 12px 28px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-sans);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(224, 122, 95, 0.35);
+            background: var(--primary-dark);
+        }
+        .btn-outline {
+            padding: 12px 28px;
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-sans);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.35s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-outline:hover {
+            background: var(--card-bg);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* 涟漪按钮 */
+        .ripple-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple-btn .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+            transform: scale(0);
+            animation: rippleAnim 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes rippleAnim {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        /* ==================== 通用Section ==================== */
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 70px 24px;
+            position: relative;
+            z-index: 2;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .section-header h2 {
+            font-family: var(--font-serif);
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text);
+            transition: color 0.5s ease;
+        }
+        .section-header h2 i {
+            margin-right: 10px;
+            color: var(--primary);
+            transition: color 0.5s ease;
+        }
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 14px;
+            transition: color 0.5s ease;
+        }
+
+        /* ==================== 进度总览 ==================== */
+        .progress-overview { margin-bottom: 20px; }
+        .life-progress-bar {
+            background: var(--bg-warm);
+            border-radius: 20px;
+            height: 28px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 10px;
+            border: 1px solid var(--border);
+        }
+        .life-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 20px;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 12px;
+        }
+        .life-progress-fill span {
+            font-size: 11px;
+            font-weight: 700;
+            color: white;
+        }
+        .life-progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+            transition: color 0.5s ease;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+            margin-top: 28px;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px 16px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card:nth-child(1) { animation-delay: 0.05s; }
+        .stat-card:nth-child(2) { animation-delay: 0.1s; }
+        .stat-card:nth-child(3) { animation-delay: 0.15s; }
+        .stat-card:nth-child(4) { animation-delay: 0.2s; }
+        .stat-card:nth-child(5) { animation-delay: 0.25s; }
+        .stat-card:nth-child(6) { animation-delay: 0.3s; }
+        .stat-card:hover {
+            transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-6px);
+            box-shadow: var(--shadow-hover);
+        }
+        .stat-icon {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        .stat-card:nth-child(1) .stat-icon { background: rgba(224, 122, 95, 0.12); color: var(--primary); }
+        .stat-card:nth-child(2) .stat-icon { background: rgba(129, 178, 154, 0.12); color: var(--accent); }
+        .stat-card:nth-child(3) .stat-icon { background: rgba(212, 160, 90, 0.12); color: var(--warning); }
+        .stat-card:nth-child(4) .stat-icon { background: rgba(122, 154, 184, 0.12); color: var(--info); }
+        .stat-card:nth-child(5) .stat-icon { background: rgba(180, 140, 180, 0.12); color: var(--primary-light); }
+        .stat-card:nth-child(6) .stat-icon { background: rgba(140, 170, 140, 0.12); color: var(--accent); }
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 3px;
+            color: var(--text);
+            transition: color 0.5s ease;
+            font-variant-numeric: tabular-nums;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            transition: color 0.5s ease;
+        }
+
+        /* 用户资料卡片 */
+        .profile-mini {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            transition: all 0.5s ease;
+        }
+        .profile-mini-avatar {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+            transition: all 0.5s ease;
+        }
+        .profile-mini-info h3 {
+            font-family: var(--font-serif);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+            transition: color 0.5s ease;
+        }
+        .profile-mini-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+            transition: color 0.5s ease;
+        }
+        .profile-mini-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+        .profile-mini-tag {
+            font-size: 11px;
+            padding: 2px 8px;
+            background: var(--bg-warm);
+            border-radius: 10px;
+            color: var(--text-light);
+            border: 1px solid var(--border);
+        }
+        .profile-mini-actions {
+            margin-left: auto;
+        }
+        .profile-mini-btn {
+            padding: 8px 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-xs);
+            font-size: 12px;
+            font-family: var(--font-sans);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .profile-mini-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        /* ==================== 时间轴（手账风格） ==================== */
+        .timeline-container {
+            position: relative;
+            padding: 20px 0;
+        }
+        .timeline-line {
+            position: absolute;
+            left: 24px;
+            top: 0; bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+            transition: background 0.5s ease;
+        }
+        .timeline-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 28px;
+            position: relative;
+            padding-left: 56px;
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .timeline-dot {
+            position: absolute;
+            left: 16px;
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            border: 3px solid var(--bg);
+            z-index: 2;
+            transition: all 0.5s ease;
+        }
+        .timeline-dot.tag-achievement { background: var(--success); }
+        .timeline-dot.tag-milestone { background: var(--info); }
+        .timeline-dot.tag-memory { background: var(--primary-light); }
+        .timeline-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 18px 20px;
+            flex: 1;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+        }
+        .timeline-card:hover {
+            transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        .timeline-card::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 16px;
+            width: 0; height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-right: 8px solid var(--card-bg);
+        }
+        .timeline-card::after {
+            content: '';
+            position: absolute;
+            left: -9px;
+            top: 16px;
+            width: 0; height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-right: 8px solid var(--border);
+            z-index: -1;
+        }
+        .timeline-date {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            transition: color 0.5s ease;
+        }
+        .timeline-title {
+            font-family: var(--font-serif);
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text);
+            transition: color 0.5s ease;
+        }
+        .timeline-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            transition: color 0.5s ease;
+        }
+        .timeline-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+        .timeline-tag.tag-achievement { background: rgba(129, 178, 154, 0.12); color: var(--accent); }
+        .timeline-tag.tag-milestone { background: rgba(122, 154, 184, 0.12); color: var(--info); }
+        .timeline-tag.tag-memory { background: rgba(244, 162, 97, 0.12); color: var(--primary-light); }
+
+        /* ==================== 目标卡片（圆形进度） ==================== */
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 18px;
+        }
+        .goal-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .goal-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .goal-card:hover {
+            transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 14px;
+        }
+        .goal-title {
+            font-family: var(--font-serif);
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            transition: color 0.5s ease;
+        }
+        .goal-status {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .goal-status.in-progress { background: rgba(122, 154, 184, 0.12); color: var(--info); }
+        .goal-status.completed { background: rgba(129, 178, 154, 0.12); color: var(--accent); }
+        .goal-status.paused { background: rgba(212, 160, 90, 0.12); color: var(--warning); }
+        .goal-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            line-height: 1.6;
+            transition: color 0.5s ease;
+        }
+        .goal-progress-wrap {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+        .goal-circle-progress {
+            position: relative;
+            width: 56px; height: 56px;
+            flex-shrink: 0;
+        }
+        .goal-circle-progress svg {
+            transform: rotate(-90deg);
+        }
+        .goal-circle-bg {
+            fill: none;
+            stroke: var(--bg-warm);
+            stroke-width: 5;
+        }
+        .goal-circle-fill {
+            fill: none;
+            stroke-width: 5;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .goal-circle-text {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text);
+        }
+        .goal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            transition: color 0.5s ease;
+        }
+        .goal-update-btn {
+            padding: 4px 12px;
+            background: var(--primary);
+            border: none;
+            color: white;
+            border-radius: var(--radius-xs);
+            font-size: 11px;
+            font-family: var(--font-sans);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .goal-update-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        /* ==================== 日记卡片（拍立得风格） ==================== */
+        .diaries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        .diary-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 4px 4px var(--radius-sm) var(--radius-sm);
+            padding: 16px 16px 20px;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+            box-shadow: var(--shadow);
+            transform: rotate(-1deg);
+            opacity: 0;
+        }
+        .diary-card.visible {
+            opacity: 1;
+        }
+        .diary-card:nth-child(even) { transform: rotate(1deg); }
+        .diary-card:hover {
+            transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) rotate(0deg) translateY(-6px) scale(1.02);
+            box-shadow: var(--shadow-hover);
+            z-index: 5;
+        }
+        .diary-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: var(--primary);
+            opacity: 0.3;
+        }
+        .diary-demo-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 10px;
+            color: var(--text-muted);
+            opacity: 0.5;
+            background: var(--bg-warm);
+            padding: 2px 8px;
+            border-radius: 10px;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .diary-media {
+            width: 100%;
+            border-radius: var(--radius-xs);
+            margin-bottom: 12px;
+            overflow: hidden;
+            background: var(--bg-warm);
+        }
+        .diary-media img {
+            width: 100%;
+            display: block;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .diary-media img:hover { transform: scale(1.03); }
+        .diary-media video, .diary-media audio {
+            width: 100%;
+            display: block;
+        }
+        .diary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .diary-mood {
+            font-size: 22px;
+        }
+        .diary-date {
+            font-size: 11px;
+            color: var(--text-muted);
+            transition: color 0.5s ease;
+        }
+        .diary-title {
+            font-family: var(--font-serif);
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text);
+            transition: color 0.5s ease;
+        }
+        .diary-content {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.7;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: color 0.5s ease;
+        }
+        .diary-delete-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: rgba(224, 122, 95, 0.1);
+            border: 1px solid rgba(224, 122, 95, 0.2);
+            color: var(--danger);
+            font-size: 11px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+        .diary-card:hover .diary-delete-btn { opacity: 1; }
+        .diary-delete-btn:hover {
+            background: rgba(224, 122, 95, 0.25);
+        }
+
+        /* ==================== 倾诉卡片（信封风格） ==================== */
+        .confessions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+        }
+        .confession-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            overflow: hidden;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .confession-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .confession-card:hover {
+            transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+        .confession-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+        .confession-demo-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 10px;
+            color: var(--text-muted);
+            opacity: 0.5;
+            background: var(--bg-warm);
+            padding: 2px 8px;
+            border-radius: 10px;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .confession-top {
+            padding: 20px 22px 16px;
+            background: linear-gradient(135deg, var(--bg-warm), var(--card-bg));
+        }
+        .confession-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 0;
+        }
+        .confession-avatar {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .confession-author {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            transition: color 0.5s ease;
+        }
+        .confession-anon-tag {
+            padding: 2px 8px;
+            background: var(--bg-warm);
+            border-radius: 20px;
+            font-size: 10px;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+        .confession-content {
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.7;
+            padding: 0 22px 16px;
+            transition: color 0.5s ease;
+        }
+        .confession-responses {
+            margin: 0 22px 16px;
+            padding-top: 12px;
+            border-top: 1px dashed var(--border);
+        }
+        .confession-responses h4 {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 500;
+            transition: color 0.5s ease;
+        }
+        .response-item {
+            padding: 8px 12px;
+            background: var(--bg-warm);
+            border-radius: var(--radius-xs);
+            margin-bottom: 6px;
+            font-size: 12px;
+            border: 1px solid var(--border);
+        }
+        .response-item .response-author {
+            font-weight: 600;
+            color: var(--primary);
+            margin-right: 6px;
+            transition: color 0.5s ease;
+        }
+        .response-input-row {
+            display: flex;
+            gap: 8px;
+            margin: 0 22px 20px;
+        }
+        .response-input-row input {
+            flex: 1;
+            padding: 8px 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xs);
+            color: var(--text);
+            font-family: var(--font-sans);
+            font-size: 13px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .response-input-row input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--border-focus);
+        }
+        .response-send-btn {
+            padding: 8px 14px;
+            background: var(--primary);
+            border: none;
+            border-radius: var(--radius-xs);
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: var(--font-sans);
+        }
+        .response-send-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ==================== 分享卡片（杂志剪报风格） ==================== */
+        .shares-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .share-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .share-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .share-card:hover {
+            transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-4px) rotate(-0.5deg);
+            box-shadow: var(--shadow-hover);
+        }
+        .share-card::after {
+            content: '';
+            position: absolute;
+            top: -20px; right: -20px;
+            width: 60px; height: 60px;
+            background: var(--primary);
+            opacity: 0.08;
+            border-radius: 50%;
+        }
+        .share-demo-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 10px;
+            color: var(--text-muted);
+            opacity: 0.5;
+            background: var(--bg-warm);
+            padding: 2px 8px;
+            border-radius: 10px;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .share-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .share-avatar {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .share-author-info { flex: 1; }
+        .share-author-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            transition: color 0.5s ease;
+        }
+        .share-date {
+            font-size: 11px;
+            color: var(--text-muted);
+            transition: color 0.5s ease;
+        }
+        .share-title {
+            font-family: var(--font-serif);
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
+            transition: color 0.5s ease;
+        }
+        .share-content {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 14px;
+            transition: color 0.5s ease;
+        }
+        .share-actions {
+            display: flex;
+            gap: 14px;
+        }
+        .like-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text-muted);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: var(--font-sans);
+        }
+        .like-btn:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+        .like-btn.liked {
+            background: rgba(224, 122, 95, 0.1);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        /* ==================== FAB浮动按钮 ==================== */
+        .fab-container {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            z-index: 90;
+        }
+        .fab-main {
+            width: 52px; height: 52px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(224, 122, 95, 0.4);
+            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+        .fab-main:hover { transform: scale(1.1); }
+        .fab-main.active { transform: rotate(45deg); }
+        .fab-sub-list {
+            position: absolute;
+            bottom: 64px;
+            right: 0;
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 10px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        .fab-sub-list.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .fab-sub {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        .fab-sub-label {
+            background: var(--card-bg);
+            padding: 5px 12px;
+            border-radius: var(--radius-xs);
+            font-size: 12px;
+            white-space: nowrap;
+            border: 1px solid var(--border);
+            color: var(--text);
+            box-shadow: var(--shadow);
+        }
+        .fab-sub-btn {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        }
+        .fab-sub-btn:hover { transform: scale(1.15); }
+        .fab-sub-btn:nth-child(2) { background: var(--info); }
+        .fab-sub-btn:nth-child(4) { background: var(--primary-light); }
+        .fab-sub-btn:nth-child(6) { background: var(--accent); }
+        .fab-sub-btn:nth-child(8) { background: var(--warning); }
+        .fab-sub-btn:nth-child(10) { background: var(--primary); }
+
+        /* ==================== 模态框 ==================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(6px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            width: 100%;
+            max-width: 520px;
+            max-height: 85vh;
+            overflow-y: auto;
+            transform: scale(0.92) translateY(20px);
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .modal-overlay.show .modal-card {
+            transform: scale(1) translateY(0);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .modal-header h3 {
+            font-family: var(--font-serif);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            transition: color 0.5s ease;
+        }
+        .modal-close {
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            background: var(--bg-warm);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .modal-close:hover {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+        .modal-form .form-group {
+            margin-bottom: 16px;
+        }
+        .modal-form label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-light);
+            margin-bottom: 6px;
+            transition: color 0.5s ease;
+        }
+        .modal-form input,
+        .modal-form textarea,
+        .modal-form select {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xs);
+            color: var(--text);
+            font-family: var(--font-sans);
+            font-size: 13px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .modal-form textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+        .modal-form input:focus,
+        .modal-form textarea:focus,
+        .modal-form select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--border-focus);
+            background: var(--card-bg);
+        }
+        .modal-form select option {
+            background: var(--card-bg);
+            color: var(--text);
+        }
+        .modal-form .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .modal-form .checkbox-group input[type="checkbox"] {
+            width: 16px; height: 16px;
+            accent-color: var(--primary);
+        }
+        .modal-submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            border: none;
+            border-radius: var(--radius-sm);
+            color: white;
+            font-family: var(--font-sans);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.35s ease;
+            margin-top: 6px;
+            letter-spacing: 0.5px;
+        }
+        .modal-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(224, 122, 95, 0.35);
+            background: var(--primary-dark);
+        }
+
+        /* ==================== 资料设置页 ==================== */
+        .profile-setup-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg);
+            z-index: 500;
+            overflow-y: auto;
+            display: none;
+        }
+        .profile-setup-overlay.show { display: block; }
+        .profile-setup-inner {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 60px 24px 40px;
+        }
+        .profile-setup-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .profile-setup-header h2 {
+            font-family: var(--font-serif);
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+        .profile-setup-header p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        .avatar-selector {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .avatar-option {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            background: var(--bg-warm);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .avatar-option:hover { transform: scale(1.08); }
+        .avatar-option.selected {
+            border-color: var(--primary);
+            background: rgba(224, 122, 95, 0.08);
+            box-shadow: 0 0 0 3px var(--border-focus);
+        }
+        .hobby-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .hobby-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: var(--bg-warm);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--text-light);
+        }
+        .hobby-tag button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 12px;
+            padding: 0;
+            margin-left: 2px;
+        }
+        .hobby-tag button:hover { color: var(--danger); }
+        .hobby-input-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 6px;
+        }
+        .hobby-input-row input {
+            flex: 1;
+        }
+        .hobby-input-row button {
+            padding: 8px 14px;
+            background: var(--primary);
+            border: none;
+            border-radius: var(--radius-xs);
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: var(--font-sans);
+        }
+        .profile-setup-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        .profile-setup-actions .btn-primary,
+        .profile-setup-actions .btn-outline {
+            flex: 1;
+            justify-content: center;
+        }
+
+        /* ==================== 图片放大预览 ==================== */
+        .image-preview-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .image-preview-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .image-preview-overlay img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: var(--radius-xs);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .image-preview-close {
+            position: absolute;
+            top: 20px; right: 20px;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ==================== Toast ==================== */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 24px;
+            z-index: 300;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .toast-item {
+            padding: 12px 20px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-hover);
+            animation: toastIn 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-sans);
+        }
+        .toast-item.success {
+            background: rgba(129, 178, 154, 0.15);
+            border: 1px solid rgba(129, 178, 154, 0.3);
+            color: #5a8a6e;
+        }
+        .toast-item.error {
+            background: rgba(224, 122, 95, 0.15);
+            border: 1px solid rgba(224, 122, 95, 0.3);
+            color: #b85a42;
+        }
+        .toast-item.info {
+            background: rgba(107, 140, 174, 0.15);
+            border: 1px solid rgba(107, 140, 174, 0.3);
+            color: #4a6d8c;
+        }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* ==================== 页脚 ==================== */
+        .footer {
+            text-align: center;
+            padding: 36px 24px;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 12px;
+            position: relative;
+            z-index: 2;
+            transition: all 0.5s ease;
+        }
+        .footer span { margin: 0 8px; }
+        .footer-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .footer-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 6px 14px;
+            border-radius: var(--radius-xs);
+            font-size: 12px;
+            font-family: var(--font-sans);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .footer-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--card-bg);
+        }
+
+        /* ==================== 动画 ==================== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==================== 空状态 ==================== */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+            transition: color 0.5s ease;
+            grid-column: 1 / -1;
+        }
+        .empty-state .empty-icon-wrap {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            position: relative;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--bg-warm), var(--card-bg));
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: emptyFloat 3s ease-in-out infinite;
+        }
+        .empty-state .empty-icon-wrap i {
+            font-size: 36px;
+            color: var(--primary);
+            opacity: 0.6;
+        }
+        .empty-state .empty-icon-wrap::after {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 2px dashed var(--border);
+            animation: emptySpin 20s linear infinite;
+        }
+        .empty-state .empty-title {
+            font-family: var(--font-serif);
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+        .empty-state .empty-desc {
+            font-size: 14px;
+            opacity: 0.7;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .empty-state .empty-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border-radius: 50px;
+            border: 2px dashed var(--primary);
+            background: transparent;
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: var(--font-sans);
+        }
+        .empty-state .empty-action-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-style: solid;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        @keyframes emptyFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        @keyframes emptySpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        /* 空状态装饰粒子 */
+        .empty-particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .empty-particles span {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0.15;
+            animation: emptyParticleFloat 4s ease-in-out infinite;
+        }
+        .empty-particles span:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+        .empty-particles span:nth-child(2) { left: 80%; top: 15%; animation-delay: 0.8s; width: 8px; height: 8px; }
+        .empty-particles span:nth-child(3) { left: 25%; top: 70%; animation-delay: 1.6s; }
+        .empty-particles span:nth-child(4) { left: 70%; top: 65%; animation-delay: 2.4s; width: 4px; height: 4px; }
+        .empty-particles span:nth-child(5) { left: 50%; top: 40%; animation-delay: 3.2s; width: 5px; height: 5px; }
+        @keyframes emptyParticleFloat {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.15; }
+            50% { transform: translateY(-15px) scale(1.3); opacity: 0.3; }
+        }
+
+        /* ==================== 关于作品弹窗 ==================== */
+        .about-section {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 400;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .about-section.show { display: flex; }
+        .about-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            max-width: 520px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .about-card h3 {
+            font-family: var(--font-serif);
+            font-size: 20px;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+        .about-card p {
+            font-size: 14px;
+            color: var(--text-light);
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+        .about-card .about-close {
+            margin-top: 16px;
+            width: 100%;
+        }
+
+        /* ==================== prefers-reduced-motion ==================== */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .hero-bg-gradient { animation: none; }
+            .empty-particles span { animation: none; }
+            .timeline-item, .goal-card, .diary-card, .confession-card, .share-card {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+
+        /* ==================== 响应式 ==================== */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero-inner { flex-direction: column; }
+            .hero-left, .hero-right { flex: 0 0 100%; }
+            .life-ring-canvas { width: 280px; height: 280px; }
+            .hero-title { font-size: 28px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .goals-grid, .diaries-grid, .shares-grid, .confessions-grid {
+                grid-template-columns: 1fr;
+            }
+            .profile-mini {
+                flex-direction: column;
+                text-align: center;
+            }
+            .profile-mini-actions { margin-left: 0; margin-top: 12px; }
+            .avatar-selector { grid-template-columns: repeat(4, 1fr); }
+            .hero-stats-row { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 480px) {
+            .section { padding: 50px 16px; }
+            .hero { min-height: auto; padding-top: calc(var(--nav-height) + 20px); }
+            .hero-title { font-size: 24px; }
+            .life-ring-canvas { width: 240px; height: 240px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .stat-card { padding: 16px 10px; }
+            .stat-number { font-size: 22px; }
+            .fab-container { bottom: 20px; right: 20px; }
+            .modal-card { padding: 20px 16px; }
+            .avatar-selector { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+            .avatar-option { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">跳转到主要内容</a>
+
+    <!-- 加载动画 -->
+    <div class="loader-overlay" id="loaderOverlay" aria-hidden="true">
+        <div class="loader-logo">
+            <svg viewBox="0 0 60 60" aria-hidden="true">
+                <path d="M30 5 C15 5, 5 18, 5 30 C5 45, 18 55, 30 55 C42 55, 55 45, 55 30 C55 18, 45 5, 30 5 Z M30 15 C22 15, 15 22, 15 30 C15 38, 22 45, 30 45 C38 45, 45 38, 45 30 C45 22, 38 15, 30 15 Z M30 22 C26 22, 22 26, 22 30 C22 34, 26 38, 30 38 C34 38, 38 34, 38 30 C38 26, 34 22, 30 22 Z"/>
+            </svg>
+        </div>
+        <div class="loader-text">人生进度</div>
+    </div>
+
+    <!-- 自定义光标 -->
+    <div class="custom-cursor" id="cursor" aria-hidden="true"></div>
+    <div class="custom-cursor-follower" id="cursorFollower" aria-hidden="true"></div>
+
+    <!-- 纸质纹理 -->
+    <div class="paper-texture" aria-hidden="true"></div>
+
+    <!-- ==================== 导航栏 ==================== -->
+    <nav class="navbar" id="navbar" role="navigation" aria-label="主导航">
+        <div class="nav-inner">
+            <a href="#" class="nav-logo" aria-label="人生进度首页">
+                <div class="nav-logo-icon" aria-hidden="true"><i class="fas fa-seedling"></i></div>
+                <span class="nav-logo-text">人生进度</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#overview"><i class="fas fa-chart-pie" aria-hidden="true"></i> 总览</a></li>
+                <li><a href="#timeline"><i class="fas fa-clock-rotate-left" aria-hidden="true"></i> 回顾</a></li>
+                <li><a href="#goals"><i class="fas fa-bullseye" aria-hidden="true"></i> 规划</a></li>
+                <li><a href="#diaries"><i class="fas fa-book" aria-hidden="true"></i> 日记</a></li>
+                <li><a href="#confessions"><i class="fas fa-comments" aria-hidden="true"></i> 倾诉</a></li>
+                <li><a href="#shares"><i class="fas fa-share-nodes" aria-hidden="true"></i> 分享</a></li>
+            </ul>
+            <div class="nav-right">
+                <div class="theme-switcher-nav" role="group" aria-label="主题切换">
+                    <button class="theme-btn-nav active" data-theme="warm" title="暖橙" aria-label="切换到暖橙主题" onclick="switchTheme('warm')"></button>
+                    <button class="theme-btn-nav" data-theme="twilight" title="暮蓝" aria-label="切换到暮蓝主题" onclick="switchTheme('twilight')"></button>
+                    <button class="theme-btn-nav" data-theme="forest" title="森绿" aria-label="切换到森绿主题" onclick="switchTheme('forest')"></button>
+                    <button class="theme-btn-nav" data-theme="pink" title="粉黛" aria-label="切换到粉黛主题" onclick="switchTheme('pink')"></button>
+                </div>
+                <div class="user-avatar" id="navAvatar" onclick="openProfileSetup()" title="编辑资料" role="button" tabindex="0" aria-label="编辑用户资料">U</div>
+                <span class="user-name" id="navNickname">用户</span>
+                <button class="logout-btn" onclick="handleLogout()" aria-label="退出登录"><i class="fas fa-right-from-bracket" aria-hidden="true"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== 英雄区域 ==================== -->
+    <section class="hero" id="hero" aria-label="欢迎区域">
+        <div class="hero-bg-gradient" aria-hidden="true"></div>
+        <canvas class="hero-particles-canvas" id="heroParticles" aria-hidden="true"></canvas>
+        <div class="hero-inner">
+            <div class="hero-left">
+                <canvas class="life-ring-canvas" id="lifeRingCanvas" aria-hidden="true"></canvas>
+            </div>
+            <div class="hero-right">
+                <div class="hero-greeting"><i class="fas fa-sparkles" aria-hidden="true"></i> 欢迎回来</div>
+                <h1 class="hero-title">你好，<span id="heroNickname">用户</span>！</h1>
+                <p class="hero-subtitle">每一个计划都是蓝图，每一个脚印都是记号</p>
+                <p class="hero-bio" id="heroBio" style="display:none"></p>
+                <div class="hero-buttons">
+                    <a href="#diaries" class="btn-primary ripple-btn" onclick="createRipple(event, this)"><i class="fas fa-pen-fancy" aria-hidden="true"></i> 开始记录</a>
+                    <a href="#timeline" class="btn-outline"><i class="fas fa-clock-rotate-left" aria-hidden="true"></i> 回顾过往</a>
+                </div>
+                <div class="hero-stats-row">
+                    <div class="hero-stat-mini">
+                        <div class="num" id="heroStatDays">0</div>
+                        <div class="lbl">已度过天数</div>
+                    </div>
+                    <div class="hero-stat-mini">
+                        <div class="num" id="heroStatGoals">0</div>
+                        <div class="lbl">目标数量</div>
+                    </div>
+                    <div class="hero-stat-mini">
+                        <div class="num" id="heroStatDiaries">0</div>
+                        <div class="lbl">日记篇数</div>
+                    </div>
+                    <div class="hero-stat-mini">
+                        <div class="num" id="heroStatTimeline">0</div>
+                        <div class="lbl">人生足迹</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main id="main-content">
+        <!-- ==================== 人生进度总览 ==================== -->
+        <section class="section" id="overview">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-pie" aria-hidden="true"></i> 人生进度总览</h2>
+                <p>你的生命旅程，每一步都算数</p>
+            </div>
+            <div class="profile-mini" id="profileMini" style="display:none">
+                <div class="profile-mini-avatar" id="profileMiniAvatar"></div>
+                <div class="profile-mini-info">
+                    <h3 id="profileMiniName">用户</h3>
+                    <p id="profileMiniDetail">完善资料，让人生进度更精准</p>
+                    <div class="profile-mini-tags" id="profileMiniTags"></div>
+                </div>
+                <div class="profile-mini-actions">
+                    <button class="profile-mini-btn" onclick="openProfileSetup()"><i class="fas fa-pen" aria-hidden="true"></i> 编辑资料</button>
+                </div>
+            </div>
+            <div class="progress-overview">
+                <div class="life-progress-bar">
+                    <div class="life-progress-fill" id="lifeProgressFill" style="width: 0%">
+                        <span id="lifeProgressText">0%</span>
+                    </div>
+                </div>
+                <div class="life-progress-label">
+                    <span>出生</span>
+                    <span id="lifeProgressAge">28岁 / 80岁</span>
+                    <span>100岁</span>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" aria-hidden="true"><i class="fas fa-book"></i></div>
+                    <div class="stat-number" id="statDiaries">0</div>
+                    <div class="stat-label">日记篇数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" aria-hidden="true"><i class="fas fa-comments"></i></div>
+                    <div class="stat-number" id="statConfessions">0</div>
+                    <div class="stat-label">倾诉次数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" aria-hidden="true"><i class="fas fa-bullseye"></i></div>
+                    <div class="stat-number" id="statGoals">0</div>
+                    <div class="stat-label">目标数量</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" aria-hidden="true"><i class="fas fa-share-nodes"></i></div>
+                    <div class="stat-number" id="statShares">0</div>
+                    <div class="stat-label">分享次数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" aria-hidden="true"><i class="fas fa-clock-rotate-left"></i></div>
+                    <div class="stat-number" id="statTimeline">0</div>
+                    <div class="stat-label">人生足迹</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" aria-hidden="true"><i class="fas fa-heart"></i></div>
+                    <div class="stat-number" id="statLikes">0</div>
+                    <div class="stat-label">获赞总数</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 人生足迹（时间轴） ==================== -->
+        <section class="section" id="timeline">
+            <div class="section-header">
+                <h2><i class="fas fa-clock-rotate-left" aria-hidden="true"></i> 人生足迹</h2>
+                <p>那些闪闪发光的时刻</p>
+            </div>
+            <div class="timeline-container" id="timelineContainer">
+                <div class="timeline-line" aria-hidden="true"></div>
+            </div>
+        </section>
+
+        <!-- ==================== 未来蓝图（目标） ==================== -->
+        <section class="section" id="goals">
+            <div class="section-header">
+                <h2><i class="fas fa-bullseye" aria-hidden="true"></i> 未来蓝图</h2>
+                <p>每一个目标都值得被认真对待</p>
+            </div>
+            <div class="goals-grid" id="goalsGrid"></div>
+        </section>
+
+        <!-- ==================== 人生日记 ==================== -->
+        <section class="section" id="diaries">
+            <div class="section-header">
+                <h2><i class="fas fa-book" aria-hidden="true"></i> 人生日记</h2>
+                <p>用文字记录生活的温度</p>
+            </div>
+            <div class="diaries-grid" id="diariesGrid"></div>
+        </section>
+
+        <!-- ==================== 人生倾诉 ==================== -->
+        <section class="section" id="confessions">
+            <div class="section-header">
+                <h2><i class="fas fa-comments" aria-hidden="true"></i> 人生倾诉</h2>
+                <p>说出心里话，温暖你我他</p>
+            </div>
+            <div class="confessions-grid" id="confessionsGrid"></div>
+        </section>
+
+        <!-- ==================== 社区精选 ==================== -->
+        <section class="section" id="shares">
+            <div class="section-header">
+                <h2><i class="fas fa-share-nodes" aria-hidden="true"></i> 社区精选</h2>
+                <p>分享你的故事，照亮别人的路</p>
+            </div>
+            <div class="shares-grid" id="sharesGrid"></div>
+        </section>
+    </main>
+
+    <!-- ==================== FAB浮动按钮 ==================== -->
+    <div class="fab-container">
+        <div class="fab-sub-list" id="fabSubList">
+            <div class="fab-sub">
+                <span class="fab-sub-label">写日记</span>
+                <button class="fab-sub-btn" onclick="openModal('diary')" aria-label="写日记"><i class="fas fa-pen-fancy" aria-hidden="true"></i></button>
+            </div>
+            <div class="fab-sub">
+                <span class="fab-sub-label">发倾诉</span>
+                <button class="fab-sub-btn" onclick="openModal('confession')" aria-label="发倾诉"><i class="fas fa-comment-dots" aria-hidden="true"></i></button>
+            </div>
+            <div class="fab-sub">
+                <span class="fab-sub-label">加事件</span>
+                <button class="fab-sub-btn" onclick="openModal('timeline')" aria-label="添加人生事件"><i class="fas fa-plus" aria-hidden="true"></i></button>
+            </div>
+            <div class="fab-sub">
+                <span class="fab-sub-label">加目标</span>
+                <button class="fab-sub-btn" onclick="openModal('goal')" aria-label="添加目标"><i class="fas fa-bullseye" aria-hidden="true"></i></button>
+            </div>
+            <div class="fab-sub">
+                <span class="fab-sub-label">发分享</span>
+                <button class="fab-sub-btn" onclick="openModal('share')" aria-label="发布分享"><i class="fas fa-share" aria-hidden="true"></i></button>
+            </div>
+        </div>
+        <button class="fab-main" id="fabMain" onclick="toggleFab()" aria-label="打开快捷菜单" aria-expanded="false">
+            <i class="fas fa-plus" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <!-- ==================== 模态框 ==================== -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-card" id="modalCard" role="document">
+            <div class="modal-header">
+                <h3 id="modalTitle">标题</h3>
+                <button class="modal-close" onclick="closeModal()" aria-label="关闭模态框"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+            </div>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- ==================== 图片预览 ==================== -->
+    <div class="image-preview-overlay" id="imagePreviewOverlay" onclick="closeImagePreview()" role="dialog" aria-modal="true" aria-label="图片预览">
+        <button class="image-preview-close" onclick="closeImagePreview()" aria-label="关闭预览"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+        <img id="imagePreviewImg" src="" alt="预览图片">
+    </div>
+
+    <!-- ==================== 资料设置页 ==================== -->
+    <div class="profile-setup-overlay" id="profileSetupOverlay" role="dialog" aria-modal="true" aria-labelledby="profileSetupTitle">
+        <div class="profile-setup-inner">
+            <div class="profile-setup-header">
+                <h2 id="profileSetupTitle"><i class="fas fa-user-circle" aria-hidden="true"></i> 完善你的资料</h2>
+                <p>让我们更了解你，为你提供更精准的人生进度追踪</p>
+            </div>
+            <form class="modal-form" onsubmit="saveProfile(event)">
+                <div class="form-group">
+                    <label>选择头像</label>
+                    <div class="avatar-selector" id="avatarSelector">
+                        <div class="avatar-option" data-avatar="&#x1F9D1;&#x200D;&#x1F4BB;" onclick="selectAvatar(this)">&#x1F9D1;&#x200D;&#x1F4BB;</div>
+                        <div class="avatar-option" data-avatar="&#x1F469;&#x200D;&#x1F393;" onclick="selectAvatar(this)">&#x1F469;&#x200D;&#x1F393;</div>
+                        <div class="avatar-option" data-avatar="&#x1F9D1;&#x200D;&#x1F680;" onclick="selectAvatar(this)">&#x1F9D1;&#x200D;&#x1F680;</div>
+                        <div class="avatar-option" data-avatar="&#x1F9D1;&#x200D;&#x1F3A8;" onclick="selectAvatar(this)">&#x1F9D1;&#x200D;&#x1F3A8;</div>
+                        <div class="avatar-option" data-avatar="&#x1F9D1;&#x200D;&#x1F52C;" onclick="selectAvatar(this)">&#x1F9D1;&#x200D;&#x1F52C;</div>
+                        <div class="avatar-option" data-avatar="&#x1F9D1;&#x200D;&#x1F373;" onclick="selectAvatar(this)">&#x1F9D1;&#x200D;&#x1F373;</div>
+                        <div class="avatar-option" data-avatar="&#x1F9D1;&#x200D;&#x1F33E;" onclick="selectAvatar(this)">&#x1F9D1;&#x200D;&#x1F33E;</div>
+                        <div class="avatar-option" data-avatar="&#x1F9D1;&#x200D;&#x1F3EB;" onclick="selectAvatar(this)">&#x1F9D1;&#x200D;&#x1F3EB;</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>昵称</label>
+                    <input type="text" id="profileNickname" placeholder="你的昵称" required>
+                </div>
+                <div class="form-group">
+                    <label>出生日期</label>
+                    <input type="date" id="profileBirthDate" required>
+                </div>
+                <div class="form-group">
+                    <label>性别</label>
+                    <select id="profileGender">
+                        <option value="">请选择</option>
+                        <option value="男">男</option>
+                        <option value="女">女</option>
+                        <option value="保密">保密</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>当前状态</label>
+                    <select id="profileStatus">
+                        <option value="">请选择</option>
+                        <option value="在校学生">在校学生</option>
+                        <option value="职场新人">职场新人</option>
+                        <option value="职场老手">职场老手</option>
+                        <option value="自由职业">自由职业</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>专业/职业</label>
+                    <input type="text" id="profileMajor" placeholder="例如：计算机科学 / 产品经理">
+                </div>
+                <div class="form-group">
+                    <label>年级/工作年限</label>
+                    <input type="text" id="profileYear" placeholder="例如：大三 / 3年">
+                </div>
+                <div class="form-group">
+                    <label>感情状态</label>
+                    <select id="profileRelationship">
+                        <option value="">请选择</option>
+                        <option value="单身">单身</option>
+                        <option value="恋爱中">恋爱中</option>
+                        <option value="已婚">已婚</option>
+                        <option value="保密">保密</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>身高（cm）</label>
+                    <input type="number" id="profileHeight" placeholder="例如：175" min="50" max="250">
+                </div>
+                <div class="form-group">
+                    <label>体重（kg）</label>
+                    <input type="number" id="profileWeight" placeholder="例如：65" min="20" max="300">
+                </div>
+                <div class="form-group">
+                    <label>兴趣爱好</label>
+                    <div class="hobby-tags" id="hobbyTags"></div>
+                    <div class="hobby-input-row">
+                        <input type="text" id="hobbyInput" placeholder="输入爱好后按添加">
+                        <button type="button" onclick="addHobby()"><i class="fas fa-plus" aria-hidden="true"></i> 添加</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>个性签名</label>
+                    <textarea id="profileBio" placeholder="一句话介绍自己..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>人生格言</label>
+                    <textarea id="profileMotto" placeholder="你信奉的一句话..."></textarea>
+                </div>
+                <div class="profile-setup-actions">
+                    <button type="submit" class="btn-primary ripple-btn" onclick="createRipple(event, this)"><i class="fas fa-check" aria-hidden="true"></i> 保存资料</button>
+                    <button type="button" class="btn-outline" onclick="closeProfileSetup()"><i class="fas fa-times" aria-hidden="true"></i> 稍后完善</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== 关于作品弹窗 ==================== -->
+    <div class="about-section" id="aboutSection" onclick="closeAbout(event)" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+        <div class="about-card" onclick="event.stopPropagation()">
+            <h3 id="aboutTitle"><i class="fas fa-award" aria-hidden="true"></i> 关于「人生进度」</h3>
+            <p>「人生进度」是一个温暖的人生记录与规划应用，帮助你记录人生足迹、写下日记、设定目标、倾诉心声、分享故事。</p>
+            <p>本项目为 TRAE AI 创造力大赛参赛作品，采用纯前端技术栈（HTML + CSS + JavaScript）构建，数据存储于浏览器 IndexedDB，支持主题切换、多媒体日记、数据导出等功能。</p>
+            <p>设计理念：温暖人文主义配色，让每一个数字背后都有温度。</p>
+            <button class="btn-primary about-close" onclick="closeAbout()">关闭</button>
+        </div>
+    </div>
+
+    <!-- ==================== Toast容器 ==================== -->
+    <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- ==================== 页脚 ==================== -->
+    <footer class="footer">
+        人生进度 &mdash; 记录每一步，规划每一天 <span>|</span> TRAE AI创造力大赛参赛作品
+        <div class="footer-actions">
+            <button class="footer-btn" onclick="exportData()" aria-label="导出数据"><i class="fas fa-download" aria-hidden="true"></i> 导出数据</button>
+            <button class="footer-btn" onclick="clearDemoData()" id="clearDemoBtn" style="display:none" aria-label="清除示例数据"><i class="fas fa-trash" aria-hidden="true"></i> 清除示例数据</button>
+            <button class="footer-btn" onclick="openAbout()" aria-label="关于作品"><i class="fas fa-circle-info" aria-hidden="true"></i> 关于作品</button>
+        </div>
+    </footer>
+
+    <script>
+    // ==================== API基础URL - IGA Pages Serverless Functions ====================
+    const API_BASE = window.location.origin + '/api';
+
+    // ==================== 全局变量 ====================
+    let currentUser = null;
+    let db = null;
+    let currentHobbies = [];
+    let selectedAvatar = '';
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isRecording = false;
+    let demoDataLoaded = false;
+    let modalFocusTrap = null;
+
+    // ==================== 主题切换 ====================
+    function switchTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        document.querySelectorAll('.theme-btn-nav').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.theme === theme);
+        });
+        localStorage.setItem('preferredTheme', theme);
+        if (currentUser && db) {
+            dbGet('users', currentUser.id).then(user => {
+                if (user) {
+                    user.theme = theme;
+                    dbPut('users', user);
+                }
+            }).catch(()=>{});
+        }
+    }
+
+    // ==================== 自定义光标 ====================
+    const cursor = document.getElementById('cursor');
+    const cursorFollower = document.getElementById('cursorFollower');
+    let cursorX = 0, cursorY = 0;
+    let followerX = 0, followerY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+        cursorX = e.clientX;
+        cursorY = e.clientY;
+        cursor.style.transform = `translate(${cursorX - 6}px, ${cursorY - 6}px)`;
+    });
+
+    function animateCursor() {
+        followerX += (cursorX - followerX) * 0.12;
+        followerY += (cursorY - followerY) * 0.12;
+        cursorFollower.style.transform = `translate(${followerX - 16}px, ${followerY - 16}px)`;
+        requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+
+    // ==================== 加载动画 ====================
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            document.getElementById('loaderOverlay').classList.add('hidden');
+        }, 800);
+    });
+
+    // ==================== 涟漪按钮效果 ====================
+    function createRipple(e, btn) {
+        const rect = btn.getBoundingClientRect();
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple';
+        const size = Math.max(rect.width, rect.height);
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+        ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+        btn.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+    }
+
+    // ==================== 生命年轮Canvas绘制 ====================
+    function drawLifeRing() {
+        const canvas = document.getElementById('lifeRingCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        ctx.scale(dpr, dpr);
+        const w = rect.width;
+        const h = rect.height;
+        const cx = w / 2;
+        const cy = h / 2;
+        const maxR = Math.min(w, h) / 2 - 20;
+
+        // 获取主题色
+        const style = getComputedStyle(document.documentElement);
+        const primary = style.getPropertyValue('--primary').trim() || '#e07a5f';
+        const borderColor = style.getPropertyValue('--border').trim() || 'rgba(61,64,91,0.1)';
+        const textColor = style.getPropertyValue('--text').trim() || '#3d405b';
+
+        // 计算生命进度
+        let age = 28;
+        const lifespan = 80;
+        try {
+            const birthStr = document.getElementById('profileBirthDate')?.value;
+            if (birthStr) {
+                const birth = new Date(birthStr);
+                const today = new Date();
+                age = today.getFullYear() - birth.getFullYear();
+                const m = today.getMonth() - birth.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+            }
+        } catch(e) {}
+        const percent = Math.min(age / lifespan, 1);
+
+        ctx.clearRect(0, 0, w, h);
+
+        // 绘制同心圆环
+        const rings = 5;
+        for (let i = 0; i < rings; i++) {
+            const r = maxR * (0.3 + (i / (rings - 1)) * 0.7);
+            const ringPercent = Math.min(percent * rings / (i + 1), 1);
+            const startAngle = -Math.PI / 2;
+            const endAngle = startAngle + ringPercent * Math.PI * 2;
+
+            // 已度过部分（实线）
+            if (ringPercent > 0) {
+                ctx.beginPath();
+                ctx.arc(cx, cy, r, startAngle, endAngle);
+                ctx.strokeStyle = primary;
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+            }
+
+            // 剩余部分（虚线）
+            if (ringPercent < 1) {
+                ctx.beginPath();
+                ctx.arc(cx, cy, r, endAngle, startAngle + Math.PI * 2);
+                ctx.setLineDash([6, 6]);
+                ctx.strokeStyle = borderColor;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+        }
+
+        // 绘制人生阶段节点
+        const stages = [
+            { label: '童年', age: 6, color: '#81b29a' },
+            { label: '少年', age: 17, color: '#7a9ab8' },
+            { label: '青年', age: 35, color: '#f4a261' },
+            { label: '中年', age: 59, color: '#d4a05a' },
+            { label: '老年', age: 80, color: '#c45d42' }
+        ];
+
+        stages.forEach((stage, idx) => {
+            const r = maxR * (0.3 + (idx / (rings - 1)) * 0.7);
+            const angle = -Math.PI / 2 + (stage.age / lifespan) * Math.PI * 2;
+            const x = cx + Math.cos(angle) * r;
+            const y = cy + Math.sin(angle) * r;
+
+            ctx.beginPath();
+            ctx.arc(x, y, 4, 0, Math.PI * 2);
+            ctx.fillStyle = stage.color;
+            ctx.fill();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // 标签
+            const labelX = cx + Math.cos(angle) * (r + 16);
+            const labelY = cy + Math.sin(angle) * (r + 16);
+            ctx.font = '11px "Noto Sans SC", sans-serif';
+            ctx.fillStyle = textColor;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(stage.label, labelX, labelY);
+        });
+
+        // 中心百分比
+        ctx.font = 'bold 42px "Noto Sans SC", sans-serif';
+        ctx.fillStyle = primary;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fontVariantNumeric = 'tabular-nums';
+        ctx.fillText(Math.round(percent * 100) + '%', cx, cy - 8);
+
+        ctx.font = '12px "Noto Sans SC", sans-serif';
+        ctx.fillStyle = textColor;
+        ctx.fillText(age + '岁 / ' + lifespan + '岁', cx, cy + 18);
+    }
+
+    // ==================== 动态粒子背景 ====================
+    function initHeroParticles() {
+        const canvas = document.getElementById('heroParticles');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+        let particles = [];
+        const particleCount = 30;
+
+        function resize() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        const style = getComputedStyle(document.documentElement);
+        const primary = style.getPropertyValue('--primary').trim() || '#e07a5f';
+        const accent = style.getPropertyValue('--accent').trim() || '#81b29a';
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width / dpr,
+                y: Math.random() * canvas.height / dpr,
+                r: Math.random() * 2 + 1,
+                vx: (Math.random() - 0.5) * 0.3,
+                vy: (Math.random() - 0.5) * 0.3,
+                alpha: Math.random() * 0.3 + 0.1,
+                color: Math.random() > 0.5 ? primary : accent
+            });
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                if (p.x < 0) p.x = canvas.width / dpr;
+                if (p.x > canvas.width / dpr) p.x = 0;
+                if (p.y < 0) p.y = canvas.height / dpr;
+                if (p.y > canvas.height / dpr) p.y = 0;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = p.alpha;
+                ctx.fill();
+            });
+            ctx.globalAlpha = 1;
+            requestAnimationFrame(animate);
+        }
+        animate();
+    }
+
+    // ==================== 计数动画 ====================
+    function animateCounter(el, target, duration = 1200) {
+        if (!el) return;
+        const start = 0;
+        const startTime = performance.now();
+        function update(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            const current = Math.round(start + (target - start) * easeOut);
+            el.textContent = current;
+            if (progress < 1) requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
+    }
+
+    // ==================== 认证检查 ====================
+    (function checkAuth() {
+        const stored = localStorage.getItem('currentUser');
+        if (!stored) {
+            window.location.href = 'login.html';
+            return;
+        }
+        try {
+            currentUser = JSON.parse(stored);
+            if (!currentUser.id || !currentUser.username) {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'login.html';
+                return;
+            }
+            const savedTheme = localStorage.getItem('preferredTheme');
+            if (savedTheme) switchTheme(savedTheme);
+        } catch (e) {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        }
+    })();
+
+    // ==================== IndexedDB 初始化 ====================
+    function openDB() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open('LifeProgressDB', 2);
+            request.onupgradeneeded = (e) => {
+                const db = e.target.result;
+                if (!db.objectStoreNames.contains('users')) {
+                    const us = db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
+                    us.createIndex('username', 'username', { unique: true });
+                }
+                if (!db.objectStoreNames.contains('diaries')) {
+                    const ds = db.createObjectStore('diaries', { keyPath: 'id', autoIncrement: true });
+                    ds.createIndex('userId', 'userId', { unique: false });
+                }
+                if (!db.objectStoreNames.contains('confessions')) {
+                    const cs = db.createObjectStore('confessions', { keyPath: 'id', autoIncrement: true });
+                    cs.createIndex('userId', 'userId', { unique: false });
+                }
+                if (!db.objectStoreNames.contains('timeline')) {
+                    const ts = db.createObjectStore('timeline', { keyPath: 'id', autoIncrement: true });
+                    ts.createIndex('userId', 'userId', { unique: false });
+                }
+                if (!db.objectStoreNames.contains('goals')) {
+                    const gs = db.createObjectStore('goals', { keyPath: 'id', autoIncrement: true });
+                    gs.createIndex('userId', 'userId', { unique: false });
+                }
+                if (!db.objectStoreNames.contains('shares')) {
+                    db.createObjectStore('shares', { keyPath: 'id', autoIncrement: true });
+                }
+            };
+            request.onsuccess = (e) => resolve(e.target.result);
+            request.onerror = (e) => reject(e.target.error);
+        });
+    }
+
+    // ==================== IndexedDB 辅助函数 ====================
+    function dbAdd(storeName, data) {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, 'readwrite');
+            const store = tx.objectStore(storeName);
+            const req = store.add(data);
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+        });
+    }
+
+    function dbPut(storeName, data) {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, 'readwrite');
+            const store = tx.objectStore(storeName);
+            const req = store.put(data);
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+        });
+    }
+
+    function dbDelete(storeName, id) {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, 'readwrite');
+            const store = tx.objectStore(storeName);
+            const req = store.delete(id);
+            req.onsuccess = () => resolve();
+            req.onerror = () => reject(req.error);
+        });
+    }
+
+    function dbGetAll(storeName) {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, 'readonly');
+            const store = tx.objectStore(storeName);
+            const req = store.getAll();
+            req.onsuccess = () => resolve(req.result || []);
+            req.onerror = () => reject(req.error);
+        });
+    }
+
+    function dbGetByIndex(storeName, indexName, value) {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, 'readonly');
+            const store = tx.objectStore(storeName);
+            const index = store.index(indexName);
+            const req = index.getAll(value);
+            req.onsuccess = () => resolve(req.result || []);
+            req.onerror = () => reject(req.error);
+        });
+    }
+
+    function dbGet(storeName, id) {
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(storeName, 'readonly');
+            const store = tx.objectStore(storeName);
+            const req = store.get(id);
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+        });
+    }
+
+    // ==================== 用户资料系统 ====================
+    async function loadUserProfile() {
+        try {
+            const user = await dbGet('users', currentUser.id);
+            if (!user) return;
+            currentUser.nickname = user.nickname;
+            currentUser.avatar = user.avatar;
+            currentUser.theme = user.theme || 'warm';
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            if (user.theme) switchTheme(user.theme);
+            updateUserUI(user);
+            if (user.birthDate || user.bio || user.avatar) {
+                showProfileMini(user);
+            }
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('setup') === 'profile' || currentUser.isNewUser) {
+                openProfileSetup();
+                if (currentUser.isNewUser) {
+                    delete currentUser.isNewUser;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                }
+                if (urlParams.get('setup')) {
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
+            }
+        } catch (e) {
+            console.error('加载用户资料失败', e);
+        }
+    }
+
+    function updateUserUI(user) {
+        const nickname = user.nickname || currentUser.nickname || currentUser.username;
+        const avatar = user.avatar;
+        document.getElementById('navAvatar').textContent = avatar || nickname.charAt(0);
+        document.getElementById('navNickname').textContent = nickname;
+        document.getElementById('heroNickname').textContent = nickname;
+        if (user.bio) {
+            const bioEl = document.getElementById('heroBio');
+            bioEl.textContent = user.bio;
+            bioEl.style.display = 'inline-block';
+        }
+    }
+
+    function showProfileMini(user) {
+        const mini = document.getElementById('profileMini');
+        mini.style.display = 'flex';
+        document.getElementById('profileMiniAvatar').textContent = user.avatar || user.nickname.charAt(0);
+        document.getElementById('profileMiniName').textContent = user.nickname;
+        const details = [];
+        if (user.gender) details.push(user.gender);
+        if (user.status) details.push(user.status);
+        if (user.major) details.push(user.major);
+        const detailText = details.length > 0 ? details.join(' \u00b7 ') : '完善资料，让人生进度更精准';
+        document.getElementById('profileMiniDetail').textContent = detailText;
+        const tagsContainer = document.getElementById('profileMiniTags');
+        tagsContainer.innerHTML = '';
+        if (user.relationship) {
+            tagsContainer.innerHTML += `<span class="profile-mini-tag">${user.relationship}</span>`;
+        }
+        if (user.hobbies && user.hobbies.length > 0) {
+            user.hobbies.slice(0, 3).forEach(h => {
+                tagsContainer.innerHTML += `<span class="profile-mini-tag">${escapeHtml(h)}</span>`;
+            });
+        }
+    }
+
+    function openProfileSetup() {
+        const overlay = document.getElementById('profileSetupOverlay');
+        overlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        dbGet('users', currentUser.id).then(user => {
+            if (!user) return;
+            document.getElementById('profileNickname').value = user.nickname || '';
+            document.getElementById('profileBirthDate').value = user.birthDate || '';
+            document.getElementById('profileGender').value = user.gender || '';
+            document.getElementById('profileStatus').value = user.status || '';
+            document.getElementById('profileMajor').value = user.major || '';
+            document.getElementById('profileYear').value = user.year || '';
+            document.getElementById('profileRelationship').value = user.relationship || '';
+            document.getElementById('profileHeight').value = user.height || '';
+            document.getElementById('profileWeight').value = user.weight || '';
+            document.getElementById('profileBio').value = user.bio || '';
+            document.getElementById('profileMotto').value = user.motto || '';
+            if (user.avatar) {
+                document.querySelectorAll('.avatar-option').forEach(opt => {
+                    opt.classList.toggle('selected', opt.dataset.avatar === user.avatar);
+                });
+                selectedAvatar = user.avatar;
+            }
+            currentHobbies = user.hobbies || [];
+            renderHobbies();
+        }).catch(() => {});
+    }
+
+    function closeProfileSetup() {
+        document.getElementById('profileSetupOverlay').classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    function selectAvatar(el) {
+        document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedAvatar = el.dataset.avatar;
+    }
+
+    function addHobby() {
+        const input = document.getElementById('hobbyInput');
+        const val = input.value.trim();
+        if (!val) return;
+        if (currentHobbies.includes(val)) {
+            showToast('该爱好已存在', 'error');
+            return;
+        }
+        currentHobbies.push(val);
+        input.value = '';
+        renderHobbies();
+    }
+
+    function removeHobby(hobby) {
+        currentHobbies = currentHobbies.filter(h => h !== hobby);
+        renderHobbies();
+    }
+
+    function renderHobbies() {
+        const container = document.getElementById('hobbyTags');
+        container.innerHTML = currentHobbies.map(h =>
+            `<span class="hobby-tag">${escapeHtml(h)} <button type="button" onclick="removeHobby('${escapeHtml(h)}')" aria-label="删除爱好 ${escapeHtml(h)}"><i class="fas fa-times" aria-hidden="true"></i></button></span>`
+        ).join('');
+    }
+
+    async function saveProfile(e) {
+        e.preventDefault();
+        try {
+            const user = await dbGet('users', currentUser.id);
+            if (!user) return;
+            user.nickname = document.getElementById('profileNickname').value.trim();
+            user.avatar = selectedAvatar || user.avatar;
+            user.birthDate = document.getElementById('profileBirthDate').value;
+            user.gender = document.getElementById('profileGender').value;
+            user.status = document.getElementById('profileStatus').value;
+            user.major = document.getElementById('profileMajor').value.trim();
+            user.year = document.getElementById('profileYear').value.trim();
+            user.relationship = document.getElementById('profileRelationship').value;
+            user.height = document.getElementById('profileHeight').value ? parseFloat(document.getElementById('profileHeight').value) : null;
+            user.weight = document.getElementById('profileWeight').value ? parseFloat(document.getElementById('profileWeight').value) : null;
+            user.hobbies = currentHobbies;
+            user.bio = document.getElementById('profileBio').value.trim();
+            user.motto = document.getElementById('profileMotto').value.trim();
+            await dbPut('users', user);
+            currentUser.nickname = user.nickname;
+            currentUser.avatar = user.avatar;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            updateUserUI(user);
+            showProfileMini(user);
+            renderLifeProgress();
+            drawLifeRing();
+            closeProfileSetup();
+            syncUserToServer(user);
+            showToast('资料保存成功！', 'success');
+        } catch (err) {
+            showToast('保存失败：' + err.message, 'error');
+        }
+    }
+
+    // 同步用户信息到服务端API
+    async function syncUserToServer(user) {
+        try {
+            await fetch(API_BASE + '/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: user.id,
+                    username: currentUser.username,
+                    nickname: user.nickname,
+                    avatar: user.avatar,
+                    bio: user.bio,
+                    status: user.status,
+                    major: user.major,
+                    year: user.year,
+                    gender: user.gender,
+                    relationship: user.relationship,
+                    motto: user.motto
+                })
+            });
+        } catch (e) {
+            console.warn('同步用户信息到服务端失败:', e.message);
+        }
+    }
+
+    // ==================== GitHub Pages 检测 ====================
+    function isGitHubPages() {
+        return window.location.hostname.includes('github.io') ||
+               window.location.hostname.includes('pages.dev') ||
+               localStorage.getItem('forceDemo') === 'true';
+    }
+
+    // ==================== Demo数据模式 ====================
+    async function seedData() {
+        if (!isGitHubPages()) return;
+        if (demoDataLoaded) return;
+
+        // 检查是否已有数据
+        const diaries = await dbGetByIndex('diaries', 'userId', currentUser.id);
+        const timeline = await dbGetByIndex('timeline', 'userId', currentUser.id);
+        const goals = await dbGetByIndex('goals', 'userId', currentUser.id);
+        const confessions = await dbGetByIndex('confessions', 'userId', currentUser.id);
+        const shares = await dbGetAll('shares');
+
+        if (diaries.length > 0 || timeline.length > 0 || goals.length > 0) {
+            return; // 已有数据，不覆盖
+        }
+
+        demoDataLoaded = true;
+        localStorage.setItem('demoDataLoaded', 'true');
+
+        // 3条日记
+        const demoDiaries = [
+            { userId: currentUser.id, title: '今天学会了做红烧肉', content: '周末在家研究菜谱，终于做出了色香味俱全的红烧肉。虽然过程有点手忙脚乱，但看到家人吃得开心，一切都值得。生活中的小确幸，往往就藏在这些烟火气里。', mood: 'happy', date: '2024-03-15', createdAt: '2024-03-15T10:00:00Z', images: [], videos: [], audios: [], isDemo: true },
+            { userId: currentUser.id, title: '深夜的沉思', content: '凌晨两点，窗外的城市已经安静。翻着旧照片，想起很多往事。时间真的过得好快，不知不觉已经走到了这里。未来的路还很长，希望自己能一直保持初心。', mood: 'thoughtful', date: '2024-03-10', createdAt: '2024-03-10T22:00:00Z', images: [], videos: [], audios: [], isDemo: true },
+            { userId: currentUser.id, title: '第一次独立完成项目', content: '经过三个月的努力，终于独立完成了人生第一个完整的项目。从需求分析到上线部署，每一步都充满挑战。感谢团队的支持，也感谢那个没有放弃的自己。', mood: 'excited', date: '2024-02-28', createdAt: '2024-02-28T18:00:00Z', images: [], videos: [], audios: [], isDemo: true }
+        ];
+        for (const d of demoDiaries) await dbAdd('diaries', d);
+
+        // 4条时间轴事件
+        const demoTimeline = [
+            { userId: currentUser.id, title: '大学毕业', description: '穿上学士服，和同学们拍了毕业照。四年的青春，在这一刻画上了句号。', date: '2022-06-20', tag: 'milestone', createdAt: '2022-06-20T00:00:00Z', isDemo: true },
+            { userId: currentUser.id, title: '第一次独自旅行', description: '背起背包去了云南，在洱海边看了日出，在丽江古城听了民谣。一个人的旅行，让我更了解自己。', date: '2023-08-15', tag: 'memory', createdAt: '2023-08-15T00:00:00Z', isDemo: true },
+            { userId: currentUser.id, title: '升职加薪', description: '经过一年的努力，终于得到了领导的认可，从初级工程师晋升为中级工程师。新的起点，继续加油！', date: '2024-01-10', tag: 'achievement', createdAt: '2024-01-10T00:00:00Z', isDemo: true },
+            { userId: currentUser.id, title: '学会做饭', description: '从一个连煎蛋都会糊的厨房小白，到现在能做出一桌像样的菜。生活技能+1，成就感满满。', date: '2024-02-14', tag: 'achievement', createdAt: '2024-02-14T00:00:00Z', isDemo: true }
+        ];
+        for (const t of demoTimeline) await dbAdd('timeline', t);
+
+        // 3个目标
+        const demoGoals = [
+            { userId: currentUser.id, title: '读完30本书', description: '今年计划读完30本涵盖技术、人文、心理的书籍，拓宽知识面。', progress: 35, status: 'in-progress', deadline: '2024-12-31', createdAt: '2024-01-01T00:00:00Z', isDemo: true },
+            { userId: currentUser.id, title: '跑完人生第一个半马', description: '从5公里开始，逐步增加到21公里。坚持每周三次跑步训练。', progress: 60, status: 'in-progress', deadline: '2024-10-01', createdAt: '2024-01-01T00:00:00Z', isDemo: true },
+            { userId: currentUser.id, title: '学会弹吉他', description: '从零基础开始，学会弹奏10首完整的歌曲。', progress: 100, status: 'completed', deadline: '2024-03-01', createdAt: '2023-06-01T00:00:00Z', isDemo: true }
+        ];
+        for (const g of demoGoals) await dbAdd('goals', g);
+
+        // 2条倾诉（1匿名1实名）
+        const demoConfessions = [
+            { userId: currentUser.id, nickname: currentUser.nickname || '用户', content: '最近工作压力很大，经常失眠。不知道该怎么调节自己的情绪，有时候觉得自己快要撑不住了。', anonymous: true, responses: [{ author: '温暖的陌生人', content: '抱抱你，每个人都会有低谷期。试着给自己放个小假，哪怕只是周末去公园走走。你并不孤单。', createdAt: '2024-03-12T10:00:00Z' }], createdAt: '2024-03-11T20:00:00Z', isDemo: true },
+            { userId: currentUser.id, nickname: currentUser.nickname || '用户', content: '终于鼓起勇气向暗恋的人表白了，虽然被婉拒了，但至少没有遗憾了。谢谢自己的勇敢。', anonymous: false, responses: [{ author: '过来人', content: '为你的勇气点赞！表白被拒绝不代表你不够好，只是缘分未到。相信更好的在前面等你。', createdAt: '2024-03-08T14:00:00Z' }], createdAt: '2024-03-07T19:00:00Z', isDemo: true }
+        ];
+        for (const c of demoConfessions) await dbAdd('confessions', c);
+
+        // 2条分享（带点赞数）
+        const demoShares = [
+            { userId: currentUser.id, nickname: '小林', title: '我的极简生活实验', content: '三个月前开始尝试极简生活，清理了家里80%的物品。现在每天醒来，看着整洁的房间，心情格外平静。原来我们需要的，真的比想象中少很多。', likes: 24, createdAt: '2024-03-05T09:00:00Z', isDemo: true },
+            { userId: currentUser.id, nickname: '阿杰', title: '从0到1学编程的心路历程', content: '一年前我还是个完全不懂代码的文科生，现在能独立开发小项目了。想对所有想转行的人说：年龄不是问题，开始行动才是答案。', likes: 56, createdAt: '2024-02-20T15:00:00Z', isDemo: true }
+        ];
+        for (const s of demoShares) await dbAdd('shares', s);
+
+        showToast('已加载示例数据', 'info');
+        document.getElementById('clearDemoBtn').style.display = 'inline-flex';
+    }
+
+    // ==================== 清除示例数据 ====================
+    async function clearDemoData() {
+        if (!confirm('确定要清除所有示例数据吗？你的真实数据不会被删除。')) return;
+        try {
+            const allDiaries = await dbGetByIndex('diaries', 'userId', currentUser.id);
+            const allTimeline = await dbGetByIndex('timeline', 'userId', currentUser.id);
+            const allGoals = await dbGetByIndex('goals', 'userId', currentUser.id);
+            const allConfessions = await dbGetByIndex('confessions', 'userId', currentUser.id);
+            const allShares = await dbGetAll('shares');
+
+            for (const d of allDiaries) { if (d.isDemo) await dbDelete('diaries', d.id); }
+            for (const t of allTimeline) { if (t.isDemo) await dbDelete('timeline', t.id); }
+            for (const g of allGoals) { if (g.isDemo) await dbDelete('goals', g.id); }
+            for (const c of allConfessions) { if (c.isDemo) await dbDelete('confessions', c.id); }
+            for (const s of allShares) { if (s.isDemo) await dbDelete('shares', s.id); }
+
+            demoDataLoaded = false;
+            localStorage.removeItem('demoDataLoaded');
+            document.getElementById('clearDemoBtn').style.display = 'none';
+            showToast('示例数据已清除', 'success');
+            await init();
+        } catch (e) {
+            showToast('清除失败：' + e.message, 'error');
+        }
+    }
+
+    // ==================== 数据导出 ====================
+    async function exportData() {
+        try {
+            const data = {
+                exportDate: new Date().toISOString(),
+                user: await dbGet('users', currentUser.id),
+                diaries: await dbGetByIndex('diaries', 'userId', currentUser.id),
+                timeline: await dbGetByIndex('timeline', 'userId', currentUser.id),
+                goals: await dbGetByIndex('goals', 'userId', currentUser.id),
+                confessions: await dbGetByIndex('confessions', 'userId', currentUser.id),
+                shares: await dbGetAll('shares')
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `人生进度数据_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('数据导出成功', 'success');
+        } catch (e) {
+            showToast('导出失败：' + e.message, 'error');
+        }
+    }
+
+    // ==================== 关于作品 ====================
+    function openAbout() {
+        document.getElementById('aboutSection').classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeAbout(e) {
+        if (e && e.target !== document.getElementById('aboutSection')) return;
+        document.getElementById('aboutSection').classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    // ==================== 渲染函数 ====================
+    async function renderStats() {
+        const diaries = await dbGetByIndex('diaries', 'userId', currentUser.id);
+        const timeline = await dbGetByIndex('timeline', 'userId', currentUser.id);
+        const goals = await dbGetByIndex('goals', 'userId', currentUser.id);
+        const confessions = await dbGetByIndex('confessions', 'userId', currentUser.id);
+        let shares = [];
+        try {
+            const res = await fetch(API_BASE + '/shares');
+            if (res.ok) shares = await res.json() || [];
+        } catch (e) {
+            shares = await dbGetAll('shares');
+        }
+        const userShares = shares.filter(s => s.userId === currentUser.id);
+        const totalLikes = shares.reduce((sum, s) => sum + (s.likes || 0), 0);
+
+        animateCounter(document.getElementById('statDiaries'), diaries.length);
+        animateCounter(document.getElementById('statTimeline'), timeline.length);
+        animateCounter(document.getElementById('statGoals'), goals.length);
+        animateCounter(document.getElementById('statConfessions'), confessions.length);
+        animateCounter(document.getElementById('statShares'), userShares.length);
+        animateCounter(document.getElementById('statLikes'), totalLikes);
+
+        // Hero stats
+        const user = await dbGet('users', currentUser.id);
+        let days = 0;
+        if (user && user.birthDate) {
+            const birth = new Date(user.birthDate);
+            const today = new Date();
+            days = Math.floor((today - birth) / (1000 * 60 * 60 * 24));
+        } else {
+            days = 28 * 365;
+        }
+        animateCounter(document.getElementById('heroStatDays'), days);
+        animateCounter(document.getElementById('heroStatGoals'), goals.length);
+        animateCounter(document.getElementById('heroStatDiaries'), diaries.length);
+        animateCounter(document.getElementById('heroStatTimeline'), timeline.length);
+    }
+
+    async function renderLifeProgress() {
+        try {
+            const user = await dbGet('users', currentUser.id);
+            let age = 28;
+            const lifespan = 80;
+            if (user && user.birthDate) {
+                const birth = new Date(user.birthDate);
+                const today = new Date();
+                age = today.getFullYear() - birth.getFullYear();
+                const monthDiff = today.getMonth() - birth.getMonth();
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) age--;
+            }
+            const percent = Math.round((age / lifespan) * 100);
+            setTimeout(() => {
+                document.getElementById('lifeProgressFill').style.width = percent + '%';
+                document.getElementById('lifeProgressText').textContent = percent + '%';
+            }, 300);
+            document.getElementById('lifeProgressAge').textContent = age + '岁 / ' + lifespan + '岁';
+        } catch (e) {
+            document.getElementById('lifeProgressFill').style.width = '35%';
+            document.getElementById('lifeProgressText').textContent = '35%';
+            document.getElementById('lifeProgressAge').textContent = '28岁 / 80岁';
+        }
+    }
+
+    async function renderTimeline() {
+        const items = await dbGetByIndex('timeline', 'userId', currentUser.id);
+        const container = document.getElementById('timelineContainer');
+        const line = '<div class="timeline-line" aria-hidden="true"></div>';
+        if (items.length === 0) {
+            container.innerHTML = line + `<div class="empty-state"><div class="empty-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-shoe-prints" aria-hidden="true"></i></div><div class="empty-title">你的人生足迹还是空白的</div><div class="empty-desc">在这里记录你人生中的重要时刻<br>每一个脚印都值得被铭记</div><button class="empty-action-btn" onclick="openModal('timeline')"><i class="fas fa-plus" aria-hidden="true"></i> 添加第一个足迹</button></div>`;
+            return;
+        }
+        items.sort((a, b) => new Date(b.date) - new Date(a.date));
+        let html = line;
+        items.forEach((item, i) => {
+            const tagClass = item.tag || 'achievement';
+            const tagLabel = tagClass === 'achievement' ? '成就' : tagClass === 'milestone' ? '里程碑' : '回忆';
+            const demoBadge = item.isDemo ? '<span class="diary-demo-badge">示例</span>' : '';
+            html += `
+                <div class="timeline-item" style="transition-delay: ${i * 0.1}s">
+                    <div class="timeline-dot tag-${tagClass}" aria-hidden="true"></div>
+                    <div class="timeline-card">
+                        ${demoBadge}
+                        <div class="timeline-date"><i class="far fa-calendar" aria-hidden="true"></i> ${item.date}</div>
+                        <div class="timeline-title">${escapeHtml(item.title)}</div>
+                        <div class="timeline-desc">${escapeHtml(item.description)}</div>
+                        <span class="timeline-tag tag-${tagClass}"><i class="fas fa-tag" aria-hidden="true"></i> ${tagLabel}</span>
+                    </div>
+                </div>`;
+        });
+        container.innerHTML = html;
+        // IntersectionObserver for stagger animation
+        requestAnimationFrame(() => {
+            container.querySelectorAll('.timeline-item').forEach((el, i) => {
+                setTimeout(() => el.classList.add('visible'), i * 100);
+            });
+        });
+    }
+
+    async function renderGoals() {
+        const items = await dbGetByIndex('goals', 'userId', currentUser.id);
+        const grid = document.getElementById('goalsGrid');
+        if (items.length === 0) {
+            grid.innerHTML = `<div class="empty-state"><div class="empty-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-compass" aria-hidden="true"></i></div><div class="empty-title">你的未来蓝图还是空白的</div><div class="empty-desc">设定目标，规划未来<br>让每一步都朝着梦想前进</div><button class="empty-action-btn" onclick="openModal('goal')"><i class="fas fa-plus" aria-hidden="true"></i> 设定第一个目标</button></div>`;
+            return;
+        }
+        let html = '';
+        items.forEach((item, i) => {
+            const statusLabel = item.status === 'completed' ? '已完成' : item.status === 'paused' ? '已暂停' : '进行中';
+            const circumference = 2 * Math.PI * 22;
+            const offset = circumference - (Math.min(item.progress, 100) / 100) * circumference;
+            const strokeColor = item.status === 'completed' ? 'var(--accent)' : item.status === 'paused' ? 'var(--warning)' : 'var(--info)';
+            const demoBadge = item.isDemo ? '<span class="diary-demo-badge">示例</span>' : '';
+            html += `
+                <div class="goal-card" style="transition-delay: ${i * 0.1}s">
+                    ${demoBadge}
+                    <div class="goal-header">
+                        <div class="goal-title">${escapeHtml(item.title)}</div>
+                        <span class="goal-status ${item.status}">${statusLabel}</span>
+                    </div>
+                    <div class="goal-desc">${escapeHtml(item.description)}</div>
+                    <div class="goal-progress-wrap">
+                        <div class="goal-circle-progress" aria-hidden="true">
+                            <svg width="56" height="56" viewBox="0 0 56 56">
+                                <circle class="goal-circle-bg" cx="28" cy="28" r="22"/>
+                                <circle class="goal-circle-fill" cx="28" cy="28" r="22"
+                                    stroke="${strokeColor}"
+                                    stroke-dasharray="${circumference}"
+                                    stroke-dashoffset="${offset}"/>
+                            </svg>
+                            <div class="goal-circle-text">${item.progress}%</div>
+                        </div>
+                        <div style="flex:1">
+                            <div class="goal-footer" style="margin-bottom:4px">
+                                <span>截止日期 ${item.deadline}</span>
+                            </div>
+                            <div style="text-align:right">
+                                ${item.status !== 'completed' ? `<button class="goal-update-btn" onclick="updateGoalProgress(${item.id}, ${item.progress})"><i class="fas fa-plus" aria-hidden="true"></i> +5%</button>` : '<span style="color:var(--accent);font-size:12px"><i class="fas fa-check-circle" aria-hidden="true"></i> 已完成</span>'}
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+        });
+        grid.innerHTML = html;
+        requestAnimationFrame(() => {
+            grid.querySelectorAll('.goal-card').forEach((el, i) => {
+                setTimeout(() => el.classList.add('visible'), i * 100);
+            });
+        });
+    }
+
+    async function renderDiaries() {
+        const items = await dbGetByIndex('diaries', 'userId', currentUser.id);
+        const grid = document.getElementById('diariesGrid');
+        if (items.length === 0) {
+            grid.innerHTML = `<div class="empty-state"><div class="empty-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-feather-pointed" aria-hidden="true"></i></div><div class="empty-title">还没有写下任何日记</div><div class="empty-desc">用文字、图片、视频或录音<br>记录生活中每一个珍贵的瞬间</div><button class="empty-action-btn" onclick="openModal('diary')"><i class="fas fa-plus" aria-hidden="true"></i> 写下第一篇日记</button></div>`;
+            return;
+        }
+        items.sort((a, b) => new Date(b.date) - new Date(a.date));
+        const moodMap = {
+            happy: '\u{1F60A}', sad: '\u{1F622}', angry: '\u{1F620}',
+            excited: '\u{1F929}', calm: '\u{1F60C}', thoughtful: '\u{1F914}',
+            inspired: '\u{1F9E0}', grateful: '\u{2764}', anxious: '\u{1F628}'
+        };
+        let html = '';
+        items.forEach((item, i) => {
+            const moodEmoji = moodMap[item.mood] || '\u{1F60A}';
+            let mediaHtml = '';
+            if (item.images && item.images.length > 0) {
+                mediaHtml += `<div class="diary-media"><img src="${item.images[0]}" alt="日记图片" onclick="openImagePreview('${item.images[0]}')" loading="lazy"></div>`;
+            }
+            if (item.videos && item.videos.length > 0) {
+                mediaHtml += `<div class="diary-media"><video controls src="${item.videos[0]}"></video></div>`;
+            }
+            if (item.audios && item.audios.length > 0) {
+                mediaHtml += `<div class="diary-media"><audio controls src="${item.audios[0]}"></audio></div>`;
+            }
+            const demoBadge = item.isDemo ? '<span class="diary-demo-badge">示例</span>' : '';
+            const deleteBtn = item.isDemo ? '' : `<button class="diary-delete-btn" onclick="deleteDiary(${item.id})" aria-label="删除日记"><i class="fas fa-trash" aria-hidden="true"></i></button>`;
+            html += `
+                <div class="diary-card" style="animation-delay: ${Math.random() * 0.5}s">
+                    ${demoBadge}
+                    ${deleteBtn}
+                    ${mediaHtml}
+                    <div class="diary-header">
+                        <div class="diary-mood" aria-label="心情: ${item.mood || 'happy'}">${moodEmoji}</div>
+                        <div class="diary-date"><i class="far fa-calendar" aria-hidden="true"></i> ${item.date}</div>
+                    </div>
+                    <div class="diary-title">${escapeHtml(item.title)}</div>
+                    <div class="diary-content">${escapeHtml(item.content)}</div>
+                </div>`;
+        });
+        grid.innerHTML = html;
+        requestAnimationFrame(() => {
+            grid.querySelectorAll('.diary-card').forEach(el => el.classList.add('visible'));
+        });
+    }
+
+    async function renderConfessions() {
+        const grid = document.getElementById('confessionsGrid');
+        try {
+            const res = await fetch(API_BASE + '/confessions');
+            if (!res.ok) throw new Error('API请求失败');
+            const items = await res.json();
+            if (!items || items.length === 0) {
+                grid.innerHTML = `<div class="empty-state"><div class="empty-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-comment-dots" aria-hidden="true"></i></div><div class="empty-title">还没有人倾诉</div><div class="empty-desc">说出你的心里话<br>收获来自陌生人的温暖与回应</div><button class="empty-action-btn" onclick="openModal('confession')"><i class="fas fa-plus" aria-hidden="true"></i> 发出第一条倾诉</button></div>`;
+                return;
+            }
+            let html = '';
+            items.forEach((item, i) => {
+                const displayName = item.anonymous ? '匿名用户' : (item.nickname || '用户');
+                const initial = displayName.charAt(0);
+                const anonTag = item.anonymous ? '<span class="confession-anon-tag"><i class="fas fa-user-secret" aria-hidden="true"></i> 匿名</span>' : '';
+                let responsesHtml = '';
+                if (item.responses && item.responses.length > 0) {
+                    responsesHtml = '<div class="confession-responses"><h4><i class="fas fa-reply" aria-hidden="true"></i> 回应 (' + item.responses.length + ')</h4>';
+                    item.responses.forEach(r => {
+                        responsesHtml += `<div class="response-item"><span class="response-author">${escapeHtml(r.author)}</span>${escapeHtml(r.content)}</div>`;
+                    });
+                    responsesHtml += '</div>';
+                }
+                const demoBadge = item.isDemo ? '<span class="confession-demo-badge">示例</span>' : '';
+                html += `
+                    <div class="confession-card" style="transition-delay: ${i * 0.1}s">
+                        ${demoBadge}
+                        <div class="confession-top">
+                            <div class="confession-meta">
+                                <div class="confession-avatar" aria-hidden="true">${initial}</div>
+                                <span class="confession-author">${escapeHtml(displayName)}</span>
+                                ${anonTag}
+                            </div>
+                        </div>
+                        <div class="confession-content">${escapeHtml(item.content)}</div>
+                        ${responsesHtml}
+                        <div class="response-input-row">
+                            <input type="text" placeholder="写下你的回应..." id="responseInput_${item.id}" aria-label="回应内容">
+                            <button class="response-send-btn" onclick="addResponse(${item.id})"><i class="fas fa-paper-plane" aria-hidden="true"></i> 发送</button>
+                        </div>
+                    </div>`;
+            });
+            grid.innerHTML = html;
+            requestAnimationFrame(() => {
+                grid.querySelectorAll('.confession-card').forEach((el, i) => {
+                    setTimeout(() => el.classList.add('visible'), i * 100);
+                });
+            });
+        } catch (e) {
+            console.warn('加载倾诉列表失败，尝试本地数据:', e.message);
+            try {
+                const items = await dbGetAll('confessions');
+                if (items.length === 0) {
+                    grid.innerHTML = '<div class="empty-state"><p>社区功能需要在线环境</p></div>';
+                    return;
+                }
+                let html = '';
+                items.forEach((item, i) => {
+                    const displayName = item.anonymous ? '匿名用户' : (item.nickname || '用户');
+                    const initial = displayName.charAt(0);
+                    const anonTag = item.anonymous ? '<span class="confession-anon-tag"><i class="fas fa-user-secret" aria-hidden="true"></i> 匿名</span>' : '';
+                    let responsesHtml = '';
+                    if (item.responses && item.responses.length > 0) {
+                        responsesHtml = '<div class="confession-responses"><h4><i class="fas fa-reply" aria-hidden="true"></i> 回应 (' + item.responses.length + ')</h4>';
+                        item.responses.forEach(r => {
+                            responsesHtml += `<div class="response-item"><span class="response-author">${escapeHtml(r.author)}</span>${escapeHtml(r.content)}</div>`;
+                        });
+                        responsesHtml += '</div>';
+                    }
+                    const demoBadge = item.isDemo ? '<span class="confession-demo-badge">示例</span>' : '';
+                    html += `
+                        <div class="confession-card" style="transition-delay: ${i * 0.1}s">
+                            ${demoBadge}
+                            <div class="confession-top">
+                                <div class="confession-meta">
+                                    <div class="confession-avatar" aria-hidden="true">${initial}</div>
+                                    <span class="confession-author">${escapeHtml(displayName)}</span>
+                                    ${anonTag}
+                                </div>
+                            </div>
+                            <div class="confession-content">${escapeHtml(item.content)}</div>
+                            ${responsesHtml}
+                            <div class="response-input-row">
+                                <input type="text" placeholder="写下你的回应..." id="responseInput_${item.id}" aria-label="回应内容">
+                                <button class="response-send-btn" onclick="addResponse(${item.id})"><i class="fas fa-paper-plane" aria-hidden="true"></i> 发送</button>
+                            </div>
+                        </div>`;
+                });
+                grid.innerHTML = html;
+                requestAnimationFrame(() => {
+                    grid.querySelectorAll('.confession-card').forEach((el, i) => {
+                        setTimeout(() => el.classList.add('visible'), i * 100);
+                    });
+                });
+            } catch (e2) {
+                grid.innerHTML = '<div class="empty-state"><p>加载失败，请稍后重试</p></div>';
+            }
+        }
+    }
+
+    async function renderShares() {
+        const grid = document.getElementById('sharesGrid');
+        try {
+            const res = await fetch(API_BASE + '/shares');
+            if (!res.ok) throw new Error('API请求失败');
+            const items = await res.json();
+            if (!items || items.length === 0) {
+                grid.innerHTML = `<div class="empty-state"><div class="empty-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-share-nodes" aria-hidden="true"></i></div><div class="empty-title">社区还没有任何分享</div><div class="empty-desc">分享你的故事和经验<br>照亮别人的路，也温暖自己的心</div><button class="empty-action-btn" onclick="openModal('share')"><i class="fas fa-plus" aria-hidden="true"></i> 分享第一个故事</button></div>`;
+                return;
+            }
+            let html = '';
+            items.forEach((item, i) => {
+                const nickname = item.nickname || '用户';
+                const initial = nickname.charAt(0);
+                const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString('zh-CN') : '';
+                const demoBadge = item.isDemo ? '<span class="share-demo-badge">示例</span>' : '';
+                html += `
+                    <div class="share-card" style="transition-delay: ${i * 0.1}s">
+                        ${demoBadge}
+                        <div class="share-header">
+                            <div class="share-avatar" aria-hidden="true">${initial}</div>
+                            <div class="share-author-info">
+                                <div class="share-author-name">${escapeHtml(nickname)}</div>
+                                <div class="share-date">${dateStr}</div>
+                            </div>
+                        </div>
+                        <div class="share-title">${escapeHtml(item.title)}</div>
+                        <div class="share-content">${escapeHtml(item.content)}</div>
+                        <div class="share-actions">
+                            <button class="like-btn" onclick="likeShare(${item.id})" id="likeBtn_${item.id}" aria-label="点赞">
+                                <i class="fas fa-heart" aria-hidden="true"></i> <span id="likeCount_${item.id}">${item.likes || 0}</span>
+                            </button>
+                        </div>
+                    </div>`;
+            });
+            grid.innerHTML = html;
+            requestAnimationFrame(() => {
+                grid.querySelectorAll('.share-card').forEach((el, i) => {
+                    setTimeout(() => el.classList.add('visible'), i * 100);
+                });
+            });
+        } catch (e) {
+            console.warn('加载分享列表失败，尝试本地数据:', e.message);
+            try {
+                const items = await dbGetAll('shares');
+                if (items.length === 0) {
+                    grid.innerHTML = '<div class="empty-state"><p>社区功能需要在线环境</p></div>';
+                    return;
+                }
+                let html = '';
+                items.forEach((item, i) => {
+                    const nickname = item.nickname || '用户';
+                    const initial = nickname.charAt(0);
+                    const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString('zh-CN') : '';
+                    const demoBadge = item.isDemo ? '<span class="share-demo-badge">示例</span>' : '';
+                    html += `
+                        <div class="share-card" style="transition-delay: ${i * 0.1}s">
+                            ${demoBadge}
+                            <div class="share-header">
+                                <div class="share-avatar" aria-hidden="true">${initial}</div>
+                                <div class="share-author-info">
+                                    <div class="share-author-name">${escapeHtml(nickname)}</div>
+                                    <div class="share-date">${dateStr}</div>
+                                </div>
+                            </div>
+                            <div class="share-title">${escapeHtml(item.title)}</div>
+                            <div class="share-content">${escapeHtml(item.content)}</div>
+                            <div class="share-actions">
+                                <button class="like-btn" onclick="likeShare(${item.id})" id="likeBtn_${item.id}" aria-label="点赞">
+                                    <i class="fas fa-heart" aria-hidden="true"></i> <span id="likeCount_${item.id}">${item.likes || 0}</span>
+                                </button>
+                            </div>
+                        </div>`;
+                });
+                grid.innerHTML = html;
+                requestAnimationFrame(() => {
+                    grid.querySelectorAll('.share-card').forEach((el, i) => {
+                        setTimeout(() => el.classList.add('visible'), i * 100);
+                    });
+                });
+            } catch (e2) {
+                grid.innerHTML = '<div class="empty-state"><p>加载失败，请稍后重试</p></div>';
+            }
+        }
+    }
+
+    // ==================== 操作函数 ====================
+    async function updateGoalProgress(id, currentProgress) {
+        const newProgress = Math.min(currentProgress + 5, 100);
+        const newStatus = newProgress >= 100 ? 'completed' : 'in-progress';
+        try {
+            const item = await dbGet('goals', id);
+            if (item) {
+                item.progress = newProgress;
+                item.status = newStatus;
+                await dbPut('goals', item);
+                showToast('进度已更新！' + (newStatus === 'completed' ? ' 恭喜完成目标！' : ''), 'success');
+                await renderGoals();
+                await renderStats();
+            }
+        } catch (e) {
+            showToast('更新失败：' + e.message, 'error');
+        }
+    }
+
+    async function deleteDiary(id) {
+        if (!confirm('确定要删除这篇日记吗？此操作不可恢复。')) return;
+        try {
+            await dbDelete('diaries', id);
+            showToast('日记已删除', 'success');
+            await renderDiaries();
+            await renderStats();
+        } catch (e) {
+            showToast('删除失败：' + e.message, 'error');
+        }
+    }
+
+    async function addResponse(confessionId) {
+        const input = document.getElementById('responseInput_' + confessionId);
+        const content = input.value.trim();
+        if (!content) {
+            showToast('请输入回应内容', 'error');
+            return;
+        }
+        try {
+            const res = await fetch(API_BASE + '/confessions/respond', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    confessionId: confessionId,
+                    author: currentUser.nickname || currentUser.username,
+                    content: content
+                })
+            });
+            if (!res.ok) throw new Error('API请求失败');
+            input.value = '';
+            showToast('回应发送成功', 'success');
+            await renderConfessions();
+        } catch (e) {
+            console.warn('通过API发送回应失败，尝试本地:', e.message);
+            try {
+                const item = await dbGet('confessions', confessionId);
+                if (item) {
+                    if (!item.responses) item.responses = [];
+                    item.responses.push({
+                        author: currentUser.nickname || currentUser.username,
+                        content: content,
+                        createdAt: new Date().toISOString()
+                    });
+                    await dbPut('confessions', item);
+                    input.value = '';
+                    showToast('回应已发送（本地模式）', 'success');
+                    await renderConfessions();
+                }
+            } catch (e2) {
+                showToast('发送失败：' + e2.message, 'error');
+            }
+        }
+    }
+
+    async function likeShare(shareId) {
+        try {
+            const res = await fetch(API_BASE + '/shares/like', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ shareId: shareId })
+            });
+            if (!res.ok) throw new Error('API请求失败');
+            const data = await res.json();
+            document.getElementById('likeCount_' + shareId).textContent = data.likes || 0;
+            document.getElementById('likeBtn_' + shareId).classList.add('liked');
+            showToast('已点赞', 'success');
+            await renderStats();
+        } catch (e) {
+            console.warn('通过API点赞失败，尝试本地:', e.message);
+            try {
+                const item = await dbGet('shares', shareId);
+                if (item) {
+                    item.likes = (item.likes || 0) + 1;
+                    await dbPut('shares', item);
+                    document.getElementById('likeCount_' + shareId).textContent = item.likes;
+                    document.getElementById('likeBtn_' + shareId).classList.add('liked');
+                    showToast('已点赞（本地模式）', 'success');
+                    await renderStats();
+                }
+            } catch (e2) {
+                showToast('操作失败：' + e2.message, 'error');
+            }
+        }
+    }
+
+    // ==================== 图片预览 ====================
+    function openImagePreview(src) {
+        const overlay = document.getElementById('imagePreviewOverlay');
+        document.getElementById('imagePreviewImg').src = src;
+        overlay.classList.add('show');
+    }
+
+    function closeImagePreview() {
+        document.getElementById('imagePreviewOverlay').classList.remove('show');
+    }
+
+    // ==================== 模态框焦点陷阱 ====================
+    function trapFocus(element) {
+        const focusable = element.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        first.focus();
+
+        modalFocusTrap = (e) => {
+            if (e.key === 'Tab') {
+                if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                }
+            }
+        };
+        element.addEventListener('keydown', modalFocusTrap);
+    }
+
+    function releaseFocusTrap(element) {
+        if (modalFocusTrap) {
+            element.removeEventListener('keydown', modalFocusTrap);
+            modalFocusTrap = null;
+        }
+    }
+
+    // ==================== 模态框系统 ====================
+    function openModal(type) {
+        toggleFab(true);
+        const overlay = document.getElementById('modalOverlay');
+        const title = document.getElementById('modalTitle');
+        const body = document.getElementById('modalBody');
+
+        const forms = {
+            diary: {
+                title: '<i class="fas fa-pen-fancy" aria-hidden="true"></i> 写日记',
+                html: `
+                    <form class="modal-form" onsubmit="submitDiary(event)">
+                        <div class="form-group">
+                            <label>标题</label>
+                            <input type="text" id="diaryTitle" placeholder="给今天起个标题..." required>
+                        </div>
+                        <div class="form-group">
+                            <label>内容</label>
+                            <textarea id="diaryContent" placeholder="今天发生了什么..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>心情</label>
+                            <select id="diaryMood" required>
+                                <option value="happy">开心 \u{1F60A}</option>
+                                <option value="calm">平静 \u{1F60C}</option>
+                                <option value="thoughtful">沉思 \u{1F914}</option>
+                                <option value="inspired">受启发 \u{1F9E0}</option>
+                                <option value="grateful">感恩 \u{2764}</option>
+                                <option value="excited">兴奋 \u{1F929}</option>
+                                <option value="sad">难过 \u{1F622}</option>
+                                <option value="anxious">焦虑 \u{1F628}</option>
+                                <option value="angry">生气 \u{1F620}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>图片</label>
+                            <input type="file" id="diaryImages" accept="image/*" multiple onchange="handleFileSelect(this, 'images')">
+                            <div id="previewImages" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>视频</label>
+                            <input type="file" id="diaryVideos" accept="video/*" onchange="handleFileSelect(this, 'videos')">
+                            <div id="previewVideos" style="margin-top:8px"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>录音</label>
+                            <div style="display:flex;gap:8px;align-items:center">
+                                <button type="button" class="btn-outline" id="recordBtn" onclick="toggleRecording()" style="padding:8px 16px;font-size:12px">
+                                    <i class="fas fa-microphone" aria-hidden="true"></i> 开始录音
+                                </button>
+                                <span id="recordStatus" style="font-size:12px;color:var(--text-muted)"></span>
+                            </div>
+                            <div id="previewAudios" style="margin-top:8px"></div>
+                        </div>
+                        <button type="submit" class="modal-submit-btn ripple-btn" onclick="createRipple(event, this)"><i class="fas fa-check" aria-hidden="true"></i> 保存日记</button>
+                    </form>`
+            },
+            confession: {
+                title: '<i class="fas fa-comment-dots" aria-hidden="true"></i> 发倾诉',
+                html: `
+                    <form class="modal-form" onsubmit="submitConfession(event)">
+                        <div class="form-group">
+                            <label>倾诉内容</label>
+                            <textarea id="confessionContent" placeholder="说出你的心里话..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="confessionAnon" checked>
+                                <label for="confessionAnon" style="margin:0">匿名发布</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="modal-submit-btn ripple-btn" onclick="createRipple(event, this)"><i class="fas fa-paper-plane" aria-hidden="true"></i> 发布倾诉</button>
+                    </form>`
+            },
+            timeline: {
+                title: '<i class="fas fa-plus" aria-hidden="true"></i> 添加人生事件',
+                html: `
+                    <form class="modal-form" onsubmit="submitTimeline(event)">
+                        <div class="form-group">
+                            <label>事件标题</label>
+                            <input type="text" id="timelineTitle" placeholder="这个时刻叫什么..." required>
+                        </div>
+                        <div class="form-group">
+                            <label>事件描述</label>
+                            <textarea id="timelineDesc" placeholder="描述一下这个时刻..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>日期</label>
+                            <input type="date" id="timelineDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>标签</label>
+                            <select id="timelineTag" required>
+                                <option value="achievement">成就</option>
+                                <option value="milestone">里程碑</option>
+                                <option value="memory">回忆</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="modal-submit-btn ripple-btn" onclick="createRipple(event, this)"><i class="fas fa-check" aria-hidden="true"></i> 添加事件</button>
+                    </form>`
+            },
+            goal: {
+                title: '<i class="fas fa-bullseye" aria-hidden="true"></i> 添加新目标',
+                html: `
+                    <form class="modal-form" onsubmit="submitGoal(event)">
+                        <div class="form-group">
+                            <label>目标标题</label>
+                            <input type="text" id="goalTitle" placeholder="你的目标是什么..." required>
+                        </div>
+                        <div class="form-group">
+                            <label>目标描述</label>
+                            <textarea id="goalDesc" placeholder="详细描述一下..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>截止日期</label>
+                            <input type="date" id="goalDeadline" required>
+                        </div>
+                        <button type="submit" class="modal-submit-btn ripple-btn" onclick="createRipple(event, this)"><i class="fas fa-check" aria-hidden="true"></i> 添加目标</button>
+                    </form>`
+            },
+            share: {
+                title: '<i class="fas fa-share" aria-hidden="true"></i> 发布分享',
+                html: `
+                    <form class="modal-form" onsubmit="submitShare(event)">
+                        <div class="form-group">
+                            <label>标题</label>
+                            <input type="text" id="shareTitle" placeholder="分享的标题..." required>
+                        </div>
+                        <div class="form-group">
+                            <label>内容</label>
+                            <textarea id="shareContent" placeholder="分享你的故事或心得..." required></textarea>
+                        </div>
+                        <button type="submit" class="modal-submit-btn ripple-btn" onclick="createRipple(event, this)"><i class="fas fa-paper-plane" aria-hidden="true"></i> 发布分享</button>
+                    </form>`
+            }
+        };
+
+        const config = forms[type];
+        if (!config) return;
+        title.innerHTML = config.title;
+        body.innerHTML = config.html;
+        overlay.classList.add('show');
+        window.diaryImages = [];
+        window.diaryVideos = [];
+        window.diaryAudios = [];
+        trapFocus(overlay);
+    }
+
+    function closeModal() {
+        const overlay = document.getElementById('modalOverlay');
+        releaseFocusTrap(overlay);
+        overlay.classList.remove('show');
+        if (isRecording) toggleRecording();
+    }
+
+    function closeModalOnOverlay(e) {
+        if (e.target === document.getElementById('modalOverlay')) {
+            closeModal();
+        }
+    }
+
+    // ==================== 多媒体处理 ====================
+    async function handleFileSelect(input, type) {
+        const files = Array.from(input.files);
+        if (!files.length) return;
+        for (const file of files) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const base64 = e.target.result;
+                if (type === 'images') {
+                    window.diaryImages = window.diaryImages || [];
+                    window.diaryImages.push(base64);
+                    const preview = document.getElementById('previewImages');
+                    const img = document.createElement('img');
+                    img.src = base64;
+                    img.style.cssText = 'width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--border)';
+                    preview.appendChild(img);
+                } else if (type === 'videos') {
+                    window.diaryVideos = window.diaryVideos || [];
+                    window.diaryVideos.push(base64);
+                    const preview = document.getElementById('previewVideos');
+                    const video = document.createElement('video');
+                    video.src = base64;
+                    video.controls = true;
+                    video.style.cssText = 'width:100%;max-height:150px;border-radius:8px';
+                    preview.innerHTML = '';
+                    preview.appendChild(video);
+                } else if (type === 'audios') {
+                    window.diaryAudios = window.diaryAudios || [];
+                    window.diaryAudios.push(base64);
+                    const preview = document.getElementById('previewAudios');
+                    const audio = document.createElement('audio');
+                    audio.src = base64;
+                    audio.controls = true;
+                    audio.style.cssText = 'width:100%';
+                    preview.innerHTML = '';
+                    preview.appendChild(audio);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    async function toggleRecording() {
+        const btn = document.getElementById('recordBtn');
+        const status = document.getElementById('recordStatus');
+
+        if (!isRecording) {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                mediaRecorder.ondataavailable = (e) => {
+                    if (e.data.size > 0) audioChunks.push(e.data);
+                };
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const base64 = e.target.result;
+                        window.diaryAudios = window.diaryAudios || [];
+                        window.diaryAudios.push(base64);
+                        const preview = document.getElementById('previewAudios');
+                        const audio = document.createElement('audio');
+                        audio.src = base64;
+                        audio.controls = true;
+                        audio.style.cssText = 'width:100%';
+                        preview.innerHTML = '';
+                        preview.appendChild(audio);
+                    };
+                    reader.readAsDataURL(blob);
+                    stream.getTracks().forEach(t => t.stop());
+                };
+                mediaRecorder.start();
+                isRecording = true;
+                btn.innerHTML = '<i class="fas fa-stop" aria-hidden="true"></i> 停止录音';
+                btn.style.background = 'var(--danger)';
+                status.textContent = '正在录音...';
+            } catch (err) {
+                showToast('无法访问麦克风：' + err.message, 'error');
+            }
+        } else {
+            mediaRecorder.stop();
+            isRecording = false;
+            btn.innerHTML = '<i class="fas fa-microphone" aria-hidden="true"></i> 开始录音';
+            btn.style.background = '';
+            status.textContent = '';
+        }
+    }
+
+    // ==================== 表单提交 ====================
+    async function submitDiary(e) {
+        e.preventDefault();
+        const title = document.getElementById('diaryTitle').value.trim();
+        const content = document.getElementById('diaryContent').value.trim();
+        const mood = document.getElementById('diaryMood').value;
+
+        if (!title || !content) { showToast('请填写完整信息', 'error'); return; }
+
+        try {
+            await dbAdd('diaries', {
+                userId: currentUser.id, title, content, mood,
+                date: new Date().toISOString().split('T')[0],
+                createdAt: new Date().toISOString(),
+                images: window.diaryImages || [],
+                videos: window.diaryVideos || [],
+                audios: window.diaryAudios || []
+            });
+            showToast('日记保存成功', 'success');
+            closeModal();
+            await renderDiaries();
+            await renderStats();
+        } catch (e) {
+            showToast('保存失败：' + e.message, 'error');
+        }
+    }
+
+    async function submitConfession(e) {
+        e.preventDefault();
+        const content = document.getElementById('confessionContent').value.trim();
+        const anonymous = document.getElementById('confessionAnon').checked;
+
+        if (!content) { showToast('请填写倾诉内容', 'error'); return; }
+
+        try {
+            const res = await fetch(API_BASE + '/confessions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: currentUser.id,
+                    nickname: currentUser.nickname,
+                    content: content,
+                    anonymous: anonymous
+                })
+            });
+            if (!res.ok) throw new Error('API请求失败');
+            showToast('倾诉发布成功', 'success');
+            closeModal();
+            await renderConfessions();
+            await renderStats();
+        } catch (e) {
+            console.warn('通过API发布倾诉失败，尝试本地:', e.message);
+            try {
+                await dbAdd('confessions', {
+                    userId: currentUser.id, content, anonymous,
+                    nickname: currentUser.nickname,
+                    responses: [],
+                    createdAt: new Date().toISOString()
+                });
+                showToast('倾诉发布成功（本地模式）', 'success');
+                closeModal();
+                await renderConfessions();
+                await renderStats();
+            } catch (e2) {
+                showToast('发布失败：' + e2.message, 'error');
+            }
+        }
+    }
+
+    async function submitTimeline(e) {
+        e.preventDefault();
+        const title = document.getElementById('timelineTitle').value.trim();
+        const description = document.getElementById('timelineDesc').value.trim();
+        const date = document.getElementById('timelineDate').value;
+        const tag = document.getElementById('timelineTag').value;
+
+        if (!title || !description || !date) { showToast('请填写完整信息', 'error'); return; }
+
+        try {
+            await dbAdd('timeline', {
+                userId: currentUser.id, title, description, date, tag,
+                createdAt: new Date().toISOString()
+            });
+            showToast('事件添加成功', 'success');
+            closeModal();
+            await renderTimeline();
+            await renderStats();
+        } catch (e) {
+            showToast('添加失败：' + e.message, 'error');
+        }
+    }
+
+    async function submitGoal(e) {
+        e.preventDefault();
+        const title = document.getElementById('goalTitle').value.trim();
+        const description = document.getElementById('goalDesc').value.trim();
+        const deadline = document.getElementById('goalDeadline').value;
+
+        if (!title || !description || !deadline) { showToast('请填写完整信息', 'error'); return; }
+
+        try {
+            await dbAdd('goals', {
+                userId: currentUser.id, title, description,
+                progress: 0, status: 'in-progress', deadline,
+                createdAt: new Date().toISOString()
+            });
+            showToast('目标添加成功', 'success');
+            closeModal();
+            await renderGoals();
+            await renderStats();
+        } catch (e) {
+            showToast('添加失败：' + e.message, 'error');
+        }
+    }
+
+    async function submitShare(e) {
+        e.preventDefault();
+        const title = document.getElementById('shareTitle').value.trim();
+        const content = document.getElementById('shareContent').value.trim();
+
+        if (!title || !content) { showToast('请填写完整信息', 'error'); return; }
+
+        try {
+            const res = await fetch(API_BASE + '/shares', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: currentUser.id,
+                    nickname: currentUser.nickname,
+                    title: title,
+                    content: content,
+                    likes: 0,
+                    createdAt: new Date().toISOString()
+                })
+            });
+            if (!res.ok) throw new Error('API请求失败');
+            showToast('分享发布成功', 'success');
+            closeModal();
+            await renderShares();
+        } catch (e) {
+            console.warn('通过API发布分享失败，尝试本地:', e.message);
+            try {
+                await dbAdd('shares', {
+                    userId: currentUser.id, nickname: currentUser.nickname,
+                    title, content, likes: 0,
+                    createdAt: new Date().toISOString()
+                });
+                showToast('分享发布成功（本地模式）', 'success');
+                closeModal();
+                await renderShares();
+            } catch (e2) {
+                showToast('发布失败：' + e2.message, 'error');
+            }
+        }
+    }
+
+    // ==================== FAB ====================
+    function toggleFab(forceClose) {
+        const main = document.getElementById('fabMain');
+        const list = document.getElementById('fabSubList');
+        if (forceClose === true) {
+            main.classList.remove('active');
+            list.classList.remove('show');
+            main.setAttribute('aria-expanded', 'false');
+            return;
+        }
+        const isOpen = list.classList.contains('show');
+        main.classList.toggle('active');
+        list.classList.toggle('show');
+        main.setAttribute('aria-expanded', String(!isOpen));
+    }
+
+    // ==================== Toast ====================
+    function showToast(message, type) {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = 'toast-item ' + type;
+        const icon = type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+        toast.innerHTML = '<i class="fas ' + icon + '" aria-hidden="true"></i> ' + message;
+        container.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(100px)';
+            toast.style.transition = 'all 0.3s';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    // ==================== 退出登录 ====================
+    function handleLogout() {
+        if (!confirm('确定要退出登录吗？')) return;
+        localStorage.removeItem('currentUser');
+        window.location.href = 'login.html';
+    }
+
+    // ==================== 工具函数 ====================
+    function escapeHtml(str) {
+        if (!str) return '';
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    // ==================== 导航栏滚动 ====================
+    window.addEventListener('scroll', () => {
+        const navbar = document.getElementById('navbar');
+        if (window.scrollY > 10) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
+    // ==================== IntersectionObserver 延迟渲染 ====================
+    function observeSections() {
+        const sections = document.querySelectorAll('.section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.id;
+                    if (id === 'timeline') renderTimeline();
+                    else if (id === 'goals') renderGoals();
+                    else if (id === 'diaries') renderDiaries();
+                    else if (id === 'confessions') renderConfessions();
+                    else if (id === 'shares') renderShares();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { rootMargin: '100px' });
+        sections.forEach(s => observer.observe(s));
+    }
+
+    // ==================== 全局键盘事件 ====================
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('modalOverlay');
+            const imgPreview = document.getElementById('imagePreviewOverlay');
+            const fabList = document.getElementById('fabSubList');
+            if (modal.classList.contains('show')) closeModal();
+            else if (imgPreview.classList.contains('show')) closeImagePreview();
+            else if (fabList.classList.contains('show')) toggleFab(true);
+        }
+    });
+
+    // ==================== 页面初始化 ====================
+    async function init() {
+        try {
+            db = await openDB();
+            await loadUserProfile();
+            renderLifeProgress();
+            drawLifeRing();
+            initHeroParticles();
+            await seedData();
+
+            // 并行渲染首屏内容
+            await Promise.all([
+                renderStats(),
+                renderTimeline(),
+                renderGoals(),
+                renderDiaries(),
+                renderConfessions(),
+                renderShares()
+            ]);
+
+            // 设置延迟渲染观察器
+            observeSections();
+
+            // 显示清除示例数据按钮
+            if (localStorage.getItem('demoDataLoaded') === 'true') {
+                document.getElementById('clearDemoBtn').style.display = 'inline-flex';
+            }
+        } catch (e) {
+            showToast('初始化失败：' + e.message, 'error');
+            console.error(e);
+        }
+    }
+
+    init();
+    </script>
+</body>
+</html>

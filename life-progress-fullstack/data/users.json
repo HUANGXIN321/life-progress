@@ -1,0 +1,4 @@
+[
+  { "id": "1", "username": "demo", "password": "123456", "nickname": "Demo用户", "avatar": "D", "createdAt": "2026-06-18" },
+  { "id": "2", "username": "test", "password": "123456", "nickname": "测试用户", "avatar": "T", "createdAt": "2026-06-18" }
+]

@@ -1,0 +1,4 @@
+[
+  { "id": "1", "userId": "1", "content": "最近压力好大，工作生活都感觉喘不过气来。有时候真的想放下一切，去一个没有人认识我的地方重新开始。", "anonymous": true, "responses": [{ "id": "r1", "userId": "2", "content": "抱抱你，每个人都会有这样的时刻。重要的是不要放弃，明天会更好的！", "createdAt": "2026-06-16" }], "createdAt": "2026-06-15" },
+  { "id": "2", "userId": "2", "content": "今天收到了一个很好的消息，终于拿到了期待已久的offer！感谢一路走来帮助过我的人。", "anonymous": false, "responses": [{ "id": "r2", "userId": "1", "content": "恭喜恭喜！努力终有回报，为你开心！", "createdAt": "2026-06-17" }], "createdAt": "2026-06-16" }
+]

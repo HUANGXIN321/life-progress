@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人生进度 - 登录</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ==================== 主题变量系统 ==================== */
+        :root {
+            --primary: #e07a5f;
+            --primary-light: #f4a261;
+            --primary-dark: #c45d42;
+            --accent: #81b29a;
+            --accent-light: #a8d5ba;
+            --bg: #fefae0;
+            --bg-warm: #fdf6e3;
+            --card-bg: #ffffff;
+            --card-bg-rgb: 255, 255, 255;
+            --text: #3d405b;
+            --text-light: #5a5d7a;
+            --text-muted: #8b8fa3;
+            --border: rgba(61, 64, 91, 0.12);
+            --border-focus: rgba(224, 122, 95, 0.4);
+            --shadow: 0 8px 32px rgba(61, 64, 91, 0.08);
+            --shadow-hover: 0 12px 40px rgba(61, 64, 91, 0.12);
+            --danger: #e07a5f;
+            --success: #81b29a;
+            --radius: 20px;
+            --radius-sm: 14px;
+            --radius-xs: 10px;
+            --font-serif: 'Noto Serif SC', serif;
+            --font-sans: 'Noto Sans SC', sans-serif;
+        }
+
+        [data-theme="twilight"] {
+            --primary: #6b8cae;
+            --primary-light: #8fb0cc;
+            --primary-dark: #4a6d8c;
+            --accent: #a0a8b8;
+            --accent-light: #c0c6d2;
+            --bg: #e8ecf1;
+            --bg-warm: #dfe4ea;
+            --card-bg: #f5f7fa;
+            --card-bg-rgb: 245, 247, 250;
+            --text: #2c3e50;
+            --text-light: #4a5568;
+            --text-muted: #718096;
+            --border: rgba(44, 62, 80, 0.1);
+            --border-focus: rgba(107, 140, 174, 0.4);
+            --shadow: 0 8px 32px rgba(44, 62, 80, 0.08);
+            --shadow-hover: 0 12px 40px rgba(44, 62, 80, 0.12);
+        }
+
+        [data-theme="forest"] {
+            --primary: #5d7a5d;
+            --primary-light: #7a9a7a;
+            --primary-dark: #4a634a;
+            --accent: #a67c52;
+            --accent-light: #c49a70;
+            --bg: #f5f0e8;
+            --bg-warm: #ebe5da;
+            --card-bg: #faf8f3;
+            --card-bg-rgb: 250, 248, 243;
+            --text: #3a3a30;
+            --text-light: #55554a;
+            --text-muted: #7a7a6a;
+            --border: rgba(58, 58, 48, 0.1);
+            --border-focus: rgba(93, 122, 93, 0.4);
+            --shadow: 0 8px 32px rgba(58, 58, 48, 0.08);
+            --shadow-hover: 0 12px 40px rgba(58, 58, 48, 0.12);
+        }
+
+        [data-theme="pink"] {
+            --primary: #d4849c;
+            --primary-light: #e8a4b8;
+            --primary-dark: #b86880;
+            --accent: #b8a8c8;
+            --accent-light: #d0c4dc;
+            --bg: #fdf6f8;
+            --bg-warm: #f8eef2;
+            --card-bg: #fffafc;
+            --card-bg-rgb: 255, 250, 252;
+            --text: #4a3a42;
+            --text-light: #66565e;
+            --text-muted: #8a7a82;
+            --border: rgba(74, 58, 66, 0.1);
+            --border-focus: rgba(212, 132, 156, 0.4);
+            --shadow: 0 8px 32px rgba(74, 58, 66, 0.08);
+            --shadow-hover: 0 12px 40px rgba(74, 58, 66, 0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        /* ==================== 飘落花瓣Canvas ==================== */
+        #petalCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ==================== 纸质纹理叠加 ==================== */
+        .paper-texture {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* ==================== 主题切换器 ==================== */
+        .theme-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            gap: 8px;
+            background: var(--card-bg);
+            padding: 6px;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.5s ease;
+        }
+
+        .theme-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .theme-btn:hover { transform: scale(1.15); }
+        .theme-btn.active { border-color: var(--text); transform: scale(1.1); }
+
+        .theme-btn[data-theme="warm"] { background: linear-gradient(135deg, #e07a5f, #f4a261); }
+        .theme-btn[data-theme="twilight"] { background: linear-gradient(135deg, #6b8cae, #a0a8b8); }
+        .theme-btn[data-theme="forest"] { background: linear-gradient(135deg, #5d7a5d, #a67c52); }
+        .theme-btn[data-theme="pink"] { background: linear-gradient(135deg, #d4849c, #b8a8c8); }
+
+        /* ==================== 主容器 ==================== */
+        .login-container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .login-inner {
+            display: flex;
+            width: 100%;
+            max-width: 1100px;
+            gap: 60px;
+            align-items: center;
+        }
+
+        /* ==================== 左侧插画区域 ==================== */
+        .illustration-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeInLeft 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .illustration-svg {
+            width: 100%;
+            max-width: 420px;
+            filter: drop-shadow(0 20px 40px rgba(61, 64, 91, 0.1));
+        }
+
+        .illustration-svg path, .illustration-svg circle, .illustration-svg ellipse, .illustration-svg rect {
+            transition: fill 0.5s ease, stroke 0.5s ease;
+        }
+
+        .illu-title {
+            font-family: var(--font-serif);
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text);
+            margin-top: 28px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .illu-subtitle {
+            font-family: var(--font-sans);
+            font-size: 15px;
+            color: var(--text-muted);
+            margin-top: 10px;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        /* ==================== 右侧表单区域 ==================== */
+        .form-side {
+            flex: 0 0 420px;
+            animation: fadeInRight 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+        }
+
+        .form-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 40px 36px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            position: relative;
+            transition: all 0.5s ease;
+        }
+
+        .form-card::before {
+            content: '';
+            position: absolute;
+            top: -3px; left: 20px; right: 20px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 3px;
+            opacity: 0.6;
+        }
+
+        .logo-area {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .logo-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--primary);
+            border-radius: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 16px rgba(224, 122, 95, 0.3);
+            transition: all 0.5s ease;
+            transform: rotate(-3deg);
+        }
+
+        .logo-area h1 {
+            font-family: var(--font-serif);
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text);
+            transition: color 0.5s ease;
+        }
+
+        .logo-area p {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 6px;
+            transition: color 0.5s ease;
+        }
+
+        /* ==================== Tab切换 ==================== */
+        .tab-container {
+            display: flex;
+            background: var(--bg-warm);
+            border-radius: 14px;
+            padding: 4px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+            transition: all 0.5s ease;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px 0;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-family: var(--font-sans);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 12px rgba(224, 122, 95, 0.3);
+        }
+
+        .tab-btn:hover:not(.active) {
+            color: var(--text);
+        }
+
+        /* ==================== 表单 ==================== */
+        .form-panel { display: none; }
+        .form-panel.active {
+            display: block;
+            animation: fadeInUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .form-group { margin-bottom: 18px; }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-light);
+            margin-bottom: 7px;
+            transition: color 0.5s ease;
+        }
+
+        .input-wrapper { position: relative; }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 12px 14px 12px 42px;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-family: var(--font-sans);
+            font-size: 14px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .input-wrapper input::placeholder {
+            color: var(--text-muted);
+            opacity: 0.6;
+        }
+
+        .input-wrapper input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--border-focus);
+            background: var(--card-bg);
+        }
+
+        .input-wrapper input:focus + i {
+            color: var(--primary);
+        }
+
+        /* 手绘边框效果 */
+        .hand-drawn-input {
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px !important;
+        }
+
+        /* ==================== 提交按钮 ==================== */
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            border: none;
+            border-radius: var(--radius-sm);
+            color: white;
+            font-family: var(--font-sans);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+            margin-top: 6px;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .submit-btn:hover::before { left: 100%; }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(224, 122, 95, 0.35);
+            background: var(--primary-dark);
+        }
+
+        .submit-btn:active { transform: translateY(0); }
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ==================== Toast提示 ==================== */
+        .toast {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-120px);
+            padding: 14px 28px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 1000;
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-hover);
+            font-family: var(--font-sans);
+        }
+
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        .toast.success {
+            background: rgba(129, 178, 154, 0.15);
+            border: 1px solid rgba(129, 178, 154, 0.3);
+            color: #5a8a6e;
+        }
+
+        .toast.error {
+            background: rgba(224, 122, 95, 0.15);
+            border: 1px solid rgba(224, 122, 95, 0.3);
+            color: #b85a42;
+        }
+
+        .toast.info {
+            background: rgba(107, 140, 174, 0.15);
+            border: 1px solid rgba(107, 140, 174, 0.3);
+            color: #4a6d8c;
+        }
+
+        /* ==================== 底部文字 ==================== */
+        .footer-text {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 12px;
+            color: var(--text-muted);
+            transition: color 0.5s ease;
+        }
+
+        /* ==================== 动画 ==================== */
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==================== 加载动画 ==================== */
+        .loader-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--bg);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .loader-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loader-logo {
+            width: 60px;
+            height: 60px;
+            position: relative;
+        }
+
+        .loader-logo svg {
+            width: 100%; height: 100%;
+        }
+
+        .loader-logo path {
+            stroke: var(--primary);
+            stroke-width: 3;
+            fill: none;
+            stroke-dasharray: 300;
+            stroke-dashoffset: 300;
+            animation: drawLogo 1.5s ease forwards;
+        }
+
+        @keyframes drawLogo {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .loader-text {
+            font-family: var(--font-serif);
+            font-size: 18px;
+            color: var(--text);
+            margin-top: 16px;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 0.8s both;
+        }
+
+        /* ==================== 自定义光标 ==================== */
+        .custom-cursor {
+            position: fixed;
+            width: 12px; height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99999;
+            transition: transform 0.15s ease-out, opacity 0.15s ease;
+            mix-blend-mode: difference;
+        }
+
+        .custom-cursor-follower {
+            position: fixed;
+            width: 32px; height: 32px;
+            border: 1.5px solid var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99998;
+            transition: transform 0.35s ease-out, opacity 0.35s ease;
+            opacity: 0.4;
+        }
+
+        /* ==================== 响应式 ==================== */
+        @media (max-width: 900px) {
+            .login-inner {
+                flex-direction: column;
+                gap: 30px;
+            }
+            .form-side { flex: none; width: 100%; max-width: 420px; }
+            .illustration-svg { max-width: 280px; }
+            .illu-title { font-size: 24px; }
+        }
+
+        @media (max-width: 480px) {
+            .form-card { padding: 28px 20px; }
+            .logo-area h1 { font-size: 22px; }
+            .theme-switcher { top: 10px; right: 10px; }
+        }
+
+        /* ==================== 滚动条 ==================== */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; opacity: 0.3; }
+    </style>
+</head>
+<body>
+    <!-- 加载动画 -->
+    <div class="loader-overlay" id="loaderOverlay">
+        <div class="loader-logo">
+            <svg viewBox="0 0 60 60">
+                <path d="M30 5 C15 5, 5 18, 5 30 C5 45, 18 55, 30 55 C42 55, 55 45, 55 30 C55 18, 45 5, 30 5 Z M30 15 C22 15, 15 22, 15 30 C15 38, 22 45, 30 45 C38 45, 45 38, 45 30 C45 22, 38 15, 30 15 Z M30 22 C26 22, 22 26, 22 30 C22 34, 26 38, 30 38 C34 38, 38 34, 38 30 C38 26, 34 22, 30 22 Z"/>
+            </svg>
+        </div>
+        <div class="loader-text">人生进度</div>
+    </div>
+
+    <!-- 自定义光标 -->
+    <div class="custom-cursor" id="cursor"></div>
+    <div class="custom-cursor-follower" id="cursorFollower"></div>
+
+    <!-- 纸质纹理 -->
+    <div class="paper-texture"></div>
+
+    <!-- 飘落花瓣Canvas -->
+    <canvas id="petalCanvas"></canvas>
+
+    <!-- 主题切换器 -->
+    <div class="theme-switcher">
+        <button class="theme-btn active" data-theme="warm" title="暖橙主题" onclick="switchTheme('warm')"></button>
+        <button class="theme-btn" data-theme="twilight" title="暮蓝主题" onclick="switchTheme('twilight')"></button>
+        <button class="theme-btn" data-theme="forest" title="森绿主题" onclick="switchTheme('forest')"></button>
+        <button class="theme-btn" data-theme="pink" title="粉黛主题" onclick="switchTheme('pink')"></button>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="login-container">
+        <div class="login-inner">
+            <!-- 左侧插画 -->
+            <div class="illustration-side">
+                <svg class="illustration-svg" viewBox="0 0 400 360" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 太阳 -->
+                    <circle cx="320" cy="60" r="28" fill="#f4a261" opacity="0.9"/>
+                    <g stroke="#f4a261" stroke-width="2" stroke-linecap="round" opacity="0.5">
+                        <line x1="320" y1="20" x2="320" y2="8"/>
+                        <line x1="320" y1="100" x2="320" y2="112"/>
+                        <line x1="280" y1="60" x2="268" y2="60"/>
+                        <line x1="360" y1="60" x2="372" y2="60"/>
+                        <line x1="292" y1="32" x2="284" y2="24"/>
+                        <line x1="348" y1="88" x2="356" y2="96"/>
+                        <line x1="292" y1="88" x2="284" y2="96"/>
+                        <line x1="348" y1="32" x2="356" y2="24"/>
+                    </g>
+                    <!-- 云朵 -->
+                    <g fill="#fff" opacity="0.85">
+                        <ellipse cx="80" cy="55" rx="28" ry="14"/>
+                        <ellipse cx="105" cy="48" rx="22" ry="12"/>
+                        <ellipse cx="58" cy="52" rx="18" ry="10"/>
+                    </g>
+                    <g fill="#fff" opacity="0.7">
+                        <ellipse cx="260" cy="95" rx="22" ry="10"/>
+                        <ellipse cx="280" cy="90" rx="16" ry="9"/>
+                        <ellipse cx="242" cy="92" rx="14" ry="8"/>
+                    </g>
+                    <!-- 远山 -->
+                    <path d="M0 280 Q60 180, 130 220 T260 190 T400 240 L400 360 L0 360 Z" fill="#e8e0d0" opacity="0.6"/>
+                    <path d="M0 300 Q80 230, 160 260 T320 220 T400 270 L400 360 L0 360 Z" fill="#d8d0c0" opacity="0.5"/>
+                    <!-- 近山 -->
+                    <path d="M-10 340 Q50 260, 120 290 T240 250 T410 300 L410 370 L-10 370 Z" fill="var(--accent)" opacity="0.25"/>
+                    <!-- 小路 -->
+                    <path d="M180 360 Q200 300, 190 250 Q185 200, 200 160" stroke="#c4b8a0" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="8 6"/>
+                    <!-- 树木 -->
+                    <g>
+                        <rect x="55" y="270" width="6" height="30" fill="#a08060" rx="2"/>
+                        <circle cx="58" cy="260" r="18" fill="var(--accent)" opacity="0.7"/>
+                        <circle cx="50" cy="268" r="12" fill="var(--accent)" opacity="0.5"/>
+                        <circle cx="66" cy="268" r="12" fill="var(--accent)" opacity="0.5"/>
+                    </g>
+                    <g>
+                        <rect x="330" y="280" width="5" height="25" fill="#a08060" rx="2"/>
+                        <ellipse cx="332" cy="270" rx="16" ry="20" fill="var(--primary)" opacity="0.35"/>
+                        <ellipse cx="325" cy="278" rx="10" ry="12" fill="var(--primary)" opacity="0.25"/>
+                        <ellipse cx="340" cy="278" rx="10" ry="12" fill="var(--primary)" opacity="0.25"/>
+                    </g>
+                    <!-- 人物剪影 -->
+                    <g transform="translate(185, 145)">
+                        <!-- 身体 -->
+                        <path d="M10 35 Q8 25, 12 18 Q15 12, 20 12 Q25 12, 28 18 Q32 25, 30 35 L32 55 L8 55 Z" fill="var(--text)" opacity="0.7"/>
+                        <!-- 头 -->
+                        <circle cx="20" cy="8" r="7" fill="var(--text)" opacity="0.7"/>
+                        <!-- 手臂举起 -->
+                        <path d="M12 22 Q5 12, 0 5" stroke="var(--text)" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.7"/>
+                        <path d="M28 22 Q35 12, 40 5" stroke="var(--text)" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.7"/>
+                        <!-- 腿 -->
+                        <line x1="16" y1="55" x2="14" y2="72" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                        <line x1="24" y1="55" x2="26" y2="72" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+                    </g>
+                    <!-- 飞鸟 -->
+                    <g stroke="var(--text)" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.4">
+                        <path d="M100 80 Q105 75, 110 80 Q115 75, 120 80"/>
+                        <path d="M130 65 Q133 62, 136 65 Q139 62, 142 65"/>
+                        <path d="M85 95 Q88 92, 91 95 Q94 92, 97 95"/>
+                    </g>
+                    <!-- 花朵点缀 -->
+                    <g fill="var(--primary)" opacity="0.5">
+                        <circle cx="90" cy="310" r="4"/>
+                        <circle cx="98" cy="306" r="3"/>
+                        <circle cx="280" cy="315" r="4"/>
+                        <circle cx="290" cy="312" r="3"/>
+                        <circle cx="150" cy="325" r="3.5"/>
+                    </g>
+                    <!-- 底部草地装饰 -->
+                    <g stroke="var(--accent)" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.4">
+                        <path d="M20 350 Q22 340, 25 335"/>
+                        <path d="M28 352 Q30 342, 33 338"/>
+                        <path d="M360 348 Q362 338, 365 334"/>
+                        <path d="M370 350 Q372 340, 375 336"/>
+                    </g>
+                </svg>
+                <div class="illu-title">人生进度</div>
+                <div class="illu-subtitle">记录每一步，规划每一天<br>让生命的旅程温暖而精彩</div>
+            </div>
+
+            <!-- 右侧表单 -->
+            <div class="form-side">
+                <div class="form-card">
+                    <div class="logo-area">
+                        <div class="logo-icon">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <h1>欢迎回来</h1>
+                        <p>登录或注册，开启你的人生之旅</p>
+                    </div>
+
+                    <div class="tab-container">
+                        <button class="tab-btn active" data-tab="login" onclick="switchTab('login')">
+                            <i class="fas fa-sign-in-alt"></i> 登录
+                        </button>
+                        <button class="tab-btn" data-tab="register" onclick="switchTab('register')">
+                            <i class="fas fa-user-plus"></i> 注册
+                        </button>
+                    </div>
+
+                    <!-- 登录表单 -->
+                    <div class="form-panel active" id="loginPanel">
+                        <form onsubmit="handleLogin(event)">
+                            <div class="form-group">
+                                <label>用户名</label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="loginUsername" class="hand-drawn-input" placeholder="请输入用户名" required autocomplete="username">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>密码</label>
+                                <div class="input-wrapper">
+                                    <input type="password" id="loginPassword" class="hand-drawn-input" placeholder="请输入密码" required autocomplete="current-password">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                            </div>
+                            <button type="submit" class="submit-btn" id="loginBtn">
+                                <i class="fas fa-arrow-right-to-bracket"></i> 登录
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- 注册表单 -->
+                    <div class="form-panel" id="registerPanel">
+                        <form onsubmit="handleRegister(event)">
+                            <div class="form-group">
+                                <label>用户名</label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="regUsername" class="hand-drawn-input" placeholder="请设置用户名（3-20字符）" required minlength="3" maxlength="20" autocomplete="username">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>昵称</label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="regNickname" class="hand-drawn-input" placeholder="请设置昵称" required maxlength="20">
+                                    <i class="fas fa-id-card"></i>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>密码</label>
+                                <div class="input-wrapper">
+                                    <input type="password" id="regPassword" class="hand-drawn-input" placeholder="请设置密码（6位以上）" required minlength="6" autocomplete="new-password">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>确认密码</label>
+                                <div class="input-wrapper">
+                                    <input type="password" id="regConfirm" class="hand-drawn-input" placeholder="请再次输入密码" required minlength="6" autocomplete="new-password">
+                                    <i class="fas fa-shield-halved"></i>
+                                </div>
+                            </div>
+                            <button type="submit" class="submit-btn" id="registerBtn">
+                                <i class="fas fa-user-check"></i> 注册
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="footer-text">
+                        人生进度 &copy; 2024 &mdash; TRAE AI创造力大赛参赛作品
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast容器 -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ==================== 主题切换 ====================
+        function switchTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === theme);
+            });
+            localStorage.setItem('preferredTheme', theme);
+        }
+
+        // 恢复主题
+        (function() {
+            const saved = localStorage.getItem('preferredTheme');
+            if (saved) switchTheme(saved);
+        })();
+
+        // ==================== 飘落花瓣动画 ====================
+        const canvas = document.getElementById('petalCanvas');
+        const ctx = canvas.getContext('2d');
+        let petals = [];
+        let mouse = { x: null, y: null };
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        class Petal {
+            constructor() {
+                this.reset();
+                this.y = Math.random() * canvas.height; // 初始随机分布
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = -20;
+                this.size = Math.random() * 6 + 3;
+                this.speedY = Math.random() * 0.8 + 0.3;
+                this.speedX = (Math.random() - 0.5) * 0.6;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.03;
+                this.opacity = Math.random() * 0.4 + 0.2;
+                this.sway = Math.random() * 0.02 + 0.01;
+                this.swayOffset = Math.random() * Math.PI * 2;
+                // 根据主题选择颜色
+                const theme = document.documentElement.getAttribute('data-theme') || 'warm';
+                const colors = {
+                    warm: ['#e07a5f', '#f4a261', '#e8b4a0', '#f0c8a0'],
+                    twilight: ['#8fb0cc', '#a0a8b8', '#b8c8d8', '#c0c6d2'],
+                    forest: ['#7a9a7a', '#a67c52', '#8aaa8a', '#b89068'],
+                    pink: ['#d4849c', '#e8a4b8', '#d8a0b0', '#e8b8c8']
+                };
+                const palette = colors[theme] || colors.warm;
+                this.color = palette[Math.floor(Math.random() * palette.length)];
+            }
+
+            update(time) {
+                this.y += this.speedY;
+                this.x += this.speedX + Math.sin(time * this.sway + this.swayOffset) * 0.5;
+                this.rotation += this.rotationSpeed;
+
+                // 鼠标影响
+                if (mouse.x !== null) {
+                    const dx = mouse.x - this.x;
+                    const dy = mouse.y - this.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 120) {
+                        this.x -= dx * 0.003;
+                        this.y -= dy * 0.003;
+                    }
+                }
+
+                if (this.y > canvas.height + 20) {
+                    this.reset();
+                }
+                if (this.x < -20) this.x = canvas.width + 20;
+                if (this.x > canvas.width + 20) this.x = -20;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+                // 绘制花瓣形状
+                ctx.beginPath();
+                ctx.ellipse(0, 0, this.size, this.size * 0.6, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function initPetals() {
+            petals = [];
+            const count = Math.min(50, Math.floor((canvas.width * canvas.height) / 25000));
+            for (let i = 0; i < count; i++) {
+                petals.push(new Petal());
+            }
+        }
+
+        let time = 0;
+        function animatePetals() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            time += 0.01;
+            petals.forEach(p => {
+                p.update(time);
+                p.draw();
+            });
+            requestAnimationFrame(animatePetals);
+        }
+
+        initPetals();
+        animatePetals();
+        window.addEventListener('resize', initPetals);
+
+        // ==================== 自定义光标 ====================
+        const cursor = document.getElementById('cursor');
+        const cursorFollower = document.getElementById('cursorFollower');
+        let cursorX = 0, cursorY = 0;
+        let followerX = 0, followerY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            cursorX = e.clientX;
+            cursorY = e.clientY;
+            cursor.style.transform = `translate(${cursorX - 6}px, ${cursorY - 6}px)`;
+        });
+
+        function animateCursor() {
+            followerX += (cursorX - followerX) * 0.12;
+            followerY += (cursorY - followerY) * 0.12;
+            cursorFollower.style.transform = `translate(${followerX - 16}px, ${followerY - 16}px)`;
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // 触摸设备隐藏自定义光标
+        if ('ontouchstart' in window) {
+            cursor.style.display = 'none';
+            cursorFollower.style.display = 'none';
+        }
+
+        // ==================== 加载动画 ====================
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loaderOverlay').classList.add('hidden');
+            }, 1200);
+        });
+
+        // ==================== IndexedDB ====================
+        function openDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open('LifeProgressDB', 2);
+                request.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains('users')) {
+                        const userStore = db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
+                        userStore.createIndex('username', 'username', { unique: true });
+                    }
+                    if (!db.objectStoreNames.contains('diaries')) {
+                        const ds = db.createObjectStore('diaries', { keyPath: 'id', autoIncrement: true });
+                        ds.createIndex('userId', 'userId', { unique: false });
+                    }
+                    if (!db.objectStoreNames.contains('confessions')) {
+                        const cs = db.createObjectStore('confessions', { keyPath: 'id', autoIncrement: true });
+                        cs.createIndex('userId', 'userId', { unique: false });
+                    }
+                    if (!db.objectStoreNames.contains('timeline')) {
+                        const ts = db.createObjectStore('timeline', { keyPath: 'id', autoIncrement: true });
+                        ts.createIndex('userId', 'userId', { unique: false });
+                    }
+                    if (!db.objectStoreNames.contains('goals')) {
+                        const gs = db.createObjectStore('goals', { keyPath: 'id', autoIncrement: true });
+                        gs.createIndex('userId', 'userId', { unique: false });
+                    }
+                    if (!db.objectStoreNames.contains('shares')) {
+                        db.createObjectStore('shares', { keyPath: 'id', autoIncrement: true });
+                    }
+                };
+                request.onsuccess = (e) => resolve(e.target.result);
+                request.onerror = (e) => reject(e.target.error);
+            });
+        }
+
+        // ==================== Tab切换 ====================
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.form-panel').forEach(panel => panel.classList.remove('active'));
+            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+            document.getElementById(tab === 'login' ? 'loginPanel' : 'registerPanel').classList.add('active');
+        }
+
+        // ==================== Toast ====================
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // ==================== 登录 ====================
+        async function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            if (!username || !password) {
+                showToast('请填写所有字段', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('loginBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 登录中...';
+
+            try {
+                const db = await openDB();
+                const tx = db.transaction('users', 'readonly');
+                const store = tx.objectStore('users');
+                const index = store.index('username');
+                const request = index.get(username);
+
+                request.onsuccess = () => {
+                    const user = request.result;
+                    if (!user) {
+                        showToast('用户名不存在', 'error');
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> 登录';
+                        return;
+                    }
+                    if (user.password !== password) {
+                        showToast('密码错误', 'error');
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> 登录';
+                        return;
+                    }
+                    // 存储到localStorage
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        id: user.id,
+                        username: user.username,
+                        nickname: user.nickname,
+                        avatar: user.avatar || null,
+                        theme: user.theme || 'warm'
+                    }));
+                    // 同步主题
+                    if (user.theme) switchTheme(user.theme);
+                    showToast('登录成功！欢迎回来', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 800);
+                };
+
+                request.onerror = () => {
+                    showToast('登录失败，请重试', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> 登录';
+                };
+            } catch (err) {
+                showToast('系统错误：' + err.message, 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> 登录';
+            }
+        }
+
+        // ==================== 注册 ====================
+        async function handleRegister(e) {
+            e.preventDefault();
+            const username = document.getElementById('regUsername').value.trim();
+            const nickname = document.getElementById('regNickname').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const confirm = document.getElementById('regConfirm').value;
+
+            if (!username || !nickname || !password || !confirm) {
+                showToast('请填写所有字段', 'error');
+                return;
+            }
+
+            if (username.length < 3) {
+                showToast('用户名至少3个字符', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showToast('密码至少6位', 'error');
+                return;
+            }
+
+            if (password !== confirm) {
+                showToast('两次密码不一致', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('registerBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 注册中...';
+
+            try {
+                const db = await openDB();
+                const tx = db.transaction('users', 'readwrite');
+                const store = tx.objectStore('users');
+                const index = store.index('username');
+
+                const checkReq = index.get(username);
+                checkReq.onsuccess = () => {
+                    if (checkReq.result) {
+                        showToast('用户名已存在', 'error');
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fas fa-user-check"></i> 注册';
+                        return;
+                    }
+
+                    const newUser = {
+                        username: username,
+                        password: password,
+                        nickname: nickname,
+                        avatar: null,
+                        birthDate: null,
+                        gender: null,
+                        status: null,
+                        major: null,
+                        year: null,
+                        relationship: null,
+                        height: null,
+                        weight: null,
+                        hobbies: [],
+                        bio: null,
+                        motto: null,
+                        theme: 'warm',
+                        createdAt: new Date().toISOString()
+                    };
+                    const addReq = store.add(newUser);
+                    addReq.onsuccess = () => {
+                        showToast('注册成功！请完善你的资料', 'success');
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fas fa-user-check"></i> 注册';
+                        // 自动登录并跳转到profile设置
+                        localStorage.setItem('currentUser', JSON.stringify({
+                            id: addReq.result,
+                            username: username,
+                            nickname: nickname,
+                            avatar: null,
+                            theme: 'warm',
+                            isNewUser: true
+                        }));
+                        setTimeout(() => {
+                            window.location.href = 'index.html?setup=profile';
+                        }, 800);
+                    };
+                    addReq.onerror = () => {
+                        showToast('注册失败，请重试', 'error');
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fas fa-user-check"></i> 注册';
+                    };
+                };
+                checkReq.onerror = () => {
+                    showToast('系统错误，请重试', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-user-check"></i> 注册';
+                };
+            } catch (err) {
+                showToast('系统错误：' + err.message, 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-user-check"></i> 注册';
+            }
+        }
+
+        // ==================== 检查是否已登录 ====================
+        (function checkAuth() {
+            const user = localStorage.getItem('currentUser');
+            if (user) {
+                try {
+                    const parsed = JSON.parse(user);
+                    if (parsed.id && parsed.username) {
+                        window.location.href = 'index.html';
+                    }
+                } catch (e) {
+                    localStorage.removeItem('currentUser');
+                }
+            }
+        })();
+    </script>
+</body>
+</html>
