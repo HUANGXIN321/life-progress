@@ -2356,7 +2356,7 @@
         人生进度 &mdash; 记录每一步，规划每一天 <span>|</span> TRAE AI创造力大赛参赛作品
         <div class="footer-actions">
             <button class="footer-btn" onclick="exportData()" aria-label="导出数据"><i class="fas fa-download" aria-hidden="true"></i> 导出数据</button>
-            <button class="footer-btn" onclick="clearDemoData()" id="clearDemoBtn" style="display:none" aria-label="清除示例数据"><i class="fas fa-trash" aria-hidden="true"></i> 清除示例数据</button>
+
             <button class="footer-btn" onclick="openAbout()" aria-label="关于作品"><i class="fas fa-circle-info" aria-hidden="true"></i> 关于作品</button>
         </div>
     </footer>
@@ -2373,7 +2373,7 @@
     let mediaRecorder = null;
     let audioChunks = [];
     let isRecording = false;
-    let demoDataLoaded = false;
+
     let modalFocusTrap = null;
 
     // ==================== 主题切换 ====================
@@ -2928,101 +2928,6 @@
         }
     }
 
-    // ==================== GitHub Pages 检测 ====================
-    function isGitHubPages() {
-        return window.location.hostname.includes('github.io') ||
-               window.location.hostname.includes('pages.dev') ||
-               localStorage.getItem('forceDemo') === 'true';
-    }
-
-    // ==================== Demo数据模式 ====================
-    async function seedData() {
-        if (!isGitHubPages()) return;
-        if (demoDataLoaded) return;
-
-        // 检查是否已有数据
-        const diaries = await dbGetByIndex('diaries', 'userId', currentUser.id);
-        const timeline = await dbGetByIndex('timeline', 'userId', currentUser.id);
-        const goals = await dbGetByIndex('goals', 'userId', currentUser.id);
-        const confessions = await dbGetByIndex('confessions', 'userId', currentUser.id);
-        const shares = await dbGetAll('shares');
-
-        if (diaries.length > 0 || timeline.length > 0 || goals.length > 0) {
-            return; // 已有数据，不覆盖
-        }
-
-        demoDataLoaded = true;
-        localStorage.setItem('demoDataLoaded', 'true');
-
-        // 3条日记
-        const demoDiaries = [
-            { userId: currentUser.id, title: '今天学会了做红烧肉', content: '周末在家研究菜谱，终于做出了色香味俱全的红烧肉。虽然过程有点手忙脚乱，但看到家人吃得开心，一切都值得。生活中的小确幸，往往就藏在这些烟火气里。', mood: 'happy', date: '2024-03-15', createdAt: '2024-03-15T10:00:00Z', images: [], videos: [], audios: [], isDemo: true },
-            { userId: currentUser.id, title: '深夜的沉思', content: '凌晨两点，窗外的城市已经安静。翻着旧照片，想起很多往事。时间真的过得好快，不知不觉已经走到了这里。未来的路还很长，希望自己能一直保持初心。', mood: 'thoughtful', date: '2024-03-10', createdAt: '2024-03-10T22:00:00Z', images: [], videos: [], audios: [], isDemo: true },
-            { userId: currentUser.id, title: '第一次独立完成项目', content: '经过三个月的努力，终于独立完成了人生第一个完整的项目。从需求分析到上线部署，每一步都充满挑战。感谢团队的支持，也感谢那个没有放弃的自己。', mood: 'excited', date: '2024-02-28', createdAt: '2024-02-28T18:00:00Z', images: [], videos: [], audios: [], isDemo: true }
-        ];
-        for (const d of demoDiaries) await dbAdd('diaries', d);
-
-        // 4条时间轴事件
-        const demoTimeline = [
-            { userId: currentUser.id, title: '大学毕业', description: '穿上学士服，和同学们拍了毕业照。四年的青春，在这一刻画上了句号。', date: '2022-06-20', tag: 'milestone', createdAt: '2022-06-20T00:00:00Z', isDemo: true },
-            { userId: currentUser.id, title: '第一次独自旅行', description: '背起背包去了云南，在洱海边看了日出，在丽江古城听了民谣。一个人的旅行，让我更了解自己。', date: '2023-08-15', tag: 'memory', createdAt: '2023-08-15T00:00:00Z', isDemo: true },
-            { userId: currentUser.id, title: '升职加薪', description: '经过一年的努力，终于得到了领导的认可，从初级工程师晋升为中级工程师。新的起点，继续加油！', date: '2024-01-10', tag: 'achievement', createdAt: '2024-01-10T00:00:00Z', isDemo: true },
-            { userId: currentUser.id, title: '学会做饭', description: '从一个连煎蛋都会糊的厨房小白，到现在能做出一桌像样的菜。生活技能+1，成就感满满。', date: '2024-02-14', tag: 'achievement', createdAt: '2024-02-14T00:00:00Z', isDemo: true }
-        ];
-        for (const t of demoTimeline) await dbAdd('timeline', t);
-
-        // 3个目标
-        const demoGoals = [
-            { userId: currentUser.id, title: '读完30本书', description: '今年计划读完30本涵盖技术、人文、心理的书籍，拓宽知识面。', progress: 35, status: 'in-progress', deadline: '2024-12-31', createdAt: '2024-01-01T00:00:00Z', isDemo: true },
-            { userId: currentUser.id, title: '跑完人生第一个半马', description: '从5公里开始，逐步增加到21公里。坚持每周三次跑步训练。', progress: 60, status: 'in-progress', deadline: '2024-10-01', createdAt: '2024-01-01T00:00:00Z', isDemo: true },
-            { userId: currentUser.id, title: '学会弹吉他', description: '从零基础开始，学会弹奏10首完整的歌曲。', progress: 100, status: 'completed', deadline: '2024-03-01', createdAt: '2023-06-01T00:00:00Z', isDemo: true }
-        ];
-        for (const g of demoGoals) await dbAdd('goals', g);
-
-        // 2条倾诉（1匿名1实名）
-        const demoConfessions = [
-            { userId: currentUser.id, nickname: currentUser.nickname || '用户', content: '最近工作压力很大，经常失眠。不知道该怎么调节自己的情绪，有时候觉得自己快要撑不住了。', anonymous: true, responses: [{ author: '温暖的陌生人', content: '抱抱你，每个人都会有低谷期。试着给自己放个小假，哪怕只是周末去公园走走。你并不孤单。', createdAt: '2024-03-12T10:00:00Z' }], createdAt: '2024-03-11T20:00:00Z', isDemo: true },
-            { userId: currentUser.id, nickname: currentUser.nickname || '用户', content: '终于鼓起勇气向暗恋的人表白了，虽然被婉拒了，但至少没有遗憾了。谢谢自己的勇敢。', anonymous: false, responses: [{ author: '过来人', content: '为你的勇气点赞！表白被拒绝不代表你不够好，只是缘分未到。相信更好的在前面等你。', createdAt: '2024-03-08T14:00:00Z' }], createdAt: '2024-03-07T19:00:00Z', isDemo: true }
-        ];
-        for (const c of demoConfessions) await dbAdd('confessions', c);
-
-        // 2条分享（带点赞数）
-        const demoShares = [
-            { userId: currentUser.id, nickname: '小林', title: '我的极简生活实验', content: '三个月前开始尝试极简生活，清理了家里80%的物品。现在每天醒来，看着整洁的房间，心情格外平静。原来我们需要的，真的比想象中少很多。', likes: 24, createdAt: '2024-03-05T09:00:00Z', isDemo: true },
-            { userId: currentUser.id, nickname: '阿杰', title: '从0到1学编程的心路历程', content: '一年前我还是个完全不懂代码的文科生，现在能独立开发小项目了。想对所有想转行的人说：年龄不是问题，开始行动才是答案。', likes: 56, createdAt: '2024-02-20T15:00:00Z', isDemo: true }
-        ];
-        for (const s of demoShares) await dbAdd('shares', s);
-
-        showToast('已加载示例数据', 'info');
-        document.getElementById('clearDemoBtn').style.display = 'inline-flex';
-    }
-
-    // ==================== 清除示例数据 ====================
-    async function clearDemoData() {
-        if (!confirm('确定要清除所有示例数据吗？你的真实数据不会被删除。')) return;
-        try {
-            const allDiaries = await dbGetByIndex('diaries', 'userId', currentUser.id);
-            const allTimeline = await dbGetByIndex('timeline', 'userId', currentUser.id);
-            const allGoals = await dbGetByIndex('goals', 'userId', currentUser.id);
-            const allConfessions = await dbGetByIndex('confessions', 'userId', currentUser.id);
-            const allShares = await dbGetAll('shares');
-
-            for (const d of allDiaries) { if (d.isDemo) await dbDelete('diaries', d.id); }
-            for (const t of allTimeline) { if (t.isDemo) await dbDelete('timeline', t.id); }
-            for (const g of allGoals) { if (g.isDemo) await dbDelete('goals', g.id); }
-            for (const c of allConfessions) { if (c.isDemo) await dbDelete('confessions', c.id); }
-            for (const s of allShares) { if (s.isDemo) await dbDelete('shares', s.id); }
-
-            demoDataLoaded = false;
-            localStorage.removeItem('demoDataLoaded');
-            document.getElementById('clearDemoBtn').style.display = 'none';
-            showToast('示例数据已清除', 'success');
-            await init();
-        } catch (e) {
-            showToast('清除失败：' + e.message, 'error');
-        }
-    }
-
     // ==================== 数据导出 ====================
     async function exportData() {
         try {
@@ -3138,12 +3043,10 @@
         items.forEach((item, i) => {
             const tagClass = item.tag || 'achievement';
             const tagLabel = tagClass === 'achievement' ? '成就' : tagClass === 'milestone' ? '里程碑' : '回忆';
-            const demoBadge = item.isDemo ? '<span class="diary-demo-badge">示例</span>' : '';
             html += `
                 <div class="timeline-item" style="transition-delay: ${i * 0.1}s">
                     <div class="timeline-dot tag-${tagClass}" aria-hidden="true"></div>
                     <div class="timeline-card">
-                        ${demoBadge}
                         <div class="timeline-date"><i class="far fa-calendar" aria-hidden="true"></i> ${item.date}</div>
                         <div class="timeline-title">${escapeHtml(item.title)}</div>
                         <div class="timeline-desc">${escapeHtml(item.description)}</div>
@@ -3173,10 +3076,8 @@
             const circumference = 2 * Math.PI * 22;
             const offset = circumference - (Math.min(item.progress, 100) / 100) * circumference;
             const strokeColor = item.status === 'completed' ? 'var(--accent)' : item.status === 'paused' ? 'var(--warning)' : 'var(--info)';
-            const demoBadge = item.isDemo ? '<span class="diary-demo-badge">示例</span>' : '';
             html += `
                 <div class="goal-card" style="transition-delay: ${i * 0.1}s">
-                    ${demoBadge}
                     <div class="goal-header">
                         <div class="goal-title">${escapeHtml(item.title)}</div>
                         <span class="goal-status ${item.status}">${statusLabel}</span>
@@ -3238,11 +3139,9 @@
             if (item.audios && item.audios.length > 0) {
                 mediaHtml += `<div class="diary-media"><audio controls src="${item.audios[0]}"></audio></div>`;
             }
-            const demoBadge = item.isDemo ? '<span class="diary-demo-badge">示例</span>' : '';
-            const deleteBtn = item.isDemo ? '' : `<button class="diary-delete-btn" onclick="deleteDiary(${item.id})" aria-label="删除日记"><i class="fas fa-trash" aria-hidden="true"></i></button>`;
+            const deleteBtn = `<button class="diary-delete-btn" onclick="deleteDiary(${item.id})" aria-label="删除日记"><i class="fas fa-trash" aria-hidden="true"></i></button>`;
             html += `
                 <div class="diary-card" style="animation-delay: ${Math.random() * 0.5}s">
-                    ${demoBadge}
                     ${deleteBtn}
                     ${mediaHtml}
                     <div class="diary-header">
@@ -3282,10 +3181,8 @@
                     });
                     responsesHtml += '</div>';
                 }
-                const demoBadge = item.isDemo ? '<span class="confession-demo-badge">示例</span>' : '';
                 html += `
                     <div class="confession-card" style="transition-delay: ${i * 0.1}s">
-                        ${demoBadge}
                         <div class="confession-top">
                             <div class="confession-meta">
                                 <div class="confession-avatar" aria-hidden="true">${initial}</div>
@@ -3328,10 +3225,8 @@
                         });
                         responsesHtml += '</div>';
                     }
-                    const demoBadge = item.isDemo ? '<span class="confession-demo-badge">示例</span>' : '';
                     html += `
                         <div class="confession-card" style="transition-delay: ${i * 0.1}s">
-                            ${demoBadge}
                             <div class="confession-top">
                                 <div class="confession-meta">
                                     <div class="confession-avatar" aria-hidden="true">${initial}</div>
@@ -3374,10 +3269,8 @@
                 const nickname = item.nickname || '用户';
                 const initial = nickname.charAt(0);
                 const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString('zh-CN') : '';
-                const demoBadge = item.isDemo ? '<span class="share-demo-badge">示例</span>' : '';
                 html += `
                     <div class="share-card" style="transition-delay: ${i * 0.1}s">
-                        ${demoBadge}
                         <div class="share-header">
                             <div class="share-avatar" aria-hidden="true">${initial}</div>
                             <div class="share-author-info">
@@ -3413,10 +3306,8 @@
                     const nickname = item.nickname || '用户';
                     const initial = nickname.charAt(0);
                     const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString('zh-CN') : '';
-                    const demoBadge = item.isDemo ? '<span class="share-demo-badge">示例</span>' : '';
                     html += `
                         <div class="share-card" style="transition-delay: ${i * 0.1}s">
-                            ${demoBadge}
                             <div class="share-header">
                                 <div class="share-avatar" aria-hidden="true">${initial}</div>
                                 <div class="share-author-info">
@@ -4092,7 +3983,6 @@
             renderLifeProgress();
             drawLifeRing();
             initHeroParticles();
-            await seedData();
 
             // 并行渲染首屏内容
             await Promise.all([
@@ -4106,11 +3996,6 @@
 
             // 设置延迟渲染观察器
             observeSections();
-
-            // 显示清除示例数据按钮
-            if (localStorage.getItem('demoDataLoaded') === 'true') {
-                document.getElementById('clearDemoBtn').style.display = 'inline-flex';
-            }
         } catch (e) {
             showToast('初始化失败：' + e.message, 'error');
             console.error(e);
