@@ -125,6 +125,13 @@
             transition: background 0.5s ease, color 0.5s ease;
         }
 
+        /* 主题切换全局过渡 */
+        body.theme-transitioning *,
+        body.theme-transitioning *::before,
+        body.theme-transitioning *::after {
+            transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease !important;
+        }
+
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; opacity: 0.3; }
@@ -2368,6 +2375,7 @@
         人生进度 &mdash; 记录每一步，规划每一天 <span>|</span> TRAE AI创造力大赛参赛作品
         <div class="footer-actions">
             <button class="footer-btn" onclick="exportData()" aria-label="导出数据"><i class="fas fa-download" aria-hidden="true"></i> 导出数据</button>
+            <button class="footer-btn" onclick="importData()" aria-label="导入数据"><i class="fas fa-upload" aria-hidden="true"></i> 导入数据</button>
 
             <button class="footer-btn" onclick="openAbout()" aria-label="关于作品"><i class="fas fa-circle-info" aria-hidden="true"></i> 关于作品</button>
         </div>
@@ -2390,6 +2398,8 @@
 
     // ==================== 主题切换 ====================
     function switchTheme(theme) {
+        // 添加主题过渡类，触发 CSS 过渡动画
+        document.body.classList.add('theme-transitioning');
         document.documentElement.setAttribute('data-theme', theme);
         document.querySelectorAll('.theme-btn-nav').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.theme === theme);
@@ -2403,6 +2413,10 @@
                 }
             }).catch(()=>{});
         }
+        // 过渡结束后移除类
+        setTimeout(() => {
+            document.body.classList.remove('theme-transitioning');
+        }, 600);
     }
 
     // ==================== 自定义光标 ====================
@@ -2945,6 +2959,7 @@
         try {
             const data = {
                 exportDate: new Date().toISOString(),
+                version: '1.0',
                 user: await dbGet('users', currentUser.id),
                 diaries: await dbGetByIndex('diaries', 'userId', currentUser.id),
                 timeline: await dbGetByIndex('timeline', 'userId', currentUser.id),
@@ -2965,6 +2980,46 @@
         } catch (e) {
             showToast('导出失败：' + e.message, 'error');
         }
+    }
+
+    async function importData() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            try {
+                const text = await file.text();
+                const data = JSON.parse(text);
+                if (!data.diaries && !data.timeline && !data.goals) {
+                    showToast('文件格式不正确', 'error');
+                    return;
+                }
+                if (!confirm('导入将覆盖现有数据，确定继续吗？')) return;
+                let count = 0;
+                if (data.diaries) {
+                    for (const item of data.diaries) { await dbAdd('diaries', item); count++; }
+                }
+                if (data.timeline) {
+                    for (const item of data.timeline) { await dbAdd('timeline', item); count++; }
+                }
+                if (data.goals) {
+                    for (const item of data.goals) { await dbAdd('goals', item); count++; }
+                }
+                if (data.confessions) {
+                    for (const item of data.confessions) { await dbAdd('confessions', item); count++; }
+                }
+                if (data.shares) {
+                    for (const item of data.shares) { await dbAdd('shares', item); count++; }
+                }
+                showToast(`成功导入 ${count} 条数据`, 'success');
+                await init();
+            } catch (e) {
+                showToast('导入失败：' + e.message, 'error');
+            }
+        };
+        input.click();
     }
 
     // ==================== 关于作品 ====================
