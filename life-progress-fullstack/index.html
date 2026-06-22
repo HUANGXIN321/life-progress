@@ -1963,8 +1963,8 @@
             .nav-links { display: none; }
             .hero-inner { flex-direction: column; }
             .hero-left, .hero-right { flex: 0 0 100%; }
-            .life-ring-canvas { width: 280px; height: 280px; }
-            .hero-title { font-size: 28px; }
+            .life-ring-canvas { width: 260px; height: 260px; }
+            .hero-title { font-size: 26px; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .goals-grid, .diaries-grid, .shares-grid, .confessions-grid {
                 grid-template-columns: 1fr;
@@ -1976,6 +1976,18 @@
             .profile-mini-actions { margin-left: 0; margin-top: 12px; }
             .avatar-selector { grid-template-columns: repeat(4, 1fr); }
             .hero-stats-row { grid-template-columns: repeat(2, 1fr); }
+            /* 移动端时间轴优化 */
+            .timeline-line { left: 16px; }
+            .timeline-item { padding-left: 40px; }
+            .timeline-dot { left: 10px; width: 14px; height: 14px; }
+            /* 模态框移动端适配 */
+            .modal-card { width: 92vw; max-width: 92vw; margin: 20px auto; }
+            /* 快捷菜单按钮位置 */
+            .fab-container { bottom: 16px; right: 16px; }
+            .fab-main { width: 52px; height: 52px; }
+            /* 导航栏紧凑 */
+            .navbar { padding: 0 12px; }
+            .nav-logo-text { font-size: 16px; }
         }
         @media (max-width: 480px) {
             .section { padding: 50px 16px; }
@@ -3031,7 +3043,13 @@
     }
 
     async function renderTimeline() {
-        const items = await dbGetByIndex('timeline', 'userId', currentUser.id);
+        let items = [];
+        try {
+            const res = await fetch(API_BASE + '/timeline');
+            if (res.ok) items = await res.json();
+        } catch (e) {
+            items = await dbGetByIndex('timeline', 'userId', currentUser.id);
+        }
         const container = document.getElementById('timelineContainer');
         const line = '<div class="timeline-line" aria-hidden="true"></div>';
         if (items.length === 0) {
@@ -3064,7 +3082,13 @@
     }
 
     async function renderGoals() {
-        const items = await dbGetByIndex('goals', 'userId', currentUser.id);
+        let items = [];
+        try {
+            const res = await fetch(API_BASE + '/goals');
+            if (res.ok) items = await res.json();
+        } catch (e) {
+            items = await dbGetByIndex('goals', 'userId', currentUser.id);
+        }
         const grid = document.getElementById('goalsGrid');
         if (items.length === 0) {
             grid.innerHTML = `<div class="empty-state"><div class="empty-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-compass" aria-hidden="true"></i></div><div class="empty-title">你的未来蓝图还是空白的</div><div class="empty-desc">设定目标，规划未来<br>让每一步都朝着梦想前进</div><button class="empty-action-btn" onclick="openModal('goal')"><i class="fas fa-plus" aria-hidden="true"></i> 设定第一个目标</button></div>`;
@@ -3114,7 +3138,13 @@
     }
 
     async function renderDiaries() {
-        const items = await dbGetByIndex('diaries', 'userId', currentUser.id);
+        let items = [];
+        try {
+            const res = await fetch(API_BASE + '/diaries');
+            if (res.ok) items = await res.json();
+        } catch (e) {
+            items = await dbGetByIndex('diaries', 'userId', currentUser.id);
+        }
         const grid = document.getElementById('diariesGrid');
         if (items.length === 0) {
             grid.innerHTML = `<div class="empty-state"><div class="empty-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-feather-pointed" aria-hidden="true"></i></div><div class="empty-title">还没有写下任何日记</div><div class="empty-desc">用文字、图片、视频或录音<br>记录生活中每一个珍贵的瞬间</div><button class="empty-action-btn" onclick="openModal('diary')"><i class="fas fa-plus" aria-hidden="true"></i> 写下第一篇日记</button></div>`;
@@ -3623,6 +3653,7 @@
         title.innerHTML = config.title;
         body.innerHTML = config.html;
         overlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
         window.diaryImages = [];
         window.diaryVideos = [];
         window.diaryAudios = [];
@@ -3633,6 +3664,7 @@
         const overlay = document.getElementById('modalOverlay');
         releaseFocusTrap(overlay);
         overlay.classList.remove('show');
+        document.body.style.overflow = '';
         if (isRecording) toggleRecording();
     }
 
@@ -3734,36 +3766,74 @@
     // ==================== 表单提交 ====================
     async function submitDiary(e) {
         e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        const originalText = btn ? btn.innerHTML : '';
+        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> 保存中...'; }
+
         const title = document.getElementById('diaryTitle').value.trim();
         const content = document.getElementById('diaryContent').value.trim();
         const mood = document.getElementById('diaryMood').value;
 
-        if (!title || !content) { showToast('请填写完整信息', 'error'); return; }
+        if (!title || !content) {
+            if (btn) { btn.disabled = false; btn.innerHTML = originalText; }
+            showToast('请填写完整信息', 'error');
+            return;
+        }
 
         try {
-            await dbAdd('diaries', {
-                userId: currentUser.id, title, content, mood,
-                date: new Date().toISOString().split('T')[0],
-                createdAt: new Date().toISOString(),
-                images: window.diaryImages || [],
-                videos: window.diaryVideos || [],
-                audios: window.diaryAudios || []
+            const res = await fetch(API_BASE + '/diaries', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: currentUser.id, title, content, mood,
+                    date: new Date().toISOString().split('T')[0],
+                    images: window.diaryImages || [],
+                    videos: window.diaryVideos || [],
+                    audios: window.diaryAudios || []
+                })
             });
+            if (!res.ok) throw new Error('API错误');
             showToast('日记保存成功', 'success');
             closeModal();
             await renderDiaries();
             await renderStats();
         } catch (e) {
-            showToast('保存失败：' + e.message, 'error');
+            console.warn('通过API保存日记失败，尝试本地:', e.message);
+            try {
+                await dbAdd('diaries', {
+                    userId: currentUser.id, title, content, mood,
+                    date: new Date().toISOString().split('T')[0],
+                    createdAt: new Date().toISOString(),
+                    images: window.diaryImages || [],
+                    videos: window.diaryVideos || [],
+                    audios: window.diaryAudios || []
+                });
+                showToast('日记保存成功（本地模式）', 'success');
+                closeModal();
+                await renderDiaries();
+                await renderStats();
+            } catch (e2) {
+                showToast('保存失败：' + e2.message, 'error');
+            }
+        } finally {
+            if (btn) { btn.disabled = false; btn.innerHTML = originalText; }
         }
     }
 
     async function submitConfession(e) {
         e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        const originalText = btn ? btn.innerHTML : '';
+        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> 发布中...'; }
+
         const content = document.getElementById('confessionContent').value.trim();
         const anonymous = document.getElementById('confessionAnon').checked;
 
-        if (!content) { showToast('请填写倾诉内容', 'error'); return; }
+        if (!content) {
+            if (btn) { btn.disabled = false; btn.innerHTML = originalText; }
+            showToast('请填写倾诉内容', 'error');
+            return;
+        }
 
         try {
             const res = await fetch(API_BASE + '/confessions', {
@@ -3797,61 +3867,124 @@
             } catch (e2) {
                 showToast('发布失败：' + e2.message, 'error');
             }
+        } finally {
+            if (btn) { btn.disabled = false; btn.innerHTML = originalText; }
         }
     }
 
     async function submitTimeline(e) {
         e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        const originalText = btn ? btn.innerHTML : '';
+        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> 添加中...'; }
+
         const title = document.getElementById('timelineTitle').value.trim();
         const description = document.getElementById('timelineDesc').value.trim();
         const date = document.getElementById('timelineDate').value;
         const tag = document.getElementById('timelineTag').value;
 
-        if (!title || !description || !date) { showToast('请填写完整信息', 'error'); return; }
+        if (!title || !description || !date) {
+            if (btn) { btn.disabled = false; btn.innerHTML = originalText; }
+            showToast('请填写完整信息', 'error');
+            return;
+        }
 
         try {
-            await dbAdd('timeline', {
-                userId: currentUser.id, title, description, date, tag,
-                createdAt: new Date().toISOString()
+            const res = await fetch(API_BASE + '/timeline', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: currentUser.id, title, description, date, tag
+                })
             });
+            if (!res.ok) throw new Error('API错误');
             showToast('事件添加成功', 'success');
             closeModal();
             await renderTimeline();
             await renderStats();
         } catch (e) {
-            showToast('添加失败：' + e.message, 'error');
+            console.warn('通过API添加事件失败，尝试本地:', e.message);
+            try {
+                await dbAdd('timeline', {
+                    userId: currentUser.id, title, description, date, tag,
+                    createdAt: new Date().toISOString()
+                });
+                showToast('事件添加成功（本地模式）', 'success');
+                closeModal();
+                await renderTimeline();
+                await renderStats();
+            } catch (e2) {
+                showToast('添加失败：' + e2.message, 'error');
+            }
+        } finally {
+            if (btn) { btn.disabled = false; btn.innerHTML = originalText; }
         }
     }
 
     async function submitGoal(e) {
         e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        const originalText = btn ? btn.innerHTML : '';
+        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> 添加中...'; }
+
         const title = document.getElementById('goalTitle').value.trim();
         const description = document.getElementById('goalDesc').value.trim();
         const deadline = document.getElementById('goalDeadline').value;
 
-        if (!title || !description || !deadline) { showToast('请填写完整信息', 'error'); return; }
+        if (!title || !description || !deadline) {
+            if (btn) { btn.disabled = false; btn.innerHTML = originalText; }
+            showToast('请填写完整信息', 'error');
+            return;
+        }
 
         try {
-            await dbAdd('goals', {
-                userId: currentUser.id, title, description,
-                progress: 0, status: 'in-progress', deadline,
-                createdAt: new Date().toISOString()
+            const res = await fetch(API_BASE + '/goals', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: currentUser.id, title, description,
+                    progress: 0, status: 'in-progress', deadline
+                })
             });
+            if (!res.ok) throw new Error('API错误');
             showToast('目标添加成功', 'success');
             closeModal();
             await renderGoals();
             await renderStats();
         } catch (e) {
-            showToast('添加失败：' + e.message, 'error');
+            console.warn('通过API添加目标失败，尝试本地:', e.message);
+            try {
+                await dbAdd('goals', {
+                    userId: currentUser.id, title, description,
+                    progress: 0, status: 'in-progress', deadline,
+                    createdAt: new Date().toISOString()
+                });
+                showToast('目标添加成功（本地模式）', 'success');
+                closeModal();
+                await renderGoals();
+                await renderStats();
+            } catch (e2) {
+                showToast('添加失败：' + e2.message, 'error');
+            }
+        } finally {
+            if (btn) { btn.disabled = false; btn.innerHTML = originalText; }
         }
     }
 
     async function submitShare(e) {
         e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        const originalText = btn ? btn.innerHTML : '';
+        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> 发布中...'; }
+
         const title = document.getElementById('shareTitle').value.trim();
         const content = document.getElementById('shareContent').value.trim();
 
-        if (!title || !content) { showToast('请填写完整信息', 'error'); return; }
+        if (!title || !content) {
+            if (btn) { btn.disabled = false; btn.innerHTML = originalText; }
+            showToast('请填写完整信息', 'error');
+            return;
+        }
 
         try {
             const res = await fetch(API_BASE + '/shares', {
@@ -3884,6 +4017,8 @@
             } catch (e2) {
                 showToast('发布失败：' + e2.message, 'error');
             }
+        } finally {
+            if (btn) { btn.disabled = false; btn.innerHTML = originalText; }
         }
     }
 
