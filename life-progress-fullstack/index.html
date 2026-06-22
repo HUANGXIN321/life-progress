@@ -421,9 +421,11 @@
             flex-direction: column;
             gap: 24px;
         }
-        .life-ring-canvas {
+        .life-ring-svg {
             width: 380px;
             height: 380px;
+            display: block;
+            margin: 0 auto;
         }
         .hero-greeting {
             font-size: 15px;
@@ -1970,7 +1972,7 @@
             .nav-links { display: none; }
             .hero-inner { flex-direction: column; }
             .hero-left, .hero-right { flex: 0 0 100%; }
-            .life-ring-canvas { width: 260px; height: 260px; }
+            .life-ring-svg { width: 260px; height: 260px; }
             .hero-title { font-size: 26px; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .goals-grid, .diaries-grid, .shares-grid, .confessions-grid {
@@ -2000,7 +2002,7 @@
             .section { padding: 50px 16px; }
             .hero { min-height: auto; padding-top: calc(var(--nav-height) + 20px); }
             .hero-title { font-size: 24px; }
-            .life-ring-canvas { width: 240px; height: 240px; }
+            .life-ring-svg { width: 240px; height: 240px; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .stat-card { padding: 16px 10px; }
             .stat-number { font-size: 22px; }
@@ -2066,7 +2068,15 @@
         <canvas class="hero-particles-canvas" id="heroParticles" aria-hidden="true"></canvas>
         <div class="hero-inner">
             <div class="hero-left">
-                <canvas class="life-ring-canvas" id="lifeRingCanvas" aria-hidden="true"></canvas>
+                <svg class="life-ring-svg" id="lifeRingSvg" viewBox="0 0 400 400" aria-hidden="true">
+                  <defs>
+                    <filter id="ringGlow">
+                      <feGaussianBlur stdDeviation="2" result="blur"/>
+                      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                  </defs>
+                  <!-- 动态生成的圆环将放在这里 -->
+                </svg>
             </div>
             <div class="hero-right">
                 <div class="hero-greeting"><i class="fas fa-sparkles" aria-hidden="true"></i> 欢迎回来</div>
@@ -2413,6 +2423,8 @@
                 }
             }).catch(()=>{});
         }
+        // 重新绘制生命年轮以应用新主题色
+        drawLifeRing();
         // 过渡结束后移除类
         setTimeout(() => {
             document.body.classList.remove('theme-transitioning');
@@ -2459,21 +2471,10 @@
         setTimeout(() => ripple.remove(), 600);
     }
 
-    // ==================== 生命年轮Canvas绘制 ====================
+    // ==================== 生命年轮SVG绘制 ====================
     function drawLifeRing() {
-        const canvas = document.getElementById('lifeRingCanvas');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        const dpr = window.devicePixelRatio || 1;
-        const rect = canvas.getBoundingClientRect();
-        canvas.width = rect.width * dpr;
-        canvas.height = rect.height * dpr;
-        ctx.scale(dpr, dpr);
-        const w = rect.width;
-        const h = rect.height;
-        const cx = w / 2;
-        const cy = h / 2;
-        const maxR = Math.min(w, h) / 2 - 20;
+        const svg = document.getElementById('lifeRingSvg');
+        if (!svg) return;
 
         // 获取主题色
         const style = getComputedStyle(document.documentElement);
@@ -2496,39 +2497,58 @@
         } catch(e) {}
         const percent = Math.min(age / lifespan, 1);
 
-        ctx.clearRect(0, 0, w, h);
-
-        // 绘制同心圆环
+        const cx = 200, cy = 200, maxR = 170;
         const rings = 5;
+
+        // 清空 SVG（保留 defs）
+        const defs = svg.querySelector('defs');
+        svg.innerHTML = '';
+        if (defs) svg.appendChild(defs);
+
+        // 绘制同心圆环（带动画）
         for (let i = 0; i < rings; i++) {
             const r = maxR * (0.3 + (i / (rings - 1)) * 0.7);
             const ringPercent = Math.min(percent * rings / (i + 1), 1);
-            const startAngle = -Math.PI / 2;
-            const endAngle = startAngle + ringPercent * Math.PI * 2;
+            const circumference = 2 * Math.PI * r;
+            const dashArray = ringPercent * circumference;
 
-            // 已度过部分（实线）
+            // 背景圆环（虚线）
+            const bgCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            bgCircle.setAttribute('cx', cx);
+            bgCircle.setAttribute('cy', cy);
+            bgCircle.setAttribute('r', r);
+            bgCircle.setAttribute('fill', 'none');
+            bgCircle.setAttribute('stroke', borderColor);
+            bgCircle.setAttribute('stroke-width', '2');
+            bgCircle.setAttribute('stroke-dasharray', '6,6');
+            bgCircle.setAttribute('opacity', '0.5');
+            svg.appendChild(bgCircle);
+
+            // 进度圆环（实线，带动画）
             if (ringPercent > 0) {
-                ctx.beginPath();
-                ctx.arc(cx, cy, r, startAngle, endAngle);
-                ctx.strokeStyle = primary;
-                ctx.lineWidth = 3;
-                ctx.lineCap = 'round';
-                ctx.stroke();
-            }
+                const progressCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                progressCircle.setAttribute('cx', cx);
+                progressCircle.setAttribute('cy', cy);
+                progressCircle.setAttribute('r', r);
+                progressCircle.setAttribute('fill', 'none');
+                progressCircle.setAttribute('stroke', primary);
+                progressCircle.setAttribute('stroke-width', '3');
+                progressCircle.setAttribute('stroke-linecap', 'round');
+                progressCircle.setAttribute('stroke-dasharray', `0 ${circumference}`);
+                progressCircle.setAttribute('stroke-dashoffset', -Math.PI * r / 2);
+                progressCircle.setAttribute('transform', `rotate(-90 ${cx} ${cy})`);
+                progressCircle.setAttribute('filter', 'url(#ringGlow)');
+                progressCircle.style.transition = 'stroke-dasharray 1.5s ease-out';
+                svg.appendChild(progressCircle);
 
-            // 剩余部分（虚线）
-            if (ringPercent < 1) {
-                ctx.beginPath();
-                ctx.arc(cx, cy, r, endAngle, startAngle + Math.PI * 2);
-                ctx.setLineDash([6, 6]);
-                ctx.strokeStyle = borderColor;
-                ctx.lineWidth = 2;
-                ctx.stroke();
-                ctx.setLineDash([]);
+                // 触发动画
+                requestAnimationFrame(() => {
+                    progressCircle.setAttribute('stroke-dasharray', `${dashArray} ${circumference - dashArray}`);
+                });
             }
         }
 
-        // 绘制人生阶段节点
+        // 人生阶段节点
         const stages = [
             { label: '童年', age: 6, color: '#81b29a' },
             { label: '少年', age: 17, color: '#7a9ab8' },
@@ -2539,39 +2559,82 @@
 
         stages.forEach((stage, idx) => {
             const r = maxR * (0.3 + (idx / (rings - 1)) * 0.7);
-            const angle = -Math.PI / 2 + (stage.age / lifespan) * Math.PI * 2;
+            const angle = (stage.age / lifespan) * Math.PI * 2 - Math.PI / 2;
             const x = cx + Math.cos(angle) * r;
             const y = cy + Math.sin(angle) * r;
 
-            ctx.beginPath();
-            ctx.arc(x, y, 4, 0, Math.PI * 2);
-            ctx.fillStyle = stage.color;
-            ctx.fill();
-            ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 2;
-            ctx.stroke();
+            const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            dot.setAttribute('cx', x);
+            dot.setAttribute('cy', y);
+            dot.setAttribute('r', '4');
+            dot.setAttribute('fill', stage.color);
+            dot.setAttribute('stroke', '#fff');
+            dot.setAttribute('stroke-width', '2');
+            dot.style.opacity = '0';
+            dot.style.transition = 'opacity 0.5s ease';
+            svg.appendChild(dot);
 
-            // 标签
-            const labelX = cx + Math.cos(angle) * (r + 16);
-            const labelY = cy + Math.sin(angle) * (r + 16);
-            ctx.font = '11px "Noto Sans SC", sans-serif';
-            ctx.fillStyle = textColor;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(stage.label, labelX, labelY);
+            const labelX = cx + Math.cos(angle) * (r + 20);
+            const labelY = cy + Math.sin(angle) * (r + 20);
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', labelX);
+            text.setAttribute('y', labelY);
+            text.setAttribute('text-anchor', 'middle');
+            text.setAttribute('dominant-baseline', 'middle');
+            text.setAttribute('fill', textColor);
+            text.setAttribute('font-size', '11');
+            text.setAttribute('font-family', 'Noto Sans SC, sans-serif');
+            text.textContent = stage.label;
+            text.style.opacity = '0';
+            text.style.transition = 'opacity 0.5s ease 0.3s';
+            svg.appendChild(text);
+
+            // 触发动画
+            setTimeout(() => { dot.style.opacity = '1'; text.style.opacity = '1'; }, 100 + idx * 150);
         });
 
-        // 中心百分比
-        ctx.font = 'bold 42px "Noto Sans SC", sans-serif';
-        ctx.fillStyle = primary;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fontVariantNumeric = 'tabular-nums';
-        ctx.fillText(Math.round(percent * 100) + '%', cx, cy - 8);
+        // 中心百分比（带动画计数）
+        const percentText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        percentText.setAttribute('x', cx);
+        percentText.setAttribute('y', cy - 5);
+        percentText.setAttribute('text-anchor', 'middle');
+        percentText.setAttribute('dominant-baseline', 'middle');
+        percentText.setAttribute('fill', primary);
+        percentText.setAttribute('font-size', '42');
+        percentText.setAttribute('font-weight', 'bold');
+        percentText.setAttribute('font-family', 'Noto Sans SC, sans-serif');
+        percentText.textContent = '0%';
+        svg.appendChild(percentText);
 
-        ctx.font = '12px "Noto Sans SC", sans-serif';
-        ctx.fillStyle = textColor;
-        ctx.fillText(age + '岁 / ' + lifespan + '岁', cx, cy + 18);
+        // 数字滚动动画
+        let current = 0;
+        const target = Math.round(percent * 100);
+        const duration = 1500;
+        const startTime = performance.now();
+        function animateNumber(now) {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+            current = Math.round(eased * target);
+            percentText.textContent = current + '%';
+            if (progress < 1) requestAnimationFrame(animateNumber);
+        }
+        requestAnimationFrame(animateNumber);
+
+        // 年龄信息
+        const ageText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        ageText.setAttribute('x', cx);
+        ageText.setAttribute('y', cy + 22);
+        ageText.setAttribute('text-anchor', 'middle');
+        ageText.setAttribute('dominant-baseline', 'middle');
+        ageText.setAttribute('fill', textColor);
+        ageText.setAttribute('font-size', '12');
+        ageText.setAttribute('font-family', 'Noto Sans SC, sans-serif');
+        ageText.textContent = age + '岁 / ' + lifespan + '岁';
+        ageText.style.opacity = '0';
+        ageText.style.transition = 'opacity 0.5s ease 1s';
+        svg.appendChild(ageText);
+        setTimeout(() => { ageText.style.opacity = '1'; }, 100);
     }
 
     // ==================== 动态粒子背景 ====================
@@ -2954,6 +3017,75 @@
         }
     }
 
+    // ==================== AI 心情分析 ====================
+    async function analyzeMood() {
+        const content = document.getElementById('diaryContent').value.trim();
+        const resultDiv = document.getElementById('moodAnalysisResult');
+        if (!content) {
+            resultDiv.textContent = '请先写下日记内容，AI 才能分析心情哦~';
+            return;
+        }
+        resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> AI 正在分析你的心情...';
+        
+        // 本地关键词分析（无需 API 密钥，即时响应）
+        const moodKeywords = {
+            happy: ['开心', '快乐', '高兴', '棒', '美好', '幸福', '喜欢', '爱', '赞', '哈哈', '嘻嘻', '愉快', '满足'],
+            calm: ['平静', '安静', '放松', '舒服', '淡然', '从容', '平和', '宁静'],
+            thoughtful: ['思考', '觉得', '认为', '感悟', '反思', '沉思', '领悟', '体会'],
+            inspired: ['灵感', '启发', '创意', '想法', '顿悟', '豁然开朗', '新思路'],
+            grateful: ['感谢', '感恩', '谢谢', '幸运', '珍惜', '感激', '温暖'],
+            excited: ['兴奋', '激动', '期待', '迫不及待', '太棒了', '燃', '冲'],
+            sad: ['难过', '伤心', '失落', '遗憾', '痛苦', '悲伤', '哭', '泪', '失望'],
+            anxious: ['焦虑', '担心', '紧张', '不安', '压力', '害怕', '恐惧', '烦躁'],
+            angry: ['生气', '愤怒', '讨厌', '烦', '火大', '不爽', '气死', '恨']
+        };
+        
+        let scores = {};
+        for (const [mood, keywords] of Object.entries(moodKeywords)) {
+            scores[mood] = keywords.reduce((sum, kw) => sum + (content.includes(kw) ? 1 : 0), 0);
+        }
+        
+        // 情感强度分析
+        const intensityWords = ['非常', '特别', '太', '超级', '极其', '真的', '好'];
+        const intensity = intensityWords.reduce((sum, w) => sum + (content.includes(w) ? 1 : 0), 0);
+        
+        // 选择得分最高的心情
+        let bestMood = 'calm';
+        let bestScore = -1;
+        for (const [mood, score] of Object.entries(scores)) {
+            if (score > bestScore) { bestScore = score; bestMood = mood; }
+        }
+        
+        // 如果没有任何关键词匹配，根据内容长度和标点判断
+        if (bestScore === 0) {
+            if (content.includes('?') || content.includes('？')) bestMood = 'thoughtful';
+            else if (content.includes('!') || content.includes('！')) bestMood = 'excited';
+        }
+        
+        // 应用到选择框
+        document.getElementById('diaryMood').value = bestMood;
+        
+        // 生成分析文案
+        const moodLabels = {
+            happy: '开心', calm: '平静', thoughtful: '沉思', inspired: '受启发',
+            grateful: '感恩', excited: '兴奋', sad: '难过', anxious: '焦虑', angry: '生气'
+        };
+        const moodAdvice = {
+            happy: '保持这份快乐，它会成为美好回忆的种子',
+            calm: '平静是一种力量，珍惜内心的安宁',
+            thoughtful: '思考让生命更有深度，记录下这份感悟',
+            inspired: '灵感稍纵即逝，把它转化为行动吧',
+            grateful: '感恩的心是最好的礼物',
+            excited: '让这份热情推动你向前',
+            sad: '允许自己难过，雨过总会天晴',
+            anxious: '深呼吸，当下的你已经是最好的自己',
+            angry: '情绪是信号，听听它在告诉你什么'
+        };
+        
+        const intensityLabel = intensity >= 2 ? '强烈' : intensity >= 1 ? '明显' : '温和';
+        resultDiv.innerHTML = `<span style="color:var(--primary)"><i class="fas fa-wand-magic-sparkles" aria-hidden="true"></i> AI 分析：${moodLabels[bestMood]}（${intensityLabel}）— ${moodAdvice[bestMood]}</span>`;
+    }
+
     // ==================== 数据导出 ====================
     async function exportData() {
         try {
@@ -3108,7 +3240,7 @@
         const container = document.getElementById('timelineContainer');
         const line = '<div class="timeline-line" aria-hidden="true"></div>';
         if (items.length === 0) {
-            container.innerHTML = line + `<div class="empty-state"><div class="empty-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-shoe-prints" aria-hidden="true"></i></div><div class="empty-title">你的人生足迹还是空白的</div><div class="empty-desc">在这里记录你人生中的重要时刻<br>每一个脚印都值得被铭记</div><button class="empty-action-btn" onclick="openModal('timeline')"><i class="fas fa-plus" aria-hidden="true"></i> 添加第一个足迹</button></div>`;
+            container.innerHTML = line + `<div class="empty-state"><div class="empty-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><img src="assets/empty-timeline.jpg" alt="人生足迹" style="width:160px;height:160px;object-fit:cover;border-radius:16px;margin-bottom:16px;opacity:0.9"><div class="empty-title">你的人生足迹还是空白的</div><div class="empty-desc">在这里记录你人生中的重要时刻<br>每一个脚印都值得被铭记</div><button class="empty-action-btn" onclick="openModal('timeline')"><i class="fas fa-plus" aria-hidden="true"></i> 添加第一个足迹</button></div>`;
             return;
         }
         items.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -3146,7 +3278,7 @@
         }
         const grid = document.getElementById('goalsGrid');
         if (items.length === 0) {
-            grid.innerHTML = `<div class="empty-state"><div class="empty-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-compass" aria-hidden="true"></i></div><div class="empty-title">你的未来蓝图还是空白的</div><div class="empty-desc">设定目标，规划未来<br>让每一步都朝着梦想前进</div><button class="empty-action-btn" onclick="openModal('goal')"><i class="fas fa-plus" aria-hidden="true"></i> 设定第一个目标</button></div>`;
+            grid.innerHTML = `<div class="empty-state"><div class="empty-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><img src="assets/empty-goals.jpg" alt="未来蓝图" style="width:160px;height:160px;object-fit:cover;border-radius:16px;margin-bottom:16px;opacity:0.9"><div class="empty-title">你的未来蓝图还是空白的</div><div class="empty-desc">设定目标，规划未来<br>让每一步都朝着梦想前进</div><button class="empty-action-btn" onclick="openModal('goal')"><i class="fas fa-plus" aria-hidden="true"></i> 设定第一个目标</button></div>`;
             return;
         }
         let html = '';
@@ -3202,7 +3334,7 @@
         }
         const grid = document.getElementById('diariesGrid');
         if (items.length === 0) {
-            grid.innerHTML = `<div class="empty-state"><div class="empty-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-feather-pointed" aria-hidden="true"></i></div><div class="empty-title">还没有写下任何日记</div><div class="empty-desc">用文字、图片、视频或录音<br>记录生活中每一个珍贵的瞬间</div><button class="empty-action-btn" onclick="openModal('diary')"><i class="fas fa-plus" aria-hidden="true"></i> 写下第一篇日记</button></div>`;
+            grid.innerHTML = `<div class="empty-state"><div class="empty-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><img src="assets/empty-diary.jpg" alt="人生日记" style="width:160px;height:160px;object-fit:cover;border-radius:16px;margin-bottom:16px;opacity:0.9"><div class="empty-title">还没有写下任何日记</div><div class="empty-desc">用文字、图片、视频或录音<br>记录生活中每一个珍贵的瞬间</div><button class="empty-action-btn" onclick="openModal('diary')"><i class="fas fa-plus" aria-hidden="true"></i> 写下第一篇日记</button></div>`;
             return;
         }
         items.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -3250,7 +3382,7 @@
             if (!res.ok) throw new Error('API请求失败');
             const items = await res.json();
             if (!items || items.length === 0) {
-                grid.innerHTML = `<div class="empty-state"><div class="empty-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-comment-dots" aria-hidden="true"></i></div><div class="empty-title">还没有人倾诉</div><div class="empty-desc">说出你的心里话<br>收获来自陌生人的温暖与回应</div><button class="empty-action-btn" onclick="openModal('confession')"><i class="fas fa-plus" aria-hidden="true"></i> 发出第一条倾诉</button></div>`;
+                grid.innerHTML = `<div class="empty-state"><div class="empty-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><img src="assets/empty-confessions.jpg" alt="人生倾诉" style="width:160px;height:160px;object-fit:cover;border-radius:16px;margin-bottom:16px;opacity:0.9"><div class="empty-title">还没有人倾诉</div><div class="empty-desc">说出你的心里话<br>收获来自陌生人的温暖与回应</div><button class="empty-action-btn" onclick="openModal('confession')"><i class="fas fa-plus" aria-hidden="true"></i> 发出第一条倾诉</button></div>`;
                 return;
             }
             let html = '';
@@ -3346,7 +3478,7 @@
             if (!res.ok) throw new Error('API请求失败');
             const items = await res.json();
             if (!items || items.length === 0) {
-                grid.innerHTML = `<div class="empty-state"><div class="empty-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><div class="empty-icon-wrap"><i class="fas fa-share-nodes" aria-hidden="true"></i></div><div class="empty-title">社区还没有任何分享</div><div class="empty-desc">分享你的故事和经验<br>照亮别人的路，也温暖自己的心</div><button class="empty-action-btn" onclick="openModal('share')"><i class="fas fa-plus" aria-hidden="true"></i> 分享第一个故事</button></div>`;
+                grid.innerHTML = `<div class="empty-state"><div class="empty-particles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><img src="assets/empty-shares.jpg" alt="社区精选" style="width:160px;height:160px;object-fit:cover;border-radius:16px;margin-bottom:16px;opacity:0.9"><div class="empty-title">社区还没有任何分享</div><div class="empty-desc">分享你的故事和经验<br>照亮别人的路，也温暖自己的心</div><button class="empty-action-btn" onclick="openModal('share')"><i class="fas fa-plus" aria-hidden="true"></i> 分享第一个故事</button></div>`;
                 return;
             }
             let html = '';
@@ -3587,7 +3719,7 @@
                             <textarea id="diaryContent" placeholder="今天发生了什么..." required></textarea>
                         </div>
                         <div class="form-group">
-                            <label>心情</label>
+                            <label>心情 <button type="button" onclick="analyzeMood()" style="margin-left:8px;padding:4px 10px;font-size:12px;background:var(--primary);color:#fff;border:none;border-radius:12px;cursor:pointer"><i class="fas fa-wand-magic-sparkles" aria-hidden="true"></i> AI分析</button></label>
                             <select id="diaryMood" required>
                                 <option value="happy">开心 \u{1F60A}</option>
                                 <option value="calm">平静 \u{1F60C}</option>
@@ -3599,6 +3731,7 @@
                                 <option value="anxious">焦虑 \u{1F628}</option>
                                 <option value="angry">生气 \u{1F620}</option>
                             </select>
+                            <div id="moodAnalysisResult" style="margin-top:6px;font-size:13px;color:var(--text-muted);min-height:18px"></div>
                         </div>
                         <div class="form-group">
                             <label>图片</label>
